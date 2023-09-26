@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Page Title</title>
+    <style>
+        /* Reset some default styles */
+        body,
+        h1 {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffd4d4;
+            color: white;
+            padding: 10px;
+        }
+
+        .banner-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-container .banner {
+            background-color: antiquewhite;
+            border-radius: 5px;
+            margin: 10px;
+            display: flex;
+            align-items: left;
+            justify-content: left;
+            flex-wrap: wrap;
+            overflow: hidden;
+            width: 95%;
+        }
+
+
+
+        .banner-container .banner .content {
+            flex: 1 1 250px;
+            text-align: left;
+            padding: 10px;
+            text-transform: uppercase;
+        }
+
+
+        footer {
+            background-color: #ffd4d4;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div style="width: 10%;">TITLE</div>
+        <div style="flex-grow: 1;"></div>
+        <div style="width: 10%;">
+            <a href="login.html">Login</a> / <a href="register.html">Register</a>
+        </div>
+    </header>
+    <h1>Concert List</h1>
+    <div class='banner-container'>
+        <div class='banner'>
+            <div class="content">
+                <p>NAME1</p>
+            </div>
+        </div>
+    </div>
+    <div class="banner-container">
+        <div class='banner'>
+            <div class="content">
+                <p>NAME2</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Contact
+    </footer>
+
+    <script>
+        function activateBanner() {
+            var banner = document.getElementById("banner");
+            banner.style.display = "block";
+        }
+    </script>
+</body>
+
+</html>

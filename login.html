@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: grey;
+        }
+
+        .container-box {
+            width: 35%;
+            text-align: center;
+            border: 10px;
+            background-color: antiquewhite;
+            border-radius: 25px;
+            padding: 3%;
+        }
+
+        .container-box .input-box {
+            position: relative;
+            width: 100%;
+            height: auto;
+            margin: 25px 0;
+        }
+
+        .input-box input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            border-radius: 25px;
+            border: 2px solid grey;
+            padding: 20px 45px 20px 20px;
+        }
+
+        .input-box input::placeholder {
+            color: grey;
+        }
+
+        .input-box i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+
+        .container-box .button {
+            width: 100%;
+            height: 40px;
+            background: transparent;
+            border: 2px solid grey;
+            outline: none;
+            border-radius: 40px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-box">
+        <form action="">
+            <h1>Login</h1>
+            <br>
+            <div class="input-box">
+                <input type="text" placeholder="Username" required>
+                <i class='bx bx-user'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" placeholder="Password" required>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <button type="submit" class="button">Login</button>
+        </form>
+        <br>
+        <p>Dont have an account?
+            <a href="register.html">Register</a>
+        </p>
+
+    </div>
+</body>
+
+</html>
