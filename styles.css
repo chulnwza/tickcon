@@ -1,0 +1,14 @@
+.container-box {
+    text-align: center;
+    border: 2px solid grey;
+    border-radius: 25px;
+    padding: 3%;
+}
+
+.btn-primary {
+    background-color: grey;
+}
+
+.btn-group .payment {
+    left: 0;
+}
