@@ -37,10 +37,12 @@
             color: grey;
         }
 
-        .genInputsContainer{
+        .genInputsContainer {
             padding-bottom: 5px;
         }
-        label, input {
+
+        .label,
+        .input {
             padding: 5px;
         }
     </style>
@@ -64,24 +66,59 @@
                 <input type="text" id="concertAddress" class="form-control" />
                 <label class="form-label">Concert Address</label>
             </div>
-
-            <p>3สำเนาบัตรประชาชนผู้จัด</p>
-            <p>4ใบอนุญาต</p>
-            <p>5ภาพเวที</p>
-            <p>6ภาพที่จอดรถพร้อมระบบควบคุมการจราจร</p>
-            <p>10บัญชีรับเงิน</p>
+            <div class=" mb-4">
+                <label for="showDate">Show date:</label>
+                <input type="date" id="showDate" name="showDate" required />
+            </div>
+            <div class="form-outline mb-4">
+                <label for="showTime">Choose a show time for your concert:</label>
+                <input type="time" id="showTime" name="showTime" required />
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="concert_img">Concert Image:</label>
+                <input type="file" id="concert_img" />
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="copy_id_card_img">Copy of ID Card:</label>
+                <input type="file" id="copy_id_card_img" />
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="con_permission_img">Permission:</label>
+                <input type="file" id="con_permission_img" />
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" for="stage_img">Stage Image:</label>
+                <input type="file" id="stage_img" />
+            </div>
+            <div class="form-outline mb-4">
+                <input type="text" id="bankName" class="form-control" />
+                <label class="form-label">Bank name</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="text" id="bankNum" class="form-control" />
+                <label class="form-label">Bank number</label>
+            </div>
 
             <!-- Input field for the number of text inputs -->
-            <div class="form-outline mb-4">
-                <input type="number" id="numInputs" class="form-control" />
-                <label class="form-label">Number of Ticket Types</label>
+            <div class="form mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Number of Ticket Types</label>
+                        <input type="number" id="numInputs" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" id="generateNumberInputs"
+                            class="btn btn-primary btn-block mt-2 mt-md-0">Generate Ticket Type Inputs</button>
+                    </div>
+                </div>
             </div>
+
+
 
             <div id="NumberInputsContainer">
                 <!-- Text inputs will be generated here -->
             </div>
-
-            <button type="button" id="generateNumberInputs" class="btn btn-primary btn-block mb-4">Generate Ticket Type Inputs</button>
+            <hr class="hr" />
             <button type="submit" class="btn btn-primary btn-block mb-4">CONFIRM</button>
         </form>
     </div>
@@ -95,7 +132,7 @@
             for (var i = 1; i <= numInputs; i++) {
                 var labelType = document.createElement("label");
                 labelType.textContent = "Type " + i + " : ";
-                
+
                 var labelAmount = document.createElement("label");
                 labelAmount.for = "ticket_amount_" + i;
                 labelAmount.textContent = "Ticket Amount " + i + ": ";
