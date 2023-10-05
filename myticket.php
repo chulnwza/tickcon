@@ -21,7 +21,7 @@ session_start();
     // Import File
     class MyDB extends SQLite3 {
     function __construct() {
-       $this->open('test.db');
+       $this->open('mainDatabase.db');
     }
     }
 
@@ -36,6 +36,7 @@ session_start();
             USING (concert_id)
             WHERE member_id = ". $_SESSION['id'] . ";";
     $ret = $db->query($sql);
+    $count = 0;
     echo '<main><div class="container bg-dark pt-3 rounded-top">
             <div class="container pt-2 pb-3">
                 <h3 class="text-center text-light">My Ticket</h5>
