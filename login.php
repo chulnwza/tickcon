@@ -1,4 +1,5 @@
-
+<?php session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,6 +15,20 @@
 <body class="p-5">
     <div class="container my-5">
         <form action="signin_db.php" method="post">
+        <?php if (isset($_SESSION['error'])) {?>
+                <div class="alert alert-danger" role="alert">
+                    <?php
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+            <?php }?>
+            <?php if (isset($_SESSION['success'])) {?>
+                <div class="alert alert-success" role="alert">
+                    <?php
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+            <?php }?>
             <h1>เข้าสู่ระบบ</h1>
             <div class="form-outline mb-4">
                 <i class='trailing'></i>

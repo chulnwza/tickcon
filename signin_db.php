@@ -49,31 +49,31 @@ if(!$db) {
                        }
                     if ($email == $email_indat) {
                         if (password_verify($password, $password_indat)) {
-                            // if ($row['urole'] == 'admin') {
-                            //     $_SESSION['admin_login'] = $row['id'];
-                            //     header("location: admin.php");
+                            if ($row['urole'] == 'admin') {
+                                $_SESSION['admin_login'] = $member_id_indat;
+                                header("location: admin.php");
                             } else {
-                                $_SESSION['user_login'] = $row['id'];
+                                $_SESSION['user_login'] = $member_id_indat;
                                 header("location: user.php");
                             }
                         } else {
                             $_SESSION['error'] = 'รหัสผ่านผิด';
-                            header("location: signin.php");
+                            header("location: login.php");
                         }
                     } else {
                         $_SESSION['error'] = 'อีเมลผิด';
-                        header("location: signin.php");
+                        header("location: login.php");
                     }
                 } else {
                     $_SESSION['error'] = "ไม่มีข้อมูลในระบบ";
-                    header("location: signin.php");
+                    header("location: login.php");
                 }
 
             } catch(PDOException $e) {
                 echo $e->getMessage();
             }
         }
-    }
+    
 
 
 ?>
