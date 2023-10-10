@@ -15,64 +15,71 @@ session_start();
 
 <body>
     <header></header>
+    
     <main>
-
     <?php
     // Import File
     class MyDB extends SQLite3 {
     function __construct() {
-       $this->open('test.db');
+       $this->open('mainDatabase.db');
     }
     }
 
     //open db
-    $_SESSION['id'] = '1';
     $db = new MyDB();
-    $sql = "SELECT concert_name, detail, ticket_id, t.ticket_type
+    $sql = "SELECT concert_name, show_date, show_time, t.ticket_type, detail, concert_img_path, t.ticket_id
             FROM booking b
             JOIN ticket t
             USING (ticket_id) 
             JOIN concert c
             USING (concert_id)
-            WHERE member_id = ". $_SESSION['id'] . ";";
+            WHERE member_id = ". $_SESSION['user_login'] . ";";
     $ret = $db->query($sql);
-    echo '<main><div class="container bg-dark pt-3 rounded-top">
-            <div class="container pt-2 pb-3">
-                <h3 class="text-center text-light">My Ticket</h5>
-            </div>
-            <div class="container bg-success pt-3 px-5 h-100 rounded">';
+    echo '<div class="container bg-dark pt-3 rounded-top">
+    <div class="container pt-2 pb-3">
+        <h3 class="text-center text-light">My Ticket</h5>
+    </div>
+    <div class="container">
+    <div class="row">';
+    $count = 1;
+    $column1 = $column2 = '<div class="col-sm-12 col-md-6 col-lg-6 mb-3">';
     while($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-        echo
-        // สร้างแถว ที่ระยะห่างแกน x = 0
-        '<div class="row gx-0">'
-        . //สร้าง column ที่มีความยาว 7/12 ของหน้าจอ ซึ่ง padding = 0 และ margin-bottom = 2
-        '<div class="col-7 p-0 mb-2">'
-        . //สร้างที่เก็บ card ที่มีความสูง 100% ของความสูง row และ กรอบโค้งด้านซ้าย
-            '<div class="card h-100 rounded-left">'
-        . //สร้างเนื้อหาของการ์ดที่มี พื้นหลังสี primary(น้ำเงิน) มีกรอบ ความหนา3 กรอบโค้งด้านซ้าย และเซ็ตให้กรอบที่เหลือไม่โค้ง
-                '<div class="card-body bg-primary border border-3 border-light rounded-start rounded-0">'
-        . //สร้างเนื้อหาใน card-body ที่ฟอนต์สีขาว และ padding-left = 1 โดยนำเนื้อหาจาก query
-                    '<div class="text-white ps-1">'. $row['concert_name']. '</div>'
-        . //สร้างปุ่มสีแดงที่ padding-top = 2, margin-top = 2
-                    '<a href="#" class="btn btn-danger pt-2 mt-2">แสดง QR code</a>
+        $text = '
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="card-title text-center">
+                        <h4> ' . $row['concert_name'] . '<h4>
+                    </div>
+                    <img class="rounded rounded-4 border border-3 border-dark w-100 mt-3 mb-3"
+                        src= '. $row['concert_img_path'] .'>
+                    <small>
+                        <p class="mb-0"><i class="far fa-calendar-days"></i> '. $row['show_date'] .',
+                            <i class="far fa-clock"></i> '. $row['show_time'] .'</small></p>
+                    <ul class="list-group list-group-unstyled ms-0 align-items-start">
+                        <li class="list-group-item border-0"><i
+                                class="fas fa-ticket-simple"></i>&nbsp;เลขตั๋ว : '. $row['ticket_id'] .'</li>
+                        <li class="list-group-item border-0"><i
+                                class="fas fa-person"></i>&nbsp;ประเภทที่นั่ง : '. $row['ticket_type'] .'</li>
+                        <li class="list-group-item border-0"><i class="fas fa-map"></i>&nbsp;สถานที่จัด : '. $row['detail'] .'
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </div>'
-        . //สร้าง column ที่มีความยาว 5/12 ของหน้าจอ ซึ่ง padding = 0 และ margin-bottom = 2
-        '<div class="col-5 p-0 mb-2">'
-        . //สร้างที่เก็บ card ที่มีความสูง 100% ของความสูง row และ กรอบไม่โค้ง
-            '<div class="card p-0 h-100 rounded-0 border-0">
-                <ul class="list-group list-group-light h-100">
-                    <li class="list-group-item p-1 rounded-right-1 h-100"><small>รหัสบัตร : '. $row['ticket_id'] .'</small></li>
-                    <li class="list-group-item p-1 h-100"><small>ที่นั่ง : '. $row['ticket_type'] .'</small></li>
-                    <li class="list-group-item p-1 h-100"><small>วันจัด : '. $row['detail'] .'</small></li>
-                    <li class="list-group-item p-1 rounded-0 h-100"><small>สถานที่จัด : </small></li>
-                </ul>
-            </div>
-        </div>
-        </div>';
+                <div class="card-footer d-inline-flex">
+                    <a href="#" class="btn btn-danger pt-2 me-2 w-100">ดูรายละเอียด</a>
+                    <a href="#" class="btn btn-danger pt-2 w-100">แสดง QR Code</a>
+                </div>
+            </div>';
+        if ($count == 1) {
+            $column1 .= $text;
+            $count += 1;
+        }elseif ($count == 2) {
+            $column2 .= $text;
+            $count = 1;
+        }
+
     }
-    echo '</div></div>';
+    echo $column1 .= '</div>';
+    echo $column2 .= '</div></div></div></div>';
     ?>
     </main>
     <footer></footer>
