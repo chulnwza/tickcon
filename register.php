@@ -72,22 +72,26 @@
             <div class="form-outline mb-4">
                 <i class='bx bxs-user trailing' ></i>
                 <input type="username" id="form" class="form-control" name='username'/>
-                <label class="form-label">Username ( ไม่ต่ำกว่า 5 )</label>
+                <label class="form-label">Username</label>
+                <small>ไม่ต่ำกว่า 5 ตัว</small>
             </div>
             <div class="form-outline mb-4">
                 <i class='trailing'>@</i>
                 <input type="email" id="form" class="form-control" name='email'/>
-                <label class="form-label">Email address ( xx@xx.xx )</label>
+                <label class="form-label">Email address</label>
+                <small>xxx@xxx.xxx</small>
             </div>
             <div class="form-outline mb-4">
                 <i class='bx bxs-lock-alt trailing'></i>
                 <input type="password" id="form" class="form-control" name='password'/>
-                <label class="form-label">Password ( ไม่ต่ำกว่า 5 )</label>
+                <label class="form-label">Password</label>
+                <small>ไม่ต่ำกว่า 5 ตัว</small>
             </div>
             <div class="form-outline mb-4">
                 <i class='bx bxs-lock-alt trailing'></i>
                 <input type="password" id="form" class="form-control" name='c_password'/>
                 <label class="form-label">Confirm Password</label>
+                <small>เหมือนกับ password</small>
             </div>
             <button type="submit" class="btn btn-primary btn-block mb-4" name="signup">REGISTER</button>
             <div class="text-center">
