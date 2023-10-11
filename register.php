@@ -36,6 +36,7 @@
             border: 2px solid grey;
             border-radius: 25px;
             padding: 3%;
+            width: 40vh;
         }
         .btn-primary{
             background-color: grey;
@@ -68,34 +69,34 @@
                         unset($_SESSION['warning']);
                     ?>
             <?php }?>
-            <h1>REGISTER</h1>
+            <h1>ลงทะเบียน</h1>
             <div class="form-outline mb-4">
                 <i class='bx bxs-user trailing' ></i>
                 <input type="username" id="form" class="form-control" name='username'/>
-                <label class="form-label">Username</label>
+                <label class="form-label">ชื่อผู้ใช้</label>
                 <small>ไม่ต่ำกว่า 5 ตัว</small>
             </div>
             <div class="form-outline mb-4">
                 <i class='trailing'>@</i>
                 <input type="email" id="form" class="form-control" name='email'/>
-                <label class="form-label">Email address</label>
+                <label class="form-label">ที่อยู่อีเมล</label>
                 <small>xxx@xxx.xxx</small>
             </div>
             <div class="form-outline mb-4">
                 <i class='bx bxs-lock-alt trailing'></i>
                 <input type="password" id="form" class="form-control" name='password'/>
-                <label class="form-label">Password</label>
+                <label class="form-label">รหัสผ่าน</label>
                 <small>ไม่ต่ำกว่า 5 ตัว</small>
             </div>
             <div class="form-outline mb-4">
                 <i class='bx bxs-lock-alt trailing'></i>
                 <input type="password" id="form" class="form-control" name='c_password'/>
-                <label class="form-label">Confirm Password</label>
+                <label class="form-label">ยืนยันรหัสผ่าน</label>
                 <small>เหมือนกับ password</small>
             </div>
-            <button type="submit" class="btn btn-primary btn-block mb-4" name="signup">REGISTER</button>
+            <button type="submit" class="btn btn-primary btn-block mb-4" name="signup">ลงทะเบียน</button>
             <div class="text-center">
-                <p>Already have an account? <a href="login.php">Login</a></p>
+                <p>มีบัญชีผู้ใช้อยู่เเล้ว? <a href="new_login.php"> เข้าสู่ระบบ</a></p>
             </div>
         </form>
     </div>
