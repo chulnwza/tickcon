@@ -96,7 +96,7 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block mb-4" name="signup">ลงทะเบียน</button>
             <div class="text-center">
-                <p>มีบัญชีผู้ใช้อยู่เเล้ว? <a href="new_login.php"> เข้าสู่ระบบ</a></p>
+                <p>มีบัญชีผู้ใช้อยู่เเล้ว? <a href="login.php"> เข้าสู่ระบบ</a></p>
             </div>
         </form>
     </div>
