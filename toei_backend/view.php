@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <html lang="en">
 
 <head>
@@ -9,7 +10,6 @@
 <body>
     <?php
     //cennect to database
-    session_start();
     require_once 'config/db.php';
     //member
     echo "<h3>member</h3>";

@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+    session_destroy();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,23 +47,20 @@
             EOF;
             $ret = $db->query($sql);
             $data_user = array();
-
+            $count = 0;
             while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                array_push($data_user, $row['email']);
+                $count++;
             }
             $ret = $db->query($sql);
-            if (count($data_user) > 0) {
+            if ($count > 0) {
                 while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
                     if (($email == $row['email']) && ($pwd == $row['pwd'])) {
-                        $check = false;
-                        session_start();
-                        $_SESSION['user'] = $email;
-                        if ($row['urole'] == 'user'){
+                        $_SESSION['user_id'] = $row['user_id'];
+                        if ($row['urole'] == 'user') {
                             header('Location:index_user.php');
-                        }elseif ($row['urole'] == 'admin'){
+                        } elseif ($row['urole'] == 'admin') {
                             header('Location:index_admin.php');
                         }
-                        
                         break;
                     } elseif (($email == $row['email']) && ($pwd != $row['pwd'])) {
                         $check = false;
