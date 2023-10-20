@@ -1,9 +1,10 @@
+<?php ob_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>create concert</title>
+    <title>check concert</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
@@ -22,7 +23,10 @@
     <a href="con_waiting_list.php"><button class="btn btn-secondary">back</button></a>
     <?php
     session_start();
-    $concert_id = $_GET['concert_id'];
+    if((!isset( $_SESSION['concert_id']) && isset($_GET['concert_id'])) || (isset($_SESSION['concert_id']) && isset($_GET['concert_id']))){
+        $_SESSION['concert_id'] = $_GET['concert_id'];
+    }
+    $concert_id = $_SESSION['concert_id'];
     require_once 'config/db.php';
     //concert data
     $sql = <<<EOF
@@ -41,7 +45,7 @@
     $row2 = $ret2->fetchArray(SQLITE3_ASSOC);
 
 
-    echo '<form action="each_con_check.php?concert_id=' . $row['concert_id'] . '" method = "post"><div class="container">' .
+    echo '<form method = "get"><div class="container">' .
         '<div>' .
         '<p><b>From User : </b>' . $row2['fname'] . '  ' . $row2['lname'] . '<b> email : </b>' . $row2['email'] . '</p>' .
         '</div>' .
@@ -95,30 +99,29 @@
         '</div>' .
         '<button type = "submit" name="button" value = "approve" class="btn btn-primary">Approve</button>
     <button type = "submit" name="button" value = "reject" class="btn btn-danger">Reject</button>
-    </from></div>';
-    if (isset($_POST['button'])) {
-        $concert_name_comment = $_POST['concert_name_comment'];
-        $detail_comment = $_POST['detail_comment'];
-        $concert_img_comment = $_POST['concert_img_comment'];
-        $show_date_comment = $_POST['show_date_comment'];
-        $show_time_comment = $_POST['show_time_comment'];
-        $copy_id_card_comment = $_POST['copy_id_card_comment'];
-        $con_permission_comment = $_POST['con_permission_comment'];
-        $stage_img_comment = $_POST['stage_img_comment'];
-        $bank_name_comment = $_POST['bank_name_comment'];
-        $bank_code_comment = $_POST['bank_code_comment'];
-        $address_comment = $_POST['address_comment'];
-        $ticket_comment = $_POST['ticket_comment'];
-        if ($_POST['button'] == 'approve') {
+    </div></from>';
+    if (isset($_GET['button'])) {
+        $concert_name_comment = $_GET['concert_name_comment'];
+        $detail_comment = $_GET['detail_comment'];
+        $concert_img_comment = $_GET['concert_img_comment'];
+        $show_date_comment = $_GET['show_date_comment'];
+        $show_time_comment = $_GET['show_time_comment'];
+        $copy_id_card_comment = $_GET['copy_id_card_comment'];
+        $con_permission_comment = $_GET['con_permission_comment'];
+        $stage_img_comment = $_GET['stage_img_comment'];
+        $bank_name_comment = $_GET['bank_name_comment'];
+        $bank_code_comment = $_GET['bank_code_comment'];
+        $address_comment = $_GET['address_comment'];
+        $ticket_comment = $_GET['ticket_comment'];
+        if ($_GET['button'] == 'approve') {
             $sql4 = <<<EOF
                         UPDATE concert
                         SET status = "approved"
                         WHERE concert_id = $concert_id;
                     EOF;
             $ret4 = $db->exec($sql4);
-            header("Location:con_waiting_list.php");
-            exit();
-        } else if ($_POST['button'] == 'reject') {
+            header("Location: con_waiting_list.php",true,307);
+        } else if ($_GET['button'] == 'reject') {
             $sql5 = <<<EOF
                         UPDATE concert
                         SET status = "rejected",
@@ -137,8 +140,7 @@
                         WHERE concert_id = $concert_id;
                     EOF;
             $ret5 = $db->exec($sql5);
-            header("Location:con_waiting_list.php",true, 301);
-            exit();
+            header("Location:con_waiting_list.php",true,307);
         }
     }
     ?>
