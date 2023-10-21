@@ -101,54 +101,38 @@ include 'condb.php'
                                             <div class="col-8">
                                                 Detail
                                             </div>
-                                            <!--แบ่งเป็น 4/12 ไว้ให้เลือกจำนวน-->
-                                            <div class="col-4">
-                                                Quantity
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
+                <?php
+    $sql1 = 'SELECT * FROM ticket_detail
+    WHERE concert_id= "'.$ids.'";';
+    $result = $db->query($sql1);
+    while($row1 = $result->fetchArray(SQLITE3_ASSOC) ) {
+    ?>
+                                        <li class="list-group-item">
                                         <div class="row border border-top-0">
                                             <!--แบ่งเป็น 8/12 ไว้แสดงข้อมูล-->
                                             <div class="col-8 align-items-center my-1">
-                                                <h6 class="my-0">FRONT</h6>
-                                                <p class="my-0"><small>Price</small></p>
-                                            </div>
-                                            <!--แบ่งเป็น 4/12 ไว้ให้เลือกจำนวน-->
-                                            <div class="col-4 d-flex align-items-center text-center">
-                                                <!--ใช้เป็น selected เพราะจะได้เห็นค่าที่เลือก-->
-                                                <select class="form-select form-select-sm" aria-label="quantity">
-                                                    <option selected value="0">0</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                </select>
+                                                <h6 class="my-0"><?=$row1['name']?></h6>
+                                                <?php
+                                                $ticket_det1 = $row1['description'];
+                                                if (is_null($ticket_det1)){
+                                                    $ticket_det1 = '';
+                                                }
+                                                ?>
+                                                <p class="my-0"><small><?=$ticket_det1?></small></p>
                                             </div>
                                         </div>
                                     </li>
-                                    <li class="list-group-item">
-                                        <div class="row border border-top-0 rounded-bottom">
-                                            <!--แบ่งเป็น 8/12 ไว้แสดงข้อมูล-->
-                                            <div class="col-8 align-items-center my-1">
-                                                <h6 class="my-0">FRONT</h6>
-                                                <p class="my-0"><small>Price</small></p>
-                                            </div>
-                                            <!--แบ่งเป็น 4/12 ไว้ให้เลือกจำนวน-->
-                                            <div class="col-4 d-flex align-items-center text-center">
-                                                <!--ใช้เป็น selected เพราะจะได้เห็นค่าที่เลือก-->
-                                                <select class="form-select form-select-sm" aria-label="quantity">
-                                                    <option selected value="0">0</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                </select>
-                                            </div>
+    <?php
+
+    }
+    ?>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card-footer border-danger border-2 text-center">
-                                <!-- Button trigger modal -->
+                            <br>
+                            <!-- Button trigger modal -->
 <!-- Button to Open the Modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
   Buy ticket
@@ -161,33 +145,72 @@ include 'condb.php'
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h2 class="modal-title">Modal Heading</h2>
+        <h2 class="modal-title">Buy ticket</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
       <!-- Modal body -->
-      <form>
-  <div class="form-group">
-    <label for="CreditCardId">หมายเลขบัตร</label>
-    <input type="number" class="form-control" id="CreditCardId"placeholder="ใส่หมายเลขบัตร">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-  <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+      <form id="BuyTicket">
+        <div class="container">
+      <br>
+      <label for="TicketType">เลือกประเภทตั๋ว:</label>
+      <select name="TicketType" id="TicketType">
+      <?php
+    $sql2 = 'SELECT * FROM ticket_detail
+    WHERE concert_id= '.$ids.' AND detail_id IN (SELECT detail_id FROM ticket WHERE payment_id IS NULL)';
+    $result = $db->query($sql2);
+    while($row2 = $result->fetchArray(SQLITE3_ASSOC) ) {
+    ?>
+    <option value="<?=$row2['name']?>"><?=$row2['name']?></option>
+    <?php
+}
+?>
+    </select>
+    <div class="form-group">
+    <br>
+    <label for="card_number"><b>หมายเลขบัตร</b></label>
+    <input type="email" class="form-control" id="card_number" placeholder="โปรดใส่หมายเลขบัตร">
+    </div>
+    <div class="form-group">
+    <br>
+    <label for="card_owner"><b>ชื่อ-นามสกุล</b></label>
+    <input type="email" class="form-control" id="card_owner" placeholder="โปรดใส่ชื่อ-นามสกุล">
+    </div>
+    <div class="form-group">
+    <br>
+    <label for="card_month"><b>เดือน</b></label>
+    <select name="card_month" id="card_mont">
+        <option value="January">มกราคม</option>
+        <option value="February ">กุมภาพันธ์</option>
+        <option value="March">มีนาคม</option>
+        <option value="April">เมษายน</option>
+        <option value="May">พฤษภาคม</option>
+        <option value="June">มิถุนายน</option>
+        <option value="July">กรกฎาคม</option>
+        <option value="August">สิงหาคม</option>
+        <option value="September">กันยายน</option>
+        <option value="October">ตุลาคม</option>
+        <option value="November">พฤศจิกายน</option>
+        <option value="December">ธันวาคม</option>
+    </select>
+    <br>
+    <div class="form-group">
+    <br>
+    <label for="card_year"><b>ปี</b></label>
+    <input type="year" class="form-control" id="card_year">
+    </div>
+    <div class="form-group">
+    <br>
+    <label for="card_cvv"><b>cvv</b></label>
+    <input type="cvv" class="form-control" id="card_cvv">
+    </div>
+    </div>
+    </div>
     </form>
 
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
       </div>
-
     </div>
   </div>
 </div>
