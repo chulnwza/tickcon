@@ -13,55 +13,82 @@
 </head>
 
 <body>
-    <a href="index_user.php"><button class="btn btn-secondary">back</button></a>
-    <div class="container">
-        <h3 class="mt-4">สร้างคอนเสิร์ต</h3>
+    <a href="my_concert.php"><button class="btn btn-secondary">back</button></a>
+    <?php
+    if ((!isset($_SESSION['concert_id']) && isset($_GET['concert_id'])) || (isset($_SESSION['concert_id']) && isset($_GET['concert_id']))) {
+        $_SESSION['concert_id'] = $_GET['concert_id'];
+    }
+    $concert_id = $_SESSION['concert_id'];
+    require_once 'config/db.php';
+    //concert data
+    $sql = <<<EOF
+    SELECT * from concert
+    WHERE concert_id = $concert_id;
+    EOF;
+    $ret = $db->query($sql);
+    $row = $ret->fetchArray(SQLITE3_ASSOC);
+    echo '<div class="container">
+        <h3 class="mt-4">my concert</h3>
         <hr>
         <form action="createcon_db.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="cname" class="form-label">ชื่อคอนเสิร์ต</label>
-                <input type="text" class="form-control" name="cname" aria-describedby="cname">
+                <input type="text" class="form-control" name="cname" value = "' . $row['concert_name'] . '">
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">สถานที่จัดคอนเสิร์ต</label><br>
-                <textarea name="address" style="width: 100%; height: 100px;"></textarea>
+                <textarea name="address" style="width: 100%; height: 100px;">' . $row['address'] . '</textarea>
             </div>
             <div class="mb-3">
                 <label for="bdate" class="form-label">วันที่เปิดให้จองบัตรคอนเสิร์ต</label>
-                <input type="date" class="form-control" name="bdate" aria-describedby="cname">
+                <input type="date" class="form-control" name="bdate" value = "' . $row['open_booking_date'] . '">
             </div>
             <div class="mb-3">
                 <label for="cdate" class="form-label">วันที่จัดคอนเสิร์ต</label>
-                <input type="date" class="form-control" name="cdate" aria-describedby="cname">
+                <input type="date" class="form-control" name="cdate" value = "' . $row['show_date'] . '">
             </div>
             <div class="mb-3">
                 <label for="ctime" class="form-label">เวลาเริ่มคอนเสิร์ต</label>
-                <input type="time" class="form-control" name="ctime" aria-describedby="cname">
+                <input type="time" class="form-control" name="ctime" value = "' . $row['show_time'] . '">
             </div>
-            <div class="mb-3" id="tic_type_add">
-                <label class="form-label">ชื่อบัตร</label>
-                <input type="text" class="form-control" name="tic_name[]">
+            <div class="mb-3" id="tic_type_add">';
+    //ticket section start
+    $sql3 = <<<EOF
+        SELECT name,description,price,COUNT(price)
+        FROM ticket
+        JOIN ticket_detail
+        USING (detail_id)
+        WHERE concert_id = $concert_id
+        GROUP BY price
+        ORDER BY price;
+    EOF;
+    $ret3 = $db->query($sql3);
+    while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
+        echo '<label class="form-label">ชื่อบัตร</label>
+                <input type="text" class="form-control" name="tic_name[]"  value = "' . $row3['name'] . '">
                 <label class="form-label">ราคาบัตร</label>
-                <input type="number" class="form-control" name="tic_price[]">
+                <input type="number" class="form-control" name="tic_price[]"  value = "' . $row3['price'] . '">
                 <label class="form-label">จำนวนบัตร</label>
-                <input type="number" class="form-control" name="tic_amount[]">
+                <input type="number" class="form-control" name="tic_amount[]"  value = "' . $row3['COUNT(price)'] . '">
                 <label class="form-label">คำอธิบาย</label>
-                <input type="text" class="form-control" name="tic_detail[]" value=" ">
-            </div>
-            <div class="mb-3">
+                <input type="text" class="form-control" name="tic_detail[]"  value = "' . $row3['description'] . '">';
+    }
+    //ticket section end
+    echo '</div>
+    <div class="mb-3">
                 <input type="button" onclick="add_type()" value="เพิ่มชนิดบัตร">
             </div>
             <div class="mb-3">
                 <label class="form-label">รายละเอียดคอนเสิร์ต</label><br>
-                <textarea name="detail" style="width: 100%; height: 100px;"></textarea>
+                <textarea name="detail" style="width: 100%; height: 100px;">'.$row['detail'].'</textarea>
             </div>
             <div class="mb-3">
                 <label for="require" class="form-label">ข้อจำกัดของคอนเสิร์ต</label>
-                <input type="require" class="form-control" name="require" aria-describedby="cname">
+                <input type="require" class="form-control" name="require" value = "' . $row['requirement'] . '">
             </div>
             <div class="mb-3">
                 <label for="poster_img" class="form-label">โปสเตอร์คอนเสิร์ต</label>
-                <input type="file" class="form-control" name="poster_img" accept="image/*">
+                <input type="file" class="form-control" name="poster_img" accept="image/*" value = "' . $row['concert_img_path'] . '">
             </div>
 
             <div class="mb-3">
@@ -85,8 +112,8 @@
             <button type="submit" class="btn btn-primary" name="create_con">Submit</button>
         </form>
         <hr>
-    </div>
-    <?php
+    </div>';
+
     if (isset($_POST['create_con'])) {
         $cname = $_POST['cname'];
         $address = $_POST['address'];
@@ -317,7 +344,7 @@
             parent.appendChild(amount);
             parent.appendChild(detail_label);
             parent.appendChild(detail);
-    }
+        }
     </script>
 </body>
 

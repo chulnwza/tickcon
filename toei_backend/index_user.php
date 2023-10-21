@@ -11,5 +11,6 @@
 <a href="login_db.php"><button class="btn btn-secondary">log out</button></a>
     <h1>This is main page for user.</h1>
     <p>คลิกที่นี่เพื่อสร้างคอนเสิร์ต <a href="createcon_db.php">สร้างคอนเสิร์ต</a></p>
+    <p>คลิกที่นี่เพื่อดูคอนเสิร์ตที่สร้าง <a href="my_concert.php">คอนเสิร์ตที่สร้าง</a></p>
 </body>
 </html>

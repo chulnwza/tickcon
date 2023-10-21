@@ -56,6 +56,12 @@
         '<p><b>สถานที่จัดคอนเสิร์ต :</b><br>' . $row['address'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="address_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
         '</div>' .
         '<div>' .
+        '<p><b>ข้อจำกัด :</b><br>' . $row['requirement'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="requirement_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
+        '</div>' .
+        '<div>' .
+        '<p><b>วันที่ปิดขายบัตรคอนเสิร์ต :</b><br>' . $row['open_booking_date'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="open_booking_date_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
+        '</div>' .
+        '<div>' .
         '<p><b>วันที่จัดคอนเสิร์ต :</b><br>' . $row['show_date'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="show_date_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
         '</div>' .
         '<div>' .
@@ -64,15 +70,17 @@
         '<div>' .
         '<p><b>บัตรคอนเสิร์ต :</b><br>';
     $sql3 = <<<EOF
-        SELECT name,detail,price,COUNT(price) 
+        SELECT name,description,price,COUNT(price)
         FROM ticket
+        JOIN ticket_detail
+        USING (detail_id)
         WHERE concert_id = $concert_id
         GROUP BY price
         ORDER BY price;
     EOF;
     $ret3 = $db->query($sql3);
     while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
-        echo '<p><b>ชื่อบัตร :</b>' . $row3['name'] . '<b> ราคาบัตร :</b>' . $row3['price'] . ' บาท   <b>จำนวน :</b>' . $row3['COUNT(price)'] . '  ใบ<b> รายละเอียด :</b>' . $row3['detail'] . '</p>';
+        echo '<p><b>ชื่อบัตร :</b>' . $row3['name'] . '<b> ราคาบัตร :</b>' . $row3['price'] . ' บาท   <b>จำนวน :</b>' . $row3['COUNT(price)'] . '  ใบ<br><b> รายละเอียด :</b>' . $row3['description'] . '</p>';
     }
     echo '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="ticket_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
         '</div>' .
@@ -113,34 +121,38 @@
         $bank_code_comment = $_GET['bank_code_comment'];
         $address_comment = $_GET['address_comment'];
         $ticket_comment = $_GET['ticket_comment'];
+        $open_booking_date_comment = $_GET['open_booking_date_comment'];
+        $requirement_comment = $_GET['requirement_comment'];
         if ($_GET['button'] == 'approve') {
             $sql4 = <<<EOF
-                        UPDATE concert
-                        SET status = "approved"
-                        WHERE concert_id = $concert_id;
-                    EOF;
+            UPDATE concert
+            SET status = "approved"
+            WHERE concert_id = $concert_id;
+            EOF;
             $ret4 = $db->exec($sql4);
-            header("Location: con_waiting_list.php",true,307);
+            header("Location: con_waiting_list.php");
         } else if ($_GET['button'] == 'reject') {
             $sql5 = <<<EOF
-                        UPDATE concert
-                        SET status = "rejected",
-                        concert_name_comment = '$concert_name_comment',
-                        detail_comment = '$detail_comment',
-                        concert_img_comment = '$concert_img_comment',
-                        show_date_comment = '$show_date_comment',
-                        show_time_comment = '$show_time_comment',
-                        copy_id_card_comment = '$copy_id_card_comment',
-                        con_permission_comment = '$con_permission_comment',
-                        stage_img_comment = '$stage_img_comment',
-                        bank_name_comment = '$bank_name_comment',
-                        bank_code_comment = '$bank_code_comment',
-                        address_comment = '$address_comment',
-                        ticket_comment = '$ticket_comment'
-                        WHERE concert_id = $concert_id;
-                    EOF;
+            UPDATE concert
+            SET status = "rejected",
+            concert_name_comment = '$concert_name_comment',
+            detail_comment = '$detail_comment',
+            concert_img_comment = '$concert_img_comment',
+            show_date_comment = '$show_date_comment',
+            show_time_comment = '$show_time_comment',
+            copy_id_card_comment = '$copy_id_card_comment',
+            con_permission_comment = '$con_permission_comment',
+            stage_img_comment = '$stage_img_comment',
+            bank_name_comment = '$bank_name_comment',
+            bank_code_comment = '$bank_code_comment',
+            address_comment = '$address_comment',
+            ticket_comment = '$ticket_comment',
+            open_booking_date_comment = '$open_booking_date_comment',
+            requirement_comment = '$requirement_comment'
+            WHERE concert_id = $concert_id; 
+            EOF;
             $ret5 = $db->exec($sql5);
-            header("Location:con_waiting_list.php",true,307);
+            header("Location:con_waiting_list.php");
         }
     }
     ?>
