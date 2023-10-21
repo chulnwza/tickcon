@@ -47,7 +47,7 @@
             <img src="' . $row['concert_img_path'] . '" class="card-img-top">
                 <div class="card-body">
                 <h5 class="card-title">' . $row['concert_name'] . '</h5>
-                <p class="card-text">' . $row['detail'] . '</p>
+                <p class="card-text">' . $row['show_date'] .' / '. $row['show_time'] . '</p>
                 <a href="each_con_check.php?concert_id=' . $row['concert_id'] . '" class="btn btn-primary">see more</a>
                 </div>
             </div>';

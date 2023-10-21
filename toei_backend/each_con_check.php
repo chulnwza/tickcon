@@ -56,10 +56,7 @@
         '<p><b>สถานที่จัดคอนเสิร์ต :</b><br>' . $row['address'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="address_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
         '</div>' .
         '<div>' .
-        '<p><b>ข้อจำกัด :</b><br>' . $row['requirement'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="requirement_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
-        '</div>' .
-        '<div>' .
-        '<p><b>วันที่ปิดขายบัตรคอนเสิร์ต :</b><br>' . $row['open_booking_date'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="open_booking_date_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
+        '<p><b>วันที่เปิดขายบัตรคอนเสิร์ต :</b><br>' . $row['open_booking_date'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="open_booking_date_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
         '</div>' .
         '<div>' .
         '<p><b>วันที่จัดคอนเสิร์ต :</b><br>' . $row['show_date'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="show_date_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
@@ -68,24 +65,27 @@
         '<p><b>เวลาเริ่มคอนเสิร์ต :</b><br>' . $row['show_time'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="show_time_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
         '</div>' .
         '<div>' .
+        '<div>' .
+        '<div>' .
+        '<p><b>รายละเอียดคอนเสิร์ต :</b><br>' . $row['detail'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="detail_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
+        '</div>' .
+        '<p><b>ข้อจำกัด :</b><br>' . $row['requirement'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="requirement_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
+        '</div>' .
         '<p><b>บัตรคอนเสิร์ต :</b><br>';
     $sql3 = <<<EOF
-        SELECT name,description,price,COUNT(price)
+        SELECT name,description,price,COUNT(detail_id)
         FROM ticket
         JOIN ticket_detail
         USING (detail_id)
         WHERE concert_id = $concert_id
-        GROUP BY price
-        ORDER BY price;
+        GROUP BY detail_id
+        ORDER BY price ASC;
     EOF;
     $ret3 = $db->query($sql3);
     while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
-        echo '<p><b>ชื่อบัตร :</b>' . $row3['name'] . '<b> ราคาบัตร :</b>' . $row3['price'] . ' บาท   <b>จำนวน :</b>' . $row3['COUNT(price)'] . '  ใบ<br><b> รายละเอียด :</b>' . $row3['description'] . '</p>';
+        echo '<p><b>ชื่อบัตร :</b>' . $row3['name'] . '<b> ราคาบัตร :</b>' . $row3['price'] . ' บาท   <b>จำนวน :</b>' . $row3['COUNT(detail_id)'] . '  ใบ<br><b> รายละเอียด :</b>' . $row3['description'] . '</p>';
     }
     echo '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="ticket_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
-        '</div>' .
-        '<div>' .
-        '<p><b>รายละเอียดคอนเสิร์ต :</b><br>' . $row['detail'] . '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="detail_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
         '</div>' .
         '<div>' .
         '<p><b>โปสเตอร์คอนเสิร์ต :</b><br></p>' . '<img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br>' . '<a href="' . $row['concert_img_path'] . '" download>download</a>' . '<p class="comment">ความคิดเห็น :</p>' . '<textarea name="concert_img_comment" style="width: 50%; height: 50px;"></textarea><hr>' .
