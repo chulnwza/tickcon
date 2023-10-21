@@ -13,9 +13,11 @@ include 'condb.php'
             color: brown;
         }
         .div-1 {
-        background-color: #80B3FF
-;
+        background-color: #80B3FF;
     }
+        h4 {
+            color: #FFFFFF;
+        }
     </style>
 </head>
 <body>
@@ -37,7 +39,7 @@ include 'condb.php'
 
                 </div>
 
-                <h4 class="mt-2">Description</h4>
+                <h4 class="mt-2" >Description</h4>
                 <hr>
                 <p><small>
                 <?=$row['detail']?>
@@ -146,7 +148,49 @@ include 'condb.php'
                                 </ul>
                             </div>
                             <div class="card-footer border-danger border-2 text-center">
-                                <button type="button" class="btn btn-danger">Buy ticket</button>
+                                <!-- Button trigger modal -->
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+  Buy ticket
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2 class="modal-title">Modal Heading</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <form>
+  <div class="form-group">
+    <label for="CreditCardId">หมายเลขบัตร</label>
+    <input type="number" class="form-control" id="CreditCardId"placeholder="ใส่หมายเลขบัตร">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-check">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
                             </div>
                         </div>
                     </div>
