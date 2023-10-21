@@ -73,5 +73,6 @@ if(!$db) {
                 echo $e->getMessage();
             }
         }
+    }
 
 ?>
