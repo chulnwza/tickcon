@@ -15,6 +15,6 @@ if (isset($_SESSION['member_id'])) {
         header("location:index_admin.php");
     }
 }else{
-    header("location:login_db.php");
+    header("location:index_notlogin.php");
 }
 ?>
