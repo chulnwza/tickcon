@@ -98,6 +98,9 @@ require_once 'config/db.php';
                         <a class="nav-link " href="index_notlogin.php" style="color:white;">Concerts</a>
                     </li>
                 </ul>
+                <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
+                    <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                </form>
                 <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
                     <button class="btn btn-outline-info" type="submit">Log In</button>
                 </form>

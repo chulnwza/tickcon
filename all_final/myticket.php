@@ -116,7 +116,7 @@ session_start();
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="createcon_db.php">
                     <button class="btn btn-light" type="submit" style="background-color: white;">Create Concert</button>
                 </form>
-                <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
+                <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
             </div>

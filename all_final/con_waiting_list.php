@@ -83,12 +83,13 @@
                         <a class="nav-link " href="con_waiting_list.php" style="color:white;">Pending List</a>
                     </li>
                 </ul>
-                <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
+                <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
             </div>
         </div>
     </nav>
+    <!-- code -->
     <a href="index_admin.php"><button class="btn btn-secondary">back</button></a>
     <h4 style="text-align:center">Approve Queue</h4>
     <?php
