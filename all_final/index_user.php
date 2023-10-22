@@ -132,7 +132,7 @@
         <div class="row">
             <?php
             $sql1 = 'SELECT * FROM concert
-    WHERE status="approved" AND open_booking_date < "' . date("Y-m-d") . '"' . ' AND show_date > "' . date("Y-m-d") . '"';
+    WHERE status="approved" AND open_booking_date <= "' . date("Y-m-d") . '"' . ' AND show_date > "' . date("Y-m-d") . '"';
             $result = $db->query($sql1);
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
 

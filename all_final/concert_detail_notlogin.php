@@ -231,7 +231,7 @@ require_once 'config/db.php';
                                                     </div>
                                                     <div class="col-3 d-flex align-items-center text-center">
                                                         <p class="my-0 fs-6">
-                                                            <?= $row1['price'] ?>
+                                                            <?= $row1['price'] ?> THB
                                                         </p>
                                                     </div>
                                                     <div class="col-3 d-flex align-items-center text-center my-1">
