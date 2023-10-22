@@ -288,7 +288,7 @@ ob_start(); ?>
             ) {
                 $sql2 = <<<EOF
                 INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id)
-                VALUES ('$cname','$detail','$require','$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path','$bank_acc_name','$bank_acc_number','$address','$member_id');
+                VALUES ('$cname',"$detail",'$require','$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path','$bank_acc_name','$bank_acc_number','$address','$member_id');
                 EOF;
                 $ret2 = $db->exec($sql2);
                 if ($ret2) {
