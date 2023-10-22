@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>register</title>
     <!-- google font -->
@@ -134,28 +134,29 @@
         $c_pwd = $_POST['c_pwd'];
         $urole = 'user';
         $error_msg = "";
+        // เพิ่ม Bootstrap alert
         if (empty($fname)) {
-            echo "<script>alert('กรุณากรอกชื่อ');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกชื่อ</div>';
         } else if (empty($lname)) {
-            echo "<script>alert('กรุณากรอกนามสกุล');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกนามสกุล</div>';
         } else if (empty($email)) {
-            echo "<script>alert('กรุณากรอกอีเมล');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกอีเมล</div>';
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo "<script>alert('รูปแบบอีเมลไม่ถูกต้อง');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">รูปแบบอีเมลไม่ถูกต้อง</div>';
         } else if (empty($pwd)) {
-            echo "<script>alert('กรุณากรอกรหัสผ่าน');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกรหัสผ่าน</div>';
         } else if (strlen($pwd) > 20 || strlen($pwd) < 5) {
-            echo "<script>alert('รหัสผ่านจะต้องมีความยาวระหว่าง 5 ถึง 20 ตัวอักษร');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">รหัสผ่านจะต้องมีความยาวระหว่าง 5 ถึง 20 ตัวอักษร</div>';
         } else if (empty($c_pwd)) {
-            echo "<script>alert('กรุณายืนยันรหัสผ่าน');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">กรุณายืนยันรหัสผ่าน</div>';
         } else if ($pwd != $c_pwd) {
-            echo "<script>alert('รหัสผ่านไม่ตรงกัน');</script>";
+            echo '<div class="alert alert-danger text-center" role="alert">รหัสผ่านไม่ตรงกัน</div>';
         } else {
-            //cennect to database
+            // Connect to the database
             session_start();
             require_once 'config/db.php';
-            //get data...
-    
+
+            // Get data...
             $sql = <<<EOF
             SELECT email from member;
             EOF;
@@ -167,23 +168,21 @@
             }
 
             if (in_array($email, $data_email)) {
-                echo "<script>alert('อีเมลนี้ถูกใช้ไปแล้ว กรุณาลองใหม่อีกครั้ง');</script>";
+                echo '<div class="alert alert-danger text-center" role="alert">อีเมลนี้ถูกใช้ไปแล้ว กรุณาลองใหม่อีกครั้ง</div>';
             } else {
-
                 $sql = <<<EOF
                 INSERT INTO member(firstname,lastname,email,password,type)
                 VALUES ('$fname','$lname','$email','$pwd','$urole');
                 EOF;
                 $ret = $db->query($sql);
-                echo "<script>alert('Register Successfully Please Log-in.');</script>";
+                echo '<div class="alert alert-success text-center" role="alert">สมัครสมาชิกสำเร็จ คลิกเพื่อเข้าสู่ระบบ</div>';
             }
             $db->close();
         }
     }
-
     ?>
-     <!-- footer -->
-     <hr>
+    <!-- footer -->
+    <hr>
     <footer class="py-3 my-4 ">
         <p class="text-center text-muted">© 2023 TICKCON</p>
     </footer>
