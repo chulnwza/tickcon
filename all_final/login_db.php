@@ -9,7 +9,7 @@ if (isset($_SESSION['member_id'])) {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>log-in</title>
     <!-- google font -->
@@ -68,8 +68,7 @@ if (isset($_SESSION['member_id'])) {
 </head>
 
 <body>
-    <!-- navbar -->
-
+    <!-- Your navbar code here -->
     <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
         <div class="container-fluid">
             <a class="navbar-brand" href="index_notlogin.php">
@@ -100,7 +99,7 @@ if (isset($_SESSION['member_id'])) {
         </div>
     </nav>
 
-    <!-- code -->
+
     <div class="container">
         <h3 class="mt-4">เข้าสู่ระบบ</h3>
         <hr>
@@ -148,20 +147,24 @@ if (isset($_SESSION['member_id'])) {
                         break;
                     } elseif (($email == $row['email']) && ($pwd != $row['password'])) {
                         $check = false;
-                        echo "<script>alert('The email or password is incorrect. Please try again.');</script>";
+                        echo '<div class="alert alert-danger text-center" role="alert">
+                                Email หรือ Password ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง
+                            </div>';
                         break;
                     }
                 }
                 if ($check) {
-                    echo "<script>alert('You haven't registered as a member yet. Please register before using the service.');</script>";
+                    echo '<div class="alert alert-warning text-center" role="alert">
+                            บัญชีนี้ยังไม่มีชื่อในระบบ โปรดสมัครสมาชิกก่อนเข้าใช้งาน
+                        </div>';
                 }
-
             } else {
-                echo "<script>alert('You haven't registered as a member yet. Please register before using the service.');</script>";
+                echo '<div class="alert alert-warning" role="alert">
+                    บัญชีนี้ยังไม่มีในระบบ โปรดสมัครสมาชิกก่อนเข้าใช้งาน
+                    </div>';
             }
             $db->close();
         }
-
         ?>
     </div>
     <!-- footer -->
@@ -169,7 +172,6 @@ if (isset($_SESSION['member_id'])) {
     <footer class="py-3 my-4 ">
         <p class="text-center text-muted">© 2023 TICKCON</p>
     </footer>
-
 </body>
 
 </html>
