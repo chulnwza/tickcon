@@ -401,8 +401,8 @@ if (isset($_POST['confirm'])) {
       $current_id = $row['ticket_id'];
 
       $sql_insert_paymemt = <<<EOF
-      INSERT INTO payment(member_id, card_number, card_holder, month, year, CVV, ticket_id)
-      VALUES ('$member_id', '$number', '$name', '$month', '$year', '$cvv', '$current_id');
+      INSERT INTO payment(member_id, card_number, card_holder, month, year, CVV)
+      VALUES ('$member_id', '$number', '$name', '$month', '$year', '$cvv');
       EOF;
       $ret_insert_payment = $db -> exec($sql_insert_paymemt);
 

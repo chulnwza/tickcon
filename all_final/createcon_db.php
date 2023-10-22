@@ -209,7 +209,9 @@ ob_start(); ?>
         $tic_price = $_POST['tic_price'];
         $tic_amount = $_POST['tic_amount'];
         $tic_detail = $_POST['tic_detail'];
-        $detail = strval($_POST['detail']);
+        $detail = $_POST['detail'];
+        $detail = str_replace("'","\'",$detail);
+        $detail = str_replace('"','\"',$detail);
         $require = $_POST['require'];
         $poster_img = basename($_FILES["poster_img"]["name"]);
         $id_card_img = basename($_FILES["id_card_img"]["name"]);
@@ -313,8 +315,8 @@ ob_start(); ?>
                     for ($i = 0; $i < count($tic_price); $i++) {
                         //store ticket detail in to ticket_detail
                         $sql = <<<EOF
-                            INSERT INTO ticket_detail(name,price,description,concert_id)
-                            VALUES('$tic_name[$i]',$tic_price[$i],'$tic_detail[$i]','$concert_id');
+                            INSERT INTO ticket_detail(name,price,description,concert_id,amount)
+                            VALUES('$tic_name[$i]',$tic_price[$i],'$tic_detail[$i]','$concert_id','$tic_amount[$i]');
                             EOF;
                         $ret = $db->exec($sql);
                         $sql = <<<EOF
