@@ -98,8 +98,11 @@ include 'condb.php'
                                         <!--สร้างแถว ที่มีกรอบมนด้านบน-->
                                         <div class="row border rounded-top">
                                             <!--แบ่งเป็น 8/12 ไว้แสดงข้อมูล-->
-                                            <div class="col-8">
-                                                Detail
+                                            <div class="col-6 my-2">
+                                                <p class="fw-bold fs-6 my-0">Detail</p>
+                                            </div>
+                                            <div class="col-3 my-2">
+                                                <p class="fw-bold fs-6 my-0">Price</p>
                                             </div>
                 <?php
     $sql1 = 'SELECT * FROM ticket_detail
@@ -110,110 +113,36 @@ include 'condb.php'
                                         <li class="list-group-item">
                                         <div class="row border border-top-0">
                                             <!--แบ่งเป็น 8/12 ไว้แสดงข้อมูล-->
-                                            <div class="col-8 align-items-center my-1">
-                                                <h6 class="my-0"><?=$row1['name']?></h6>
+                                            <div class="col-6 align-items-center my-1">
+                                            <h6 class="my-0 fw-bold" id="type"><?=$row1['name']?></h6>
                                                 <?php
                                                 $ticket_det1 = $row1['description'];
                                                 if (is_null($ticket_det1)){
                                                     $ticket_det1 = '';
                                                 }
                                                 ?>
-                                                <p class="my-0"><small><?=$ticket_det1?></small></p>
+                                                <small class="text-secondary my-0">'<?=$ticket_det1?></small>
+                                            </div>
+                                            <div class="col-3 d-flex align-items-center text-center">
+                                                <!--ใช้เป็น selected เพราะจะได้เห็นค่าที่เลือก-->
+                                                <p class="my-0 fs-6"><?=$row1['price']?></p>
+                                            </div>
+                                            <div class="col-3 d-flex align-items-center text-center my-1">
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#payment"
+                                                data-ticket-name="<?=$row1['name']?>"
+                                                data-ticket-description="<?=$row1['description']?>"
+                                                data-ticket-price="<?=$row1['price']?>">Buy Now</button>
                                             </div>
                                         </div>
                                     </li>
     <?php
-
     }
     ?>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="card-footer border-danger border-2 text-center">
-                            <br>
-                            <!-- Button trigger modal -->
-<!-- Button to Open the Modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-  Buy ticket
-</button>
-
-<!-- The Modal -->
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h2 class="modal-title">Buy ticket</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <!-- Modal body -->
-      <form id="BuyTicket">
-        <div class="container">
-      <br>
-      <label for="TicketType">เลือกประเภทตั๋ว:</label>
-      <select name="TicketType" id="TicketType">
-      <?php
-    $sql2 = 'SELECT * FROM ticket_detail
-    WHERE concert_id= '.$ids.' AND detail_id IN (SELECT detail_id FROM ticket WHERE payment_id IS NULL)';
-    $result = $db->query($sql2);
-    while($row2 = $result->fetchArray(SQLITE3_ASSOC) ) {
-    ?>
-    <option value="<?=$row2['name']?>"><?=$row2['name']?></option>
-    <?php
-}
-?>
-    </select>
-    <div class="form-group">
-    <br>
-    <label for="card_number"><b>หมายเลขบัตร</b></label>
-    <input type="email" class="form-control" id="card_number" placeholder="โปรดใส่หมายเลขบัตร">
-    </div>
-    <div class="form-group">
-    <br>
-    <label for="card_owner"><b>ชื่อ-นามสกุล</b></label>
-    <input type="email" class="form-control" id="card_owner" placeholder="โปรดใส่ชื่อ-นามสกุล">
-    </div>
-    <div class="form-group">
-    <br>
-    <label for="card_month"><b>เดือน</b></label>
-    <select name="card_month" id="card_mont">
-        <option value="January">มกราคม</option>
-        <option value="February ">กุมภาพันธ์</option>
-        <option value="March">มีนาคม</option>
-        <option value="April">เมษายน</option>
-        <option value="May">พฤษภาคม</option>
-        <option value="June">มิถุนายน</option>
-        <option value="July">กรกฎาคม</option>
-        <option value="August">สิงหาคม</option>
-        <option value="September">กันยายน</option>
-        <option value="October">ตุลาคม</option>
-        <option value="November">พฤศจิกายน</option>
-        <option value="December">ธันวาคม</option>
-    </select>
-    <br>
-    <div class="form-group">
-    <br>
-    <label for="card_year"><b>ปี</b></label>
-    <input type="year" class="form-control" id="card_year">
-    </div>
-    <div class="form-group">
-    <br>
-    <label for="card_cvv"><b>cvv</b></label>
-    <input type="cvv" class="form-control" id="card_cvv">
-    </div>
-    </div>
-    </div>
-    </form>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
                             </div>
                         </div>
                     </div>
