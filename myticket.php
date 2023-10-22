@@ -24,7 +24,7 @@ session_start();
 
     //open db
     $db = new MyDB();
-    $_SESSION['user_login'] = 1;
+    $_SESSION['user_login'] = 1; #แก้ตอนรวมไฟล์
         if (!isset($_SESSION['user_login'])) {
             $_SESSION['error'] = 'กรุณาล็อคอินก่อน';
             header("location: /tickcon/login.php", TRUE);
