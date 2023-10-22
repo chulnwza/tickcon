@@ -116,7 +116,7 @@ session_start();
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="createcon_db.php">
                     <button class="btn btn-light" type="submit" style="background-color: white;">Create Concert</button>
                 </form>
-                <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
+                <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
             </div>
@@ -152,7 +152,7 @@ session_start();
                 echo "you don't have any ticket.";
             } else {
                 $sql = <<<EOF
-                SELECT concert_name, show_date, show_time, td.name, c.address, requirement, concert_img_path, t.ticket_id,p.member_id
+                SELECT concert_id, concert_name, show_date, show_time, td.name, concert_img_path, p.member_id
                 FROM ticket t
                 JOIN ticket_detail td
                 USING (detail_id) 
@@ -164,13 +164,21 @@ session_start();
                 EOF;
                 $ret = $db->query($sql);
                 while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                    echo '<div class="card mb-3" style="width: 18rem;">
+                    echo '<div class="card mb-3" style="width: 24rem;">
                     <div class="card-body">
+                      <div class="row">
+                      <div class="col-lg-4 col-sm-12">
+                      <img class="card-img rounded rounded-4 border border-3 border-dark w-100 mt-1 mb-3"
+                            src="'. $row['concert_img_path'] .'" alt="poster">
+                      </div>
+                      <div class="col-lg-8 col-sm-12">
                       <h6 class="card-title">'.$row['concert_name'].'</h6>
                       <h6 class="card-subtitle mb-2 text-body-secondary">'.$row['show_date'].' / '.$row['show_time'].'</h6>
                       <p class="card-text">'.$row['name'].'</p>
-                      <a href="#" class="card-link">see more</a>
+                      <a href="concert_detail.php?id='. $row['concert_id'] .'" class="card-link">see more</a>
                       <a href="#" class="card-link">QR code</a>
+                      </div>
+                      </div>
                     </div>
                     </div>';
                 }

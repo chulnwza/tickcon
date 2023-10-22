@@ -20,6 +20,10 @@ require_once 'config/db.php';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <!-- add style -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -128,7 +132,7 @@ require_once 'config/db.php';
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="createcon_db.php">
                     <button class="btn btn-light" type="submit">Create Concert</button>
                 </form>
-                <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
+                <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
             </div>
@@ -136,28 +140,35 @@ require_once 'config/db.php';
     </nav>
 
     <!-- code -->
-<div class="container">
+    <div class="container">
         <!--แยกฝั่งหน้าจอ-->
         <?php
         $ids = $_GET['id'];
-        $sql = 'SELECT * FROM concert WHERE concert_id = "'.$ids.'";';
+        $sql = 'SELECT * FROM concert WHERE concert_id = "' . $ids . '";';
         $result = $db->query($sql);
         $row = $result->fetchArray(SQLITE3_ASSOC);
         ?>
-        <div class="row h-100">
+        <div class="row mt-0">
             <!--ฝั่งแรกยาว 7/12 ใช้แสดงรูป + description-->
             <div class="col-lg-7 div-1">
                 <div class="card my-3 text-center" style="width: 50%;margin: 0 auto;">
 
-                    <img style="width: 100%;" class="card-img" src="<?=$row['concert_img_path']?>">
+                    <img style="width: 100%;" class="card-img" src="<?= $row['concert_img_path'] ?>">
 
                 </div>
 
-                <h4 class="mt-2" >Description</h4>
+                <h4 class="mt-2">Description</h4>
                 <hr>
-                <p><small>
-                <?=$row['detail']?>
-                    </small></p>
+                <small style="white-space: pre;">
+                        <?= $row['detail'] ?>
+                    </small>
+
+                <div class="card my-3 text-center" style="width: 50%;margin: 0 auto;<?php if (is_null($row['stage_img']) == TRUE) {echo 'display:none;';}?>">
+
+                    <img style="width: 100%;" class="card-img" src="<?=$row['stage_img']?>">
+
+                </div>
+
             </div>
             <!--ฝั่งสองยาว 5/12 ใช้แสดงรายละเอียดสำคัญและการจองตัว-->
             <div class="col-lg-5 bg-dark">
@@ -167,7 +178,9 @@ require_once 'config/db.php';
                     <div class="col-12 mt-3 my-2">
                         <div class="card">
                             <div class="card-body text-center">
-                                <h6 class="card-title fs-4 fw-bold"><?=$row['concert_name']?></h6>
+                                <h6 class="card-title mb-0 fw-bold fs-5">
+                                    <?= $row['concert_name'] ?>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -177,11 +190,17 @@ require_once 'config/db.php';
                     <!--ใช้แสดงวัน เวลา สถานที่ ข้อกำหนด-->
                     <div class="col-12">
                         <div class="card h-100">
-                            <div class="card-body pb-0 mb-0">
-                                <ul class="list-unstyled">
-                                    <li><i class="bi bi-clock"></i><b> วัน/เวลา :</b> <?php echo date('l d F Y', strtotime($row['show_date'])); ?>, <?=$row['show_time']?></li>
-                                    <li><i class="bi bi-geo-alt"></i><b> สถานที่ :</b> <?=$row['address']?></li>
-                                    <li><i class="bi bi-exclamation-circle-fill"></i><b> ข้อกำหนด :</b> <?=$row['requirement']?></li>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    <li><b><i class="bi bi-clock"></i>&nbsp;วัน/เวลา :</b>
+                                        <?php echo date('l d F Y', strtotime($row['show_date'])); ?>, <?=$row['show_time']?>
+                                    </li>
+                                    <li><b><i class="bi bi-geo-alt"></i>&nbsp;สถานที่ :</b>
+                                        <?= $row['address'] ?>
+                                    </li>
+                                    <li><b><i class="bi bi-exclamation-circle-fill"></i>&nbsp;ข้อกำหนด :</b>
+                                        <?= $row['requirement'] ?>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -192,11 +211,11 @@ require_once 'config/db.php';
                 <div class="row mt-2">
                     <div class="col-12">
                         <!--ใช้รูปแบบ card เพราะเป็นกรอบมาให้ แบ่งหัวท้ายง่าย-->
-                        <div class="card border-danger border">
+                        <div class="card border-danger border mb-4">
                             <!--ส่วนหัว-->
-                            <p class="card-header border-danger border-2 fw-bold">ประเภทตั๋วที่จำหน่าย</p>
+                            <p class="card-header border-danger border-2">ประเภทตั๋วที่จำหน่าย</p>
                             <!--ส่วนเนื้อหา-->
-                            <div class="card-body">
+                            <div class="card-body pb-0">
                                 <!--ใช้ list เพราะจะได้แสดงเป็นประเภทๆ ได้สะดวก-->
                                 <ul class="list-unstyled list-group-light align-middle">
                                     <!--ในแต่ละข้อมูลจะแบ่งเป็นซ้ายขวาอีกทีนึง-->
@@ -211,222 +230,249 @@ require_once 'config/db.php';
                                                 <p class="fw-bold fs-6 my-0">Price</p>
                                             </div>
                                     </li>
-                <?php
-    $sql1 = 'SELECT *, count(detail_id) `amount_each`
-    FROM (SELECT detail_id, name, description, price, payment_id, amount
-    FROM ticket_detail
-    JOIN ticket
-    USING (detail_id)
-    WHERE concert_id= '.$ids.')
-	GROUP by detail_id, payment_id IS NOT NULL;';
-    $result1 = $db->query($sql1);
-    while($row1 = $result1->fetchArray(SQLITE3_ASSOC) ) {
-        if ((is_null($row1['payment_id']) == TRUE) || ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each']))) {
-    ?>
-                                        <li class="list-group-item">
-                                        <div class="row border border-top-0">
-                                            <div class="col-6 align-items-center my-1">
-                                            <h6 class="my-0 fw-bold" id="type"><?=$row1['name']?></h6>
-                                                <?php
-                                                $ticket_det1 = $row1['description'];
-                                                if (is_null($ticket_det1)){
-                                                    $ticket_det1 = '';
-                                                }
-                                                ?>
-                                                <small class="text-secondary my-0"><?=$ticket_det1?></small>
-                                            </div>
-                                            <div class="col-3 d-flex align-items-center text-center">
-                                                <p class="my-0 fs-6"><?=$row1['price'].'฿'?></p>
-                                            </div>
-                                            <div class="col-3 d-flex align-items-center text-center my-1">
-                                                
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#payment"
-                                                data-ticket-name="<?=$row1['name']?>"
-                                                data-ticket-description="<?=$row1['description']?>"
-                                                data-ticket-price="<?=$row1['price'].'฿'?>"
-                                                data-ticket-detail-id="<?=$row1['detail_id']?>"
-                                                <?php
-                                                if ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each'])) {
-                                                    echo 'disabled> Sold Out </button>';
-                                                } else {
-                                                    echo '>Buy Now</button>';
-                                                }
-                                                ?>
-                                            </div>
-                                        </div>
-                                    </li>
-                            <?php
-                            }}
-                            ?>
-    <div class="modal fade" id="payment" tabindex="-1" role="dialog" aria-labelledby="Title"
-                                aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <!--ส่วนหัว-->
-                                        <div class="modal-header">
-                                            <p class="modal-title fw-bold fs-6" id="Title">Buy ticket</p>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close">
-                                            </button>
-                                        </div>
-                                        <!--ส่วนฟอร์ม-->
-                                        <div class="modal-body">
-                                            <div class="card mb-4">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            <img class="rounded rounded-4 border border-3 border-dark w-100"
-                                                                src="<?=$row['concert_img_path']?>" id="buying-poster" alt="poster">
-                                                        </div>
-                                                        <div class="col-8 d-flex align-items-center">
-                                                            <ul class="list-unstyled">
-                                                                <li class="mb-2"><p class="my-0 fw-bold">ประเภทที่นั่ง:&nbsp;</p><span id="modal-ticket-name"></span></li>
-                                                                <li class="mb-2"><p class="my-0 fw-bold">รายละเอียด:&nbsp;</p><span id="modal-ticket-description"></span></li>
-                                                                <li class="mb-2"><p class="my-0 fw-bold">ราคา:&nbsp;</p><span id="modal-ticket-price"></span></li>
-                                                                <li class="mb-2"><p class="my-0 fw-bold">วันที่และเวลา:&nbsp;</p><?=date('l d F Y', strtotime($row['show_date']));?>, <?=$row['show_time']?></li>
-                                                                <li class="mb-2"><p class="my-0 fw-bold">สถานที่จัด:&nbsp;</p><?=$row['address']?></li>
-                                                            </ul>
+                                    <?php
+                                    $sql1 = 'SELECT *, count(detail_id) `amount_each`
+                                    FROM (SELECT detail_id, name, description, price, payment_id, amount
+                                    FROM ticket_detail
+                                    JOIN ticket
+                                    USING (detail_id)
+                                    WHERE concert_id= ' . $ids . ')
+                                    GROUP by detail_id, payment_id;';
+                                    $result1 = $db->query($sql1);
+                                    while ($row1 = $result1->fetchArray(SQLITE3_ASSOC)) {
+                                        if ((is_null($row1['payment_id']) == TRUE) || ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each']))) {
+                                            ?>
+                                            <li class="list-group-item">
+                                                <div class="row border border-top-0">
+                                                    <div class="col-6 align-items-center my-1">
+                                                        <h6 class="my-0 fw-bold" id="type">
+                                                            <?= $row1['name'] ?>
+                                                        </h6>
+                                                        <?php
+                                                        $ticket_det1 = $row1['description'];
+                                                        if (is_null($ticket_det1)) {
+                                                            $ticket_det1 = '';
+                                                        }
+                                                        ?>
+                                                        <small class="text-secondary my-0">
+                                                            <?= $ticket_det1 ?>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-3 d-flex align-items-center text-center">
+                                                        <p class="my-0 fs-6">
+                                                            <?= $row1['price'] . '฿' ?>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-3 d-flex align-items-center text-center my-1">
+
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                            data-bs-target="#payment" data-ticket-name="<?= $row1['name'] ?>"
+                                                            data-ticket-description="<?= $row1['description'] ?>"
+                                                            data-ticket-price="<?= $row1['price'] ?>฿"
+                                                            data-ticket-detail-id="<?= $row1['detail_id'] ?>" <?php
+                                                            if ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each'])) {
+                                                                echo 'disabled> Sold Out </button>';
+                                                            } else {
+                                                                echo '>Buy Now</button>';
+                                                            }
+                                                            ?> </div>
+                                                    </div>
+                                            </li>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                    <div class="modal fade" id="payment" tabindex="-1" role="dialog"
+                                        aria-labelledby="Title" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <!--ส่วนหัว-->
+                                                <div class="modal-header">
+                                                    <p class="modal-title fw-bold fs-6" id="Title">Buy ticket</p>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                    </button>
+                                                </div>
+                                                <!--ส่วนฟอร์ม-->
+                                                <div class="modal-body">
+                                                    <div class="card mb-4">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-4">
+                                                                    <img class="rounded rounded-4 border border-3 border-dark w-100"
+                                                                        src="<?= $row['concert_img_path'] ?>"
+                                                                        id="buying-poster" alt="poster">
+                                                                </div>
+                                                                <div class="col-8 d-flex align-items-center">
+                                                                    <ul class="list-unstyled">
+                                                                        <li class="mb-2">
+                                                                            <p class="my-0 fw-bold">ประเภทที่นั่ง:&nbsp;
+                                                                            </p><span id="modal-ticket-name"></span>
+                                                                        </li>
+                                                                        <li class="mb-2">
+                                                                            <p class="my-0 fw-bold">รายละเอียด:&nbsp;
+                                                                            </p><span
+                                                                                id="modal-ticket-description"></span>
+                                                                        </li>
+                                                                        <li class="mb-2">
+                                                                            <p class="my-0 fw-bold">ราคา:&nbsp;</p><span
+                                                                                id="modal-ticket-price"></span>
+                                                                        </li>
+                                                                        <li class="mb-2">
+                                                                            <p class="my-0 fw-bold">วันที่และเวลา:&nbsp;
+                                                                            </p>
+                                                                            <?= date('l d F Y', strtotime($row['show_date'])); ?>,
+                                                                            <?= $row['show_time'] ?>
+                                                                        </li>
+                                                                        <li class="mb-2">
+                                                                            <p class="my-0 fw-bold">สถานที่จัด:&nbsp;
+                                                                            </p>
+                                                                            <?= $row['address'] ?>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $_GET['id'];?>" method="POST">
-                                                <div class="form-floating mb-2">
-                                                    <input type="text" class="form-control" id="credit_number"
-                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                                        placeholder="เลขบัตรเครดิต" name="credit_number">
-                                                    <label for="credit_number">เลขบัตรเครดิต</label>
-                                                </div>
-                                                <div class="form-floating mb-2">
-                                                    <input type="text" class="form-control" id="credit_name"
-                                                        placeholder="ชื่อ-นามสกุลผู้ถือบัตร" name="credit_name">
-                                                    <label for="credit_name">ชื่อ-นามสกุลผู้ถือบัตร</label>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-4 col-sm-6">
+                                                    <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $_GET['id'];?>" method="POST">
                                                         <div class="form-floating mb-2">
-                                                            <input type="text" id="form" name="credit_month"
-                                                                class="form-control"
+                                                            <input type="text" class="form-control" id="credit_number"
                                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                                                maxlength="2" placeholder="Month" name="credit_month" />
-                                                            <label for="credit_month">MM</label>
+                                                                placeholder="เลขบัตรเครดิต" name="credit_number">
+                                                            <label for="credit_number">เลขบัตรเครดิต</label>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-4 col-sm-6">
                                                         <div class="form-floating mb-2">
-                                                            <input type="text" id="form" name="credit_year"
-                                                                class="form-control"
-                                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                                                maxlength="4" placeholder="Year" name="credit_year" />
-                                                            <label for="credit_year">YY</label>
+                                                            <input type="text" class="form-control" id="credit_name"
+                                                                placeholder="ชื่อ-นามสกุลผู้ถือบัตร" name="credit_name">
+                                                            <label for="credit_name">ชื่อ-นามสกุลผู้ถือบัตร</label>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-4 col-sm-12 text-center">
-                                                        <div class="form-floating mb-2">
-                                                            <input type="text" id="form" name="credit_cvv"
-                                                                class="form-control"
-                                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                                                                maxlength="3" placeholder="CVV" name="credit_cvv" />
-                                                            <label for="credit_cvv">CVV</label>
+                                                        <div class="row">
+                                                            <div class="col-4 col-sm-6">
+                                                                <div class="form-floating mb-2">
+                                                                    <input type="text" id="form" name="credit_month"
+                                                                        class="form-control"
+                                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                                        maxlength="2" placeholder="Month"
+                                                                        name="credit_month" />
+                                                                    <label for="credit_month">MM</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4 col-sm-6">
+                                                                <div class="form-floating mb-2">
+                                                                    <input type="text" id="form" name="credit_year"
+                                                                        class="form-control"
+                                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                                        maxlength="4" placeholder="Year"
+                                                                        name="credit_year" />
+                                                                    <label for="credit_year">YY</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4 col-sm-12 text-center">
+                                                                <div class="form-floating mb-2">
+                                                                    <input type="text" id="form" name="credit_cvv"
+                                                                        class="form-control"
+                                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                                                        maxlength="3" placeholder="CVV"
+                                                                        name="credit_cvv" />
+                                                                    <label for="credit_cvv">CVV</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                        <!--ส่วนท้าย-->
+                                                        <div class="modal-footer">
+                                                        <input type="hidden" name="detail_id" id="ticket-detail-id">
+                                                            <button type="submit" class="btn btn-success"
+                                                                name="confirm">Confirm</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
-                                                <!--ส่วนท้าย-->
-                                                <div class="modal-footer">
-                                                <input type="hidden" name="detail_id" id="ticket-detail-id">
-                                                <button type="submit" class="btn btn-success" name="confirm">Confirm</button>
-                                                </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                             </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            </div>
+                            </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
+    </div>
     <?php
-if (isset($_POST['confirm'])) {
-    $member_id = $_SESSION['member_id'];
-    $number = $_POST['credit_number'];
-    $name = $_POST['credit_name'];
-    $month = $_POST['credit_month'];
-    $year = $_POST['credit_year'];
-    $cvv = $_POST['credit_cvv'];
-    $detail_id = $_POST['detail_id'];
-    $alert_text = '';
-    if (empty($number)) {
-      $alert_text .= 'กรุณากรอกเลขบัตรเครดิต\n';
-    }
-    if (empty($name)) {
-      $alert_text .= 'กรุณากรอกเลขชื่อ-นามสกุลผู้ถือบัตร\n';
-    }
-    if (empty($month)) {
-      $alert_text .= 'กรุณากรอกเดือนที่บัตรหมดอายุ\n';
-    }
-    if (empty($year)) {
-      $alert_text .= 'กรุณากรอกปีที่บัตรหมดอายุ\n';
-    }
-    if (empty($cvv)) {
-      $alert_text .= 'กรุณากรอกรหัสรักษาความปลอดภัยของบัตร\n';
-    }
-    if ($month > 12){
-        $alert_text .= 'กรุณากรอกเดือนที่หมดอายุตามความเป็นจริง\n';
-    }
-    if ($year < date("Y")){
-        $alert_text .= 'กรุณากรอกปีที่หมดอายุให้ไม่น้อยกว่าปัจจุบัน';
-    }
-    if ($alert_text != "") {
-      echo "<script>alert('" . $alert_text . "');</script>";
-    }else {
-      #หาว่าตั๋ว id ที่น้อยที่สุดคือ id ที่เท่าไหร่
-      $sql_find = <<<EOF
-      SELECT ticket_id
-      FROM ticket
-      WHERE detail_id = $detail_id
-      AND payment_id IS NULL
-      ORDER BY ticket_id ASC
-      LIMIT 1;
-      EOF;
-      $ret = $db -> query($sql_find);
-      $row = $ret -> fetchArray(SQLITE3_ASSOC);
-      $current_id = $row['ticket_id'];
+    if (isset($_POST['confirm'])) {
+        $member_id = $_SESSION['member_id'];
+        $number = $_POST['credit_number'];
+        $name = $_POST['credit_name'];
+        $month = $_POST['credit_month'];
+        $year = $_POST['credit_year'];
+        $cvv = $_POST['credit_cvv'];
+        $detail_id = $_POST['detail_id'];
+        $alert_text = '';
+        if (empty($number)) {
+            $alert_text .= 'กรุณากรอกเลขบัตรเครดิต\n';
+        }
+        if (empty($name)) {
+            $alert_text .= 'กรุณากรอกเลขชื่อ-นามสกุลผู้ถือบัตร\n';
+        }
+        if (empty($month)) {
+            $alert_text .= 'กรุณากรอกเดือนที่บัตรหมดอายุ\n';
+        }
+        if (empty($year)) {
+            $alert_text .= 'กรุณากรอกปีที่บัตรหมดอายุ\n';
+        }
+        if (empty($cvv)) {
+            $alert_text .= 'กรุณากรอกรหัสรักษาความปลอดภัยของบัตร\n';
+        }
+        if ($month > 12){
+            $alert_text .= 'กรุณากรอกเดือนที่หมดอายุตามความเป็นจริง\n';
+        }
+        if ($year < date("Y")){
+            $alert_text .= 'กรุณากรอกปีที่หมดอายุให้ไม่น้อยกว่าปัจจุบัน';
+        }
+        if ($alert_text != "") {
+            echo "<script>alert('" . $alert_text . "');</script>";
+        }else {
+            #หาว่าตั๋ว id ที่น้อยที่สุดคือ id ที่เท่าไหร่
+            $sql_find = <<<EOF
+            SELECT ticket_id
+            FROM ticket
+            WHERE detail_id = $detail_id
+            AND payment_id IS NULL
+            ORDER BY ticket_id ASC
+            LIMIT 1;
+            EOF;
+            $ret = $db -> query($sql_find);
+            $row = $ret -> fetchArray(SQLITE3_ASSOC);
+            $current_id = $row['ticket_id'];
+            echo $current_id;
 
-      $sql_insert_paymemt = <<<EOF
-      INSERT INTO payment(member_id, card_number, card_holder, month, year, CVV)
-      VALUES ('$member_id', '$number', '$name', '$month', '$year', '$cvv');
-      EOF;
-      $ret_insert_payment = $db -> exec($sql_insert_paymemt);
+            $sql_insert_paymemt = <<<EOF
+            INSERT INTO payment(ticket_id, member_id, card_number, card_holder, month, year, CVV)
+            VALUES ($current_id, $member_id, $number, '$name', $month, $year, $cvv);
+            EOF;
+            $ret_insert_payment = $db -> exec($sql_insert_paymemt);
 
-      $sql_get_payment_id = <<<EOF
-      SELECT payment_id
-      FROM payment
-      ORDER BY payment_id DESC
-      LIMIT 1;
-      EOF;
-      $ret_payment_id = $db -> query($sql_get_payment_id);
-      $row = $ret_payment_id -> fetchArray(SQLITE3_ASSOC);
-      $payment_id = $row['payment_id'];
+            $sql_get_payment_id = <<<EOF
+            SELECT payment_id
+            FROM payment
+            ORDER BY payment_id DESC
+            LIMIT 1;
+            EOF;
+            $ret_payment_id = $db -> query($sql_get_payment_id);
+            $row = $ret_payment_id -> fetchArray(SQLITE3_ASSOC);
+            $payment_id = $row['payment_id'];
 
-      $sql_update_ticket = <<<EOF
-      UPDATE ticket
-      SET payment_id = $payment_id
-      WHERE ticket_id = $current_id;
-      EOF;
-      $ret_update_ticket = $db -> exec($sql_update_ticket);
-      echo '<script>alert("การซื้อบัตรเสร็จสิ้น");</script>';
-    }
-  }
-?>
-    <?php
+            $sql_update_ticket = <<<EOF
+            UPDATE ticket
+            SET payment_id = $payment_id
+            WHERE ticket_id = $current_id;
+            EOF;
+            $ret_update_ticket = $db -> exec($sql_update_ticket);
+            echo '<script>alert("การซื้อบัตรเสร็จสิ้น");</script>';
+            }
+        }
     $db->close();
     ?>
     <!-- footer -->
