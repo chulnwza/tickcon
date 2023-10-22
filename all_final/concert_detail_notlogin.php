@@ -77,36 +77,65 @@ require_once 'config/db.php';
 </head>
 
 <body>
-   <!-- navbar -->
+    <!-- navbar -->
+    <?php if (isset($_SESSION['member_id'])) { ?>
+        <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index_admin.php">
+                    <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index_admin.php" style="color:white;">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="con_waiting_list.php">Pending List</a>
 
-   <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index_notlogin.php">
-                <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="index_notlogin.php">Home</a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link " href="index_notlogin.php" style="color:white;">Concerts</a>
-                    </li>
-                </ul>
-                <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
-                    <button class="btn btn-outline-info" type="submit">Sign Up</button>
-                </form>
-                <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
-                    <button class="btn btn-outline-info" type="submit">Log In</button>
-                </form>
+                        </li>
+                    </ul>
+                    <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
+                        <button class="btn btn-outline-danger" type="submit">Log Out</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    <?php } ?>
+    <?php if (!isset($_SESSION['member_id'])) { ?>
+        <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index_notlogin.php">
+                    <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
+                        <!-- <li class="nav-item">
+                                <a class="nav-link" href="index_notlogin.php">Home</a>
+                            </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link " href="index_notlogin.php" style="color:white;">Concerts</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
+                        <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                    </form>
+                    <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
+                        <button class="btn btn-outline-info" type="submit">Log In</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    <?php } ?>
     <!-- code -->
     <div class="container">
         <!--แยกฝั่งหน้าจอ-->
@@ -236,17 +265,19 @@ require_once 'config/db.php';
                                                     </div>
                                                     <div class="col-3 d-flex align-items-center text-center my-1">
 
-                                                        <button type="button" class="btn btn-danger"   data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover"
-                                                            data-bs-target="#payment" data-ticket-name="<?= $row1['name'] ?>"
+                                                        <button type="button" class="btn btn-danger" data-bs-container="body"
+                                                            data-bs-toggle="popover" data-bs-placement="top"
+                                                            data-bs-content="Top popover" data-bs-target="#payment"
+                                                            data-ticket-name="<?= $row1['name'] ?>"
                                                             data-ticket-description="<?= $row1['description'] ?>"
                                                             data-ticket-price="<?= $row1['price'] ?>"
                                                             data-ticket-detail-id="<?= $row1['detail_id'] ?>" <?php
-                                                            if ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each'])) {
-                                                                echo 'disabled> Sold Out </button>';
-                                                            } else {
-                                                                echo 'disabled >Buy Now</button>';
-                                                            }
-                                                            ?> </div>
+                                                              if ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each'])) {
+                                                                  echo 'disabled> Sold Out </button>';
+                                                              } else {
+                                                                  echo 'disabled >Buy Now</button>';
+                                                              }
+                                                              ?> </div>
                                                     </div>
                                             </li>
                                             <?php

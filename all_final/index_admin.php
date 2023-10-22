@@ -41,10 +41,12 @@
             background-color: #C2D9FF;
             border-color: #C2D9FF;
         }
-        .btn-outline-danger{
+
+        .btn-outline-danger {
             color: white;
             border-color: white;
         }
+
         .card-text {
             max-width: 50ch;
             overflow: hidden;
@@ -65,8 +67,7 @@
     <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
         <div class="container-fluid">
             <a class="navbar-brand" href="index_admin.php">
-                <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" 
-                    class="d-inline-block align-text-top">
+                <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -79,9 +80,8 @@
                         <a class="nav-link" href="index_admin.php" style="color:white;">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="con_waiting_list.php">Pending List<span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle">
-                        </span></a>
-                        
+                        <a class="nav-link " href="con_waiting_list.php">Pending List</a>
+
                     </li>
                 </ul>
                 <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
@@ -92,6 +92,44 @@
     </nav>
 
     <!-- code -->
+    <div class="text-center">
+        <h1>คอนเสิร์ตที่เปิดขาย</h1>
+    </div>
+    <div class="container">
+        <br>
+        <div class="row">
+            <?php
+            require_once 'config/db.php';
+            $sql1 = 'SELECT * FROM concert
+            WHERE status="approved" AND open_booking_date < "' . date("Y-m-d") . '"' . ' AND show_date > "' . date("Y-m-d") . '"';
+            $result = $db->query($sql1);
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+
+
+                ?>
+                <div class="col-sm-3">
+                    <div class="text-center">
+                        <img src="<?= $row['concert_img_path'] ?>" width="200px" height="250" class="mt-5 p-1 my-1 border">
+                        <br>
+                        <b>
+                            <?= $row['concert_name'] ?>
+                        </b><br>
+                        <b>Showtime:</b>
+                        <?= $row['show_time'] ?>,
+                        <?= $row['show_date'] ?><br>
+                        <a class="btn btn-outline-primary"
+                            href="concert_detail_notlogin.php?id=<?= $row['concert_id'] ?>">รายละเอียด</a>
+                        <a class="btn btn-outline-dark">ซื้อบัตร</a>
+                    </div>
+                    <br>
+                </div>
+                <?php
+            }
+            $db->close();
+            ?>
+        </div>
+    </div>
+
 
     <!-- footer -->
     <hr>
