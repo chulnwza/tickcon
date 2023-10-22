@@ -446,11 +446,10 @@ require_once 'config/db.php';
             $ret = $db -> query($sql_find);
             $row = $ret -> fetchArray(SQLITE3_ASSOC);
             $current_id = $row['ticket_id'];
-            echo $current_id;
 
             $sql_insert_paymemt = <<<EOF
-            INSERT INTO payment(ticket_id, member_id, card_number, card_holder, month, year, CVV)
-            VALUES ($current_id, $member_id, $number, '$name', $month, $year, $cvv);
+            INSERT INTO payment(member_id, card_number, card_holder, month, year, CVV)
+            VALUES ($member_id, $number, '$name', $month, $year, $cvv);
             EOF;
             $ret_insert_payment = $db -> exec($sql_insert_paymemt);
 
