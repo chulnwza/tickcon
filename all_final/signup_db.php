@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>register</title>
     <!-- google font -->
@@ -21,7 +21,6 @@
     <style>
         * {
             font-family: 'Dosis', sans-serif;
-            font-weight: 700;
         }
 
         .navbar-brand {
@@ -42,7 +41,7 @@
             border-color: #C2D9FF;
         }
 
-        .btn-outline-info {
+        .btn-outline-light {
             color: white;
             border-color: white;
         }
@@ -83,104 +82,105 @@
                     </li>
                 </ul>
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
-                    <button class="btn btn-outline-info" type="submit"
+                    <button class="btn btn-outline-light" type="submit"
                         style="background-color: #FFFFFF; color:#000000; border-color: white;">Sign Up</button>
                 </form>
                 <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
-                    <button class="btn btn-outline-info" type="submit">Log In</button>
+                    <button class="btn btn-outline-light" type="submit">Log In</button>
                 </form>
             </div>
         </div>
     </nav>
 
     <!-- code -->
-    <div class="container">
+    <div class="container" style="width : 60%">
         <h3 class="mt-4">สมัครสมาชิก</h3>
         <hr>
         <?php
-    if (isset($_POST['signup'])) {
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
-        $email = $_POST['email'];
-        $pwd = $_POST['pwd'];
-        $c_pwd = $_POST['c_pwd'];
-        $urole = 'user';
-        $error_msg = "";
-        // เพิ่ม Bootstrap alert
-        if (empty($fname)) {
-            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกชื่อ</div>';
-        } else if (empty($lname)) {
-            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกนามสกุล</div>';
-        } else if (empty($email)) {
-            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกอีเมล</div>';
-        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo '<div class="alert alert-danger text-center" role="alert">รูปแบบอีเมลไม่ถูกต้อง</div>';
-        } else if (empty($pwd)) {
-            echo '<div class="alert alert-danger text-center" role="alert">กรุณากรอกรหัสผ่าน</div>';
-        } else if (strlen($pwd) > 20 || strlen($pwd) < 5) {
-            echo '<div class="alert alert-danger text-center" role="alert">รหัสผ่านจะต้องมีความยาวระหว่าง 5 ถึง 20 ตัวอักษร</div>';
-        } else if (empty($c_pwd)) {
-            echo '<div class="alert alert-danger text-center" role="alert">กรุณายืนยันรหัสผ่าน</div>';
-        } else if ($pwd != $c_pwd) {
-            echo '<div class="alert alert-danger text-center" role="alert">รหัสผ่านไม่ตรงกัน</div>';
-        } else {
-            // Connect to the database
-            session_start();
-            require_once 'config/db.php';
+        if (isset($_POST['signup'])) {
+            $fname = $_POST['fname'];
+            $lname = $_POST['lname'];
+            $email = $_POST['email'];
+            $pwd = $_POST['pwd'];
+            $c_pwd = $_POST['c_pwd'];
+            $urole = 'user';
+            $error_msg = "";
+            // เพิ่ม Bootstrap alert
+            if (empty($fname)) {
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">กรุณากรอกชื่อ<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else if (empty($lname)) {
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">กรุณากรอกนามสกุล<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else if (empty($email)) {
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">กรุณากรอกอีเมล<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo '<div class="alert alert-danger text-center" role="alert">รูปแบบอีเมลไม่ถูกต้อง<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else if (empty($pwd)) {
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">กรุณากรอกรหัสผ่าน<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else if (strlen($pwd) > 20 || strlen($pwd) < 5) {
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">รหัสผ่านจะต้องมีความยาวระหว่าง 5 ถึง 20 ตัวอักษร<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else if (empty($c_pwd)) {
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">กรุณายืนยันรหัสผ่าน<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else if ($pwd != $c_pwd) {
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">รหัสผ่านไม่ตรงกัน<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else {
+                // Connect to the database
+                session_start();
+                require_once 'config/db.php';
 
-            // Get data...
-            $sql = <<<EOF
+                // Get data...
+                $sql = <<<EOF
             SELECT email from member;
             EOF;
-            $ret = $db->query($sql);
-            $data_email = array();
+                $ret = $db->query($sql);
+                $data_email = array();
 
-            while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                array_push($data_email, $row['email']);
-            }
+                while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
+                    array_push($data_email, $row['email']);
+                }
 
-            if (in_array($email, $data_email)) {
-                echo '<div class="alert alert-danger text-center" role="alert">อีเมลนี้ถูกใช้ไปแล้ว กรุณาลองใหม่อีกครั้ง</div>';
-            } else {
-                $sql = <<<EOF
+                if (in_array($email, $data_email)) {
+                    echo '<div class="alert alert-danger text-center" role="alert">อีเมลนี้ถูกใช้ไปแล้ว กรุณาลองใหม่อีกครั้ง</div>';
+                } else {
+                    $sql = <<<EOF
                 INSERT INTO member(firstname,lastname,email,password,type)
                 VALUES ('$fname','$lname','$email','$pwd','$urole');
                 EOF;
-                $ret = $db->query($sql);
-                echo '<div class="alert alert-success text-center" role="alert">สมัครสมาชิกสำเร็จ คลิกเพื่อเข้าสู่ระบบ <a href="login_db.php"> เข้าสู่ระบบ</a></div>';
+                    $ret = $db->query($sql);
+                    echo '<div class="alert alert-success text-center" role="alert">สมัครสมาชิกสำเร็จ คลิกเพื่อเข้าสู่ระบบ <a href="login_db.php"> เข้าสู่ระบบ</a></div>';
+                }
+                $db->close();
             }
-            $db->close();
         }
-    }
-    ?>
+        ?>
         <form action="signup_db.php" method="post">
             <div class="mb-3">
                 <label for="fname" class="form-label">First name</label>
-                <input type="text" class="form-control" name="fname" aria-describedby="fname">
+                <input type="text" class="form-control" name="fname" aria-describedby="fname" placeholder="ชื่อจริง">
             </div>
             <div class="mb-3">
                 <label for="lname" class="form-label">Last name</label>
-                <input type="text" class="form-control" name="lname" aria-describedby="lname">
+                <input type="text" class="form-control" name="lname" aria-describedby="lname" placeholder="นามสกุล">
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="email">
+                <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="อีเมล">
             </div>
             <div class="mb-3">
                 <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control" name="pwd">
+                <input type="password" class="form-control" name="pwd" placeholder="ความยาวมากกว่า 5 ตัวอักษร">
             </div>
             <div class="mb-3">
                 <label for="confirm pwd" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" name="c_pwd">
+                <input type="password" class="form-control" name="c_pwd" placeholder="ยืนยัน password">
             </div>
-            <button type="submit" class="btn btn-primary" name="signup">Sign Up</button>
+            <button type="submit" class="btn btn-info" name="signup">Sign Up</button>
+
         </form>
-        
+
 
     </div>
 
-    
+
     <!-- footer -->
     <hr>
     <footer class="py-3 my-4 ">

@@ -41,7 +41,6 @@ require_once 'config/db.php';
 
         * {
             font-family: 'Dosis', sans-serif;
-            font-weight: 700;
         }
 
         .navbar-brand {
@@ -132,7 +131,7 @@ require_once 'config/db.php';
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="createcon_db.php">
                     <button class="btn btn-light" type="submit">Create Concert</button>
                 </form>
-                <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
+                <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
             </div>
@@ -192,13 +191,13 @@ require_once 'config/db.php';
                         <div class="card h-100">
                             <div class="card-body">
                                 <ul class="list-unstyled mb-0">
-                                    <li><b><i class="bi bi-clock"></i>&nbsp;วัน/เวลา :</b>
+                                    <li><b><i class="bi bi-clock"></i>&nbsp;</b>
                                         <?php echo date('l d F Y', strtotime($row['show_date'])); ?>, <?=$row['show_time']?>
                                     </li>
-                                    <li><b><i class="bi bi-geo-alt"></i>&nbsp;สถานที่ :</b>
+                                    <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
                                         <?= $row['address'] ?>
                                     </li>
-                                    <li><b><i class="bi bi-exclamation-circle-fill"></i>&nbsp;ข้อกำหนด :</b>
+                                    <li><b><i class="bi bi-exclamation-circle-fill"></i>&nbsp;</b>
                                         <?= $row['requirement'] ?>
                                     </li>
                                 </ul>

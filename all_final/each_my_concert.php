@@ -22,7 +22,6 @@
     <style>
         * {
             font-family: 'Dosis', sans-serif;
-            font-weight: 700;
         }
 
         .navbar-brand {
@@ -33,7 +32,7 @@
             color: white;
         }
 
-        .nav-link:hover {
+        .nav-link-1:hover {
             color: white;
             font-weight: bolder;
         }
@@ -58,6 +57,11 @@
         .card {
             margin: auto;
         }
+
+        .nav-link {
+            text-decoration: none;
+            color: #000000;
+        }
     </style>
 </head>
 
@@ -79,10 +83,10 @@
                         <a class="nav-link" href="index_user.php">Home</a>
                     </li> -->
                     <li class="nav-item">
-                        <a class="nav-link " href="index_user.php">Concerts</a>
+                        <a class="nav-link-1 nav-link " href="index_user.php">Concerts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="myticket.php">My Tickets</a>
+                        <a class="nav-link-1 nav-link" href="myticket.php">My Tickets</a>
                     </li>
                 </ul>
                 <?php
@@ -137,8 +141,23 @@
     $row = $ret->fetchArray(SQLITE3_ASSOC);
     if (!isset($_POST['button'])) {
         echo '<div class="container">
-        <h3 class="mt-4">my concert</h3>
-        <hr>
+        
+        <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">ข้อมูลคอนเสิร์ต</a>
+        </li>';
+        if ($row['status'] == 'approved') {
+            echo '<li class="nav-item">
+                <a class="nav-link" href="each_my_concert_stat.php">ดูข้อมูลการซื้อบัตร</a>
+                </li>';
+        }else{
+            echo '<li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true" href="each_my_concert_stat.php">ดูข้อมูลการซื้อบัตร</a>
+                </li>';
+        }
+
+        echo '</ul><br>
+    
         <form action="each_my_concert.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="cname" class="form-label"><b>ชื่อคอนเสิร์ต</b></label>

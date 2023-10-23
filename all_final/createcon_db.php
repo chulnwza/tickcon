@@ -8,8 +8,8 @@ ob_start(); ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>create concert</title>
-   <!-- google font -->
-   <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
         rel="stylesheet">
@@ -24,7 +24,6 @@ ob_start(); ?>
     <style>
         * {
             font-family: 'Dosis', sans-serif;
-            font-weight: 700;
         }
 
         .navbar-brand {
@@ -104,17 +103,17 @@ ob_start(); ?>
                 if ($count > 0) {
                     echo '<form class="d-flex mb-2 mb-lg-0 me-1" action="my_concert.php">
                     <button class="btn btn-light position-relative" type="submit" >My Concert';
-                    if(in_array("approved", $status) || in_array("rejected", $status)){
+                    if (in_array("approved", $status) || in_array("rejected", $status)) {
                         echo '<span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle">
                         </span>';
                     }
-                    
+
                     echo '</button>
                     </form>';
                 }
                 ?>
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="createcon_db.php">
-                    <button class="btn btn-light" type="submit" style = "background-color: white;">Create Concert</button>
+                    <button class="btn btn-light" type="submit" style="background-color: white;">Create Concert</button>
                 </form>
                 <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
@@ -124,10 +123,189 @@ ob_start(); ?>
     </nav>
 
     <!-- code -->
+
     <a href="index_user.php"><button class="btn btn-secondary">back</button></a>
     <div class="container">
         <h3 class="mt-4">สร้างคอนเสิร์ต</h3>
         <hr>
+        <?php
+        if (isset($_POST['create_con'])) {
+            //name
+            $cname = $_POST['cname'];
+            $cname = str_replace('"', '”', $cname);
+            $cname = str_replace('‘', "'", $cname);
+            $cname = str_replace('’', "'", $cname);
+            //address
+            $address = $_POST['address'];
+            $address = str_replace('"', '”', $address);
+            $address = str_replace('‘', "'", $address);
+            $address = str_replace('’', "'", $address);
+            //open booking date
+            $bdate = $_POST['bdate'];
+            //start date
+            $cdate = $_POST['cdate'];
+            //start time
+            $ctime = $_POST['ctime'];
+            //ticket name
+            $tic_name = $_POST['tic_name'];
+            //ticket price
+            $tic_price = $_POST['tic_price'];
+            //ticket amount
+            $tic_amount = $_POST['tic_amount'];
+            //ticket detail
+            $tic_detail = $_POST['tic_detail'];
+            //detail
+            $detail = $_POST['detail'];
+            $detail = str_replace('"', '”', $detail);
+            $detail = str_replace('‘', "'", $detail);
+            $detail = str_replace('’', "'", $detail);
+            //requirement
+            $require = $_POST['require'];
+            $require = str_replace('"', '”', $require);
+            $require = str_replace('‘', "'", $require);
+            $require = str_replace('’', "'", $require);
+            //file
+            $poster_img = basename($_FILES["poster_img"]["name"]);
+            $id_card_img = basename($_FILES["id_card_img"]["name"]);
+            $license_img = basename($_FILES["license_img"]["name"]);
+            $con_img = basename($_FILES["con_img"]["name"]);
+            //bank name
+            $bank_acc_name = $_POST['bank_acc_name'];
+            $bank_acc_name = str_replace('"', '”', $bank_acc_name);
+            $bank_acc_name = str_replace('‘', "'", $bank_acc_name);
+            $bank_acc_name = str_replace('’', "'", $bank_acc_name);
+            //bank number
+            $bank_acc_number = $_POST['bank_acc_number'];
+            $status = "checking";
+            $member_id = $_SESSION['member_id']; #อย่าลืมแก้
+            $alert_msg = "";
+
+            if (empty($cname)) {
+                $alert_msg .= 'กรุณาระบุชื่อคอนเสิร์ต<br>';
+            } elseif (empty($address)) {
+                $alert_msg .= 'กรุณาระบุสถานที่จัดคอนเสิร์ต<br>';
+            } elseif (empty($bdate)) {
+                $alert_msg .= 'กรุณาระบุวันที่เปิดให้จองบัตรคอนเสิร์ต<br>';
+            } elseif (empty($cdate)) {
+                $alert_msg .= 'กรุณาระบุวันที่จัดคอนเสิร์ต<br>';
+            } elseif (empty($ctime)) {
+                $alert_msg .= 'กรุณาระบุเวลาเริ่มคอนเสิร์ต<br>';
+            } elseif (empty($tic_name)) {
+                $alert_msg .= 'กรุณาระบุชื่อบัตร<br>';
+            } elseif (empty($tic_price)) {
+                $alert_msg .= 'กรุณาระบุราคาบัตร<br>';
+            } elseif (empty($tic_amount)) {
+                $alert_msg .= 'กรุณาระบุจำนวนบัตร<br>';
+            } elseif (empty($detail)) {
+                $alert_msg .= 'กรุณาระบุรายละเอียดคอนเสิร์ต<br>';
+            } elseif (empty($require)) {
+                $alert_msg .= 'กรุณาระบุข้อจำกัดของคอนเสิร์ต หากไม่มีให้ใส่ (-)<br>';
+            } elseif (empty($poster_img)) {
+                $alert_msg .= 'กรุณาอัพโหลดภาพโปสเตอร์คอนเสิร์ต<br>';
+            } elseif (empty($id_card_img)) {
+                $alert_msg .= 'กรุณาอัพโหลดสำเนาบัตรประชาชนผู้จัดคอนเสิร์ต<br>';
+            } elseif (empty($license_img)) {
+                $alert_msg .= 'กรุณาอัพโหลดภาพใบอนุญาตจัดคอนเสิร์ต<br>';
+            } elseif (empty($bank_acc_name)) {
+                $alert_msg .= 'กรุณาระบุชื่อธนาคารรับเงิน<br>';
+            } elseif (empty($bank_acc_number)) {
+                $alert_msg .= 'กรุณาระบุเลขที่บัญชีของธนาคารรับเงิน<br>';
+            } elseif (strtotime($bdate) > strtotime($cdate)) {
+                $alert_msg .= 'กรุณากรอกวันที่เปิดจำหน่ายบัตรให้เป็นวันที่ก่อนวันจัดแสดง<br>';
+            }
+            if ($alert_msg != "") {
+
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">' . $alert_msg
+                    . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } else {
+
+                //cennect to database
+                require_once 'config/db.php';
+
+                // Upload file to server 
+                $poster_img_path = "upload/poster/" . $poster_img;
+                $id_card_img_path = "upload/id_card/" . $id_card_img;
+                $license_img_path = "upload/license/" . $license_img;
+
+                if (
+                    (move_uploaded_file($_FILES["poster_img"]["tmp_name"], $poster_img_path)) &&
+                    (move_uploaded_file($_FILES["id_card_img"]["tmp_name"], $id_card_img_path)) &&
+                    (move_uploaded_file($_FILES["license_img"]["tmp_name"], $license_img_path))
+                ) {
+                    $sql2 = <<<EOF
+                INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id)
+                VALUES ("$cname","$detail","$require",'$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path',"$bank_acc_name",'$bank_acc_number',"$address",'$member_id');
+                EOF;
+                    $ret2 = $db->exec($sql2);
+                    if ($ret2) {
+                        $sql = <<<EOF
+                            SELECT * from concert
+                            ORDER BY concert_id DESC;
+                            EOF;
+                        $ret = $db->query($sql);
+                        $row = $ret->fetchArray(SQLITE3_ASSOC);
+                        $concert_id = $row['concert_id'];
+
+                        if (!empty($con_img)) {
+                            $con_img_path = "upload/concert_map/" . $con_img;
+                            move_uploaded_file($_FILES["con_img"]["tmp_name"], $con_img_path);
+                            $sql1 = <<<EOF
+                            UPDATE concert
+                            SET stage_img = '$con_img_path'
+                            WHERE concert_id = $concert_id;
+                            EOF;
+                            $ret1 = $db->exec($sql1);
+                        }
+                        for ($i = 0; $i < count($tic_price); $i++) {
+                            //store ticket detail in to ticket_detail
+        
+                            //ticket name replace string for avoid error
+                            $tic_name_clean = $tic_name[$i];
+                            $tic_name_clean = str_replace('"', '”', $tic_name_clean);
+                            $tic_name_clean = str_replace('‘', "'", $tic_name_clean);
+                            $tic_name_clean = str_replace('’', "'", $tic_name_clean);
+                            //ticket detail replace string for avoid error
+                            $tic_detail_clean = $tic_detail[$i];
+                            $tic_detail_clean = str_replace('"', '”', $tic_detail_clean);
+                            $tic_detail_clean = str_replace('‘', "'", $tic_detail_clean);
+                            $tic_detail_clean = str_replace('’', "'", $tic_detail_clean);
+
+                            $sql = <<<EOF
+                            INSERT INTO ticket_detail(name,price,description,concert_id,amount)
+                            VALUES("$tic_name_clean",$tic_price[$i],"$tic_detail_clean",'$concert_id','$tic_amount[$i]');
+                            EOF;
+                            $ret = $db->exec($sql);
+                            $sql = <<<EOF
+                            SELECT * from ticket_detail
+                            ORDER BY detail_id DESC;
+                            EOF;
+                            $ret = $db->query($sql);
+                            $row = $ret->fetchArray(SQLITE3_ASSOC);
+                            for ($j = 0; $j < $tic_amount[$i]; $j++) {
+                                //store all ticket into ticket
+                                $detail_id = $row["detail_id"];
+                                $sql = <<<EOF
+                                        INSERT INTO ticket(detail_id)
+                                        VALUES('$detail_id');
+                                    EOF;
+                                $ret = $db->exec($sql);
+                            }
+
+                        }
+                        echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">สร้างคอนเสิร์ตเสร็จสิ้น กรุณารอการตรวจสอบข้อมูล สามารถตรวจสอบตอบกลับจากผู้ตรวจสอบในหน้า <a href="my_concert.php">My Concert</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+
+                    } else {
+                        echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">ไม่สามารถสร้างคอนเสิร์ตได้ กรุณาลองใหม่อีกครั้ง EMSG:1<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+                        
+                    }
+                } else {
+                    echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">ไม่สามารถสร้างคอนเสิร์ตได้ กรุณาลองใหม่อีกครั้ง EMSG:2<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+                }
+                $db->close();
+            }
+        }
+
+        ?>
         <form action="createcon_db.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="cname" class="form-label">ชื่อคอนเสิร์ต</label>
@@ -198,196 +376,7 @@ ob_start(); ?>
         </form>
         <hr>
     </div>
-    <?php
-    if (isset($_POST['create_con'])) {
-        //name
-        $cname = $_POST['cname'];
-        $cname = str_replace('"','”',$cname);
-        $cname = str_replace('‘',"'",$cname);
-        $cname = str_replace('’',"'",$cname);
-        //address
-        $address = $_POST['address'];
-        $address = str_replace('"','”',$address);
-        $address = str_replace('‘',"'",$address);
-        $address = str_replace('’',"'",$address);
-        //open booking date
-        $bdate = $_POST['bdate'];
-        //start date
-        $cdate = $_POST['cdate'];
-        //start time
-        $ctime = $_POST['ctime'];
-        //ticket name
-        $tic_name = $_POST['tic_name'];
-        //ticket price
-        $tic_price = $_POST['tic_price'];
-        //ticket amount
-        $tic_amount = $_POST['tic_amount'];
-        //ticket detail
-        $tic_detail = $_POST['tic_detail'];
-        //detail
-        $detail = $_POST['detail'];
-        $detail = str_replace('"','”',$detail);
-        $detail = str_replace('‘',"'",$detail);
-        $detail = str_replace('’',"'",$detail);
-        //requirement
-        $require = $_POST['require'];
-        $require = str_replace('"','”',$require);
-        $require = str_replace('‘',"'",$require);
-        $require = str_replace('’',"'",$require);
-        //file
-        $poster_img = basename($_FILES["poster_img"]["name"]);
-        $id_card_img = basename($_FILES["id_card_img"]["name"]);
-        $license_img = basename($_FILES["license_img"]["name"]);
-        $con_img = basename($_FILES["con_img"]["name"]);
-        //bank name
-        $bank_acc_name = $_POST['bank_acc_name'];
-        $bank_acc_name = str_replace('"','”',$bank_acc_name);
-        $bank_acc_name = str_replace('‘',"'",$bank_acc_name);
-        $bank_acc_name = str_replace('’',"'",$bank_acc_name);
-        //bank number
-        $bank_acc_number = $_POST['bank_acc_number'];
-        $status = "checking";
-        $member_id = $_SESSION['member_id']; #อย่าลืมแก้
-        $alert_msg = "";
 
-        if (empty($cname)) {
-            $alert_msg .= 'กรุณาระบุชื่อคอนเสิร์ต\n';
-        }
-        if (empty($address)) {
-            $alert_msg .= 'กรุณาระบุสถานที่จัดคอนเสิร์ต\n';
-        }
-        if (empty($bdate)) {
-            $alert_msg .= 'กรุณาระบุวันที่เปิดให้จองบัตรคอนเสิร์ต\n';
-        }
-        if (empty($cdate)) {
-            $alert_msg .= 'กรุณาระบุวันที่จัดคอนเสิร์ต\n';
-        }
-        if (empty($ctime)) {
-            $alert_msg .= 'กรุณาระบุเวลาเริ่มคอนเสิร์ต\n';
-        }
-        if (empty($tic_name)) {
-            $alert_msg .= 'กรุณาระบุชื่อบัตร\n';
-        }
-        if (empty($tic_price)) {
-            $alert_msg .= 'กรุณาระบุราคาบัตร\n';
-        }
-        if (empty($tic_amount)) {
-            $alert_msg .= 'กรุณาระบุจำนวนบัตร\n';
-        }
-        if (empty($detail)) {
-            $alert_msg .= 'กรุณาระบุรายละเอียดคอนเสิร์ต\n';
-        }
-        if (empty($require)) {
-            $alert_msg .= 'กรุณาระบุข้อจำกัดของคอนเสิร์ต หากไม่มีให้ใส่ (-)\n';
-        }
-        if (empty($poster_img)) {
-            $alert_msg .= 'กรุณาอัพโหลดภาพโปสเตอร์คอนเสิร์ต\n';
-        }
-        if (empty($id_card_img)) {
-            $alert_msg .= 'กรุณาอัพโหลดสำเนาบัตรประชาชนผู้จัดคอนเสิร์ต\n';
-        }
-        if (empty($license_img)) {
-            $alert_msg .= 'กรุณาอัพโหลดภาพใบอนุญาตจัดคอนเสิร์ต\n';
-        }
-        if (empty($bank_acc_name)) {
-            $alert_msg .= 'กรุณาระบุชื่อธนาคารรับเงิน\n';
-        }
-        if (empty($bank_acc_number)) {
-            $alert_msg .= 'กรุณาระบุเลขที่บัญชีของธนาคารรับเงิน\n';
-        }
-        if (strtotime($bdate) > strtotime($cdate)) {
-            $alert_msg .= 'กรุณากรอกวันที่เปิดจำหน่ายบัตรให้เป็นวันที่ก่อนวันจัดแสดง\n';
-        }
-        if ($alert_msg != "") {
-            echo "<script>alert('" . $alert_msg . "');</script>";
-        } else {
-
-            //cennect to database
-            require_once 'config/db.php';
-
-            // Upload file to server 
-            $poster_img_path = "upload/poster/" . $poster_img;
-            $id_card_img_path = "upload/id_card/" . $id_card_img;
-            $license_img_path = "upload/license/" . $license_img;
-
-            if (
-                (move_uploaded_file($_FILES["poster_img"]["tmp_name"], $poster_img_path)) &&
-                (move_uploaded_file($_FILES["id_card_img"]["tmp_name"], $id_card_img_path)) &&
-                (move_uploaded_file($_FILES["license_img"]["tmp_name"], $license_img_path))
-            ) {
-                $sql2 = <<<EOF
-                INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id)
-                VALUES ("$cname","$detail","$require",'$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path',"$bank_acc_name",'$bank_acc_number',"$address",'$member_id');
-                EOF;
-                $ret2 = $db->exec($sql2);
-                if ($ret2) {
-                    $sql = <<<EOF
-                            SELECT * from concert
-                            ORDER BY concert_id DESC;
-                            EOF;
-                    $ret = $db->query($sql);
-                    $row = $ret->fetchArray(SQLITE3_ASSOC);
-                    $concert_id = $row['concert_id'];
-
-                    if (!empty($con_img)) {
-                        $con_img_path = "upload/concert_map/" . $con_img;
-                        move_uploaded_file($_FILES["con_img"]["tmp_name"], $con_img_path);
-                        $sql1 = <<<EOF
-                            UPDATE concert
-                            SET stage_img = '$con_img_path'
-                            WHERE concert_id = $concert_id;
-                            EOF;
-                        $ret1 = $db->exec($sql1);
-                    }
-                    for ($i = 0; $i < count($tic_price); $i++) {
-                        //store ticket detail in to ticket_detail
-
-                        //ticket name replace string for avoid error
-                        $tic_name_clean = $tic_name[$i];
-                        $tic_name_clean = str_replace('"','”',$tic_name_clean);
-                        $tic_name_clean = str_replace('‘',"'",$tic_name_clean);
-                        $tic_name_clean = str_replace('’',"'",$tic_name_clean);
-                        //ticket detail replace string for avoid error
-                        $tic_detail_clean = $tic_detail[$i];
-                        $tic_detail_clean = str_replace('"','”',$tic_detail_clean);
-                        $tic_detail_clean = str_replace('‘',"'",$tic_detail_clean);
-                        $tic_detail_clean = str_replace('’',"'",$tic_detail_clean);
-
-                        $sql = <<<EOF
-                            INSERT INTO ticket_detail(name,price,description,concert_id,amount)
-                            VALUES("$tic_name_clean",$tic_price[$i],"$tic_detail_clean",'$concert_id','$tic_amount[$i]');
-                            EOF;
-                        $ret = $db->exec($sql);
-                        $sql = <<<EOF
-                            SELECT * from ticket_detail
-                            ORDER BY detail_id DESC;
-                            EOF;
-                        $ret = $db->query($sql);
-                        $row = $ret->fetchArray(SQLITE3_ASSOC);
-                        for ($j = 0; $j < $tic_amount[$i]; $j++) {
-                            //store all ticket into ticket
-                            $detail_id = $row["detail_id"];
-                            $sql = <<<EOF
-                                        INSERT INTO ticket(detail_id)
-                                        VALUES('$detail_id');
-                                    EOF;
-                            $ret = $db->exec($sql);
-                        }
-
-                    }
-                    echo "<script>alert('Create concert successfully, Please wait for approve the the concert.');</script>";
-                    // header('location:index_user.php');
-                } else {
-                    echo "<script>alert('Can not create concert something went wrong, Please try again. :emsg1');</script>";
-                }
-            } else { 
-                echo "<script>alert('Can not create concert something went wrong, Please try again. :emsg2');</script>";
-            }
-            $db->close();
-        }
-    }
-
-    ?>
     <script>
         function add_type() {
             //parent

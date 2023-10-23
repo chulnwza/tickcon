@@ -21,7 +21,6 @@
     <style>
         * {
             font-family: 'Dosis', sans-serif;
-            font-weight: 700;
         }
 
         .navbar-brand {

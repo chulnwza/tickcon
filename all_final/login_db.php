@@ -28,7 +28,6 @@ if (isset($_SESSION['member_id'])) {
     <style>
         * {
             font-family: 'Dosis', sans-serif;
-            font-weight: 700;
         }
 
         .navbar-brand {
@@ -49,7 +48,7 @@ if (isset($_SESSION['member_id'])) {
             border-color: #C2D9FF;
         }
 
-        .btn-outline-info {
+        .btn-outline-light {
             color: white;
             border-color: white;
         }
@@ -63,6 +62,10 @@ if (isset($_SESSION['member_id'])) {
 
         .card {
             margin: auto;
+        }
+
+        .linkk {
+            text-decoration: none;
         }
     </style>
 </head>
@@ -89,10 +92,10 @@ if (isset($_SESSION['member_id'])) {
                     </li>
                 </ul>
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
-                    <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                    <button class="btn btn-outline-light" type="submit">Sign Up</button>
                 </form>
                 <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
-                    <button class="btn btn-outline-info" type="submit"
+                    <button class="btn btn-outline-light" type="submit"
                         style="background-color: #FFFFFF; color:#000000; border-color: white;">Log In</button>
                 </form>
             </div>
@@ -100,7 +103,7 @@ if (isset($_SESSION['member_id'])) {
     </nav>
 
 
-    <div class="container">
+    <div class="container" style="width : 60%">
         <h3 class="mt-4">เข้าสู่ระบบ</h3>
         <hr>
         <?php
@@ -109,63 +112,74 @@ if (isset($_SESSION['member_id'])) {
             $email = $_POST['email'];
             $pwd = $_POST['pwd'];
             $check = true;
-            //cennect to database
-            require_once 'config/db.php';
+            if (empty($email)) {
+                echo '<div class="alert alert-warning text-center alert-dismissible fade show" role="alert">
+                            กรุณากรอกอีเมลหรือสมัครสมาชิก คลิกที่นี่เพื่อสมัครสมาชิก <a class="linkk" href="signup_db.php">สมัครสมาชิก</a>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+            } elseif (empty($pwd)) {
+                echo '<div class="alert alert-warning text-center alert-dismissible fade show" role="alert">
+                            กรุณากรอกรหัสผ่านหรือสมัครสมาชิก คลิกที่นี่เพื่อสมัครสมาชิก <a class="linkk" href="signup_db.php">สมัครสมาชิก</a>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
 
-            $sql = <<<EOF
+            } else {
+                //cennect to database
+                require_once 'config/db.php';
+
+                $sql = <<<EOF
             SELECT * from member;
             EOF;
-            $ret = $db->query($sql);
-            $data_member = array();
-            $count = 0;
-            while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                $count++;
-            }
-            $ret = $db->query($sql);
-            if ($count > 0) {
+                $ret = $db->query($sql);
+                $data_member = array();
+                $count = 0;
                 while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                    if (($email == $row['email']) && ($pwd == $row['password'])) {
-                        $_SESSION['member_id'] = $row['member_id'];
-                        if ($row['type'] == 'user') {
-                            header('Location:index_user.php');
-                        } elseif ($row['type'] == 'admin') {
-                            header('Location:index_admin.php');
-                        }
-                        break;
-                    } elseif (($email == $row['email']) && ($pwd != $row['password'])) {
-                        $check = false;
-                        echo '<div class="alert alert-danger text-center" role="alert">
+                    $count++;
+                }
+                $ret = $db->query($sql);
+                if ($count > 0) {
+                    while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
+                        if (($email == $row['email']) && ($pwd == $row['password'])) {
+                            $_SESSION['member_id'] = $row['member_id'];
+                            if ($row['type'] == 'user') {
+                                header('Location:index_user.php');
+                            } elseif ($row['type'] == 'admin') {
+                                header('Location:index_admin.php');
+                            }
+                            break;
+                        } elseif (($email == $row['email']) && ($pwd != $row['password'])) {
+                            $check = false;
+                            echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
                                 Email หรือ Password ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง
-                            </div>';
-                        break;
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+                            break;
+                        }
                     }
+                    if ($check) {
+                        echo '<div class="alert alert-warning text-center alert-dismissible fade show" role="alert">
+                            บัญชีนี้ยังไม่มีชื่อในระบบ คลิกที่นี่เพื่อสมัครสมาชิก <a class="linkk" href="signup_db.php">สมัครสมาชิก</a>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+                    }
+                } else {
+                    echo '<div class="alert alert-warning text-center alert-dismissible fade show" role="alert">
+                    บัญชีนี้ยังไม่มีในระบบ คลิกที่นี่เพื่อสมัครสมาชิก <a class="linkk" href="signup_db.php">สมัครสมาชิก</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
                 }
-                if ($check) {
-                    echo '<div class="alert alert-warning text-center" role="alert">
-                            บัญชีนี้ยังไม่มีชื่อในระบบ โปรดสมัครสมาชิกก่อนเข้าใช้งาน
-                        </div>';
-                }
-            } else {
-                echo '<div class="alert alert-warning" role="alert">
-                    บัญชีนี้ยังไม่มีในระบบ โปรดสมัครสมาชิกก่อนเข้าใช้งาน
-                    </div>';
+                $db->close();
             }
-            $db->close();
+
         }
         ?>
         <form action="login_db.php" method="post">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="email">
+                <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="อีเมล">
             </div>
             <div class="mb-3">
                 <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control" name="pwd">
+                <input type="password" class="form-control" name="pwd" placeholder="รหัสผ่าน">
             </div>
-            <button type="submit" class="btn btn-primary" name="signin">Log In</button>
+            <button type="submit" class="btn btn-info" name="signin">Log In</button>
         </form>
         <hr>
-        <p>คลิกที่นี่เพื่อสมัครสมาชิก <a href="signup_db.php">สมัครสมาชิก</a></p>
 
     </div>
     <!-- footer -->

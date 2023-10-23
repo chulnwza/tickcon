@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>create concert</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +32,7 @@
             color: white;
         }
 
-        .nav-link:hover {
+        .nav-link-1:hover {
             color: white;
             font-weight: bolder;
         }
@@ -57,12 +57,15 @@
         .card {
             margin: auto;
         }
-    </style>
 
+        .nav-link {
+            text-decoration: none;
+            color: #000000;
+        }
+    </style>
 </head>
 
 <body>
-
     <!-- navbar -->
     <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
         <div class="container-fluid">
@@ -80,10 +83,10 @@
                         <a class="nav-link" href="index_user.php">Home</a>
                     </li> -->
                     <li class="nav-item">
-                        <a class="nav-link " href="index_user.php" style="color:white;">Concerts</a>
+                        <a class="nav-link-1 nav-link " href="index_user.php">Concerts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="myticket.php">My Tickets</a>
+                        <a class=" nav-link-1 nav-link" href="myticket.php">My Tickets</a>
                     </li>
                 </ul>
                 <?php
@@ -101,8 +104,8 @@
                     $count++;
                 }
                 if ($count > 0) {
-                    echo '<form class="d-flex mb-2 mb-lg-0 me-1" action = "my_concert.php">
-                    <button class="btn btn-light position-relative" type="submit">My Concert';
+                    echo '<form class="d-flex mb-2 mb-lg-0 me-1" action="my_concert.php">
+                    <button class="btn btn-light position-relative" type="submit" style = "background-color: white;">My Concert';
                     if (in_array("approved", $status) || in_array("rejected", $status)) {
                         echo '<span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle">
                         </span>';
@@ -121,48 +124,37 @@
             </div>
         </div>
     </nav>
-
     <!-- code -->
-    <div class="container">
-    <h3 class="mt-4 text-center">คอนเสิร์ตที่เปิดขาย</h3>
-        <hr>
-        <br>
-        <div class="row">
-            <?php
-            $sql1 = 'SELECT * FROM concert
-    WHERE status="approved" AND open_booking_date <= "' . date("Y-m-d") . '"' . ' AND show_date > "' . date("Y-m-d") . '"';
-            $result = $db->query($sql1);
-            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+    <a href="my_concert.php"><button class="btn btn-secondary">back</button></a>
+    <?php
+    if ((!isset($_SESSION['concert_id']) && isset($_GET['concert_id'])) || (isset($_SESSION['concert_id']) && isset($_GET['concert_id']))) {
+        $_SESSION['concert_id'] = $_GET['concert_id'];
+    }
+    $concert_id = $_SESSION['concert_id'];
+    require_once 'config/db.php';
+    //concert data
+    $sql = <<<EOF
+    SELECT * from concert
+    WHERE concert_id = $concert_id;
+    EOF;
+    $ret = $db->query($sql);
+    $row = $ret->fetchArray(SQLITE3_ASSOC);
+
+    echo '<div class="container">
+        <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link1 nav-link" href="each_my_concert.php">ข้อมูลคอนเสิร์ต</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link1 nav-link active" aria-current="page" href="each_my_concert_stat.php" >ดูข้อมูลการซื้อบัตร</a>
+        </li>
+        </ul><br>
+    </div>';
+    
+
+    ?>
 
 
-                ?>
-                <div class="col-sm-3">
-                    <div class="text-center">
-                        <img src="<?= $row['concert_img_path'] ?>" width="200px" height="250"
-                            class="mt-5 p-1 my-1 border"> <br>
-                        <b>
-                            <?= $row['concert_name'] ?>
-                        </b><br>
-                        <b>Showtime:</b>
-                        <?= $row['show_time'] ?>,
-                        <?= $row['show_date'] ?><br>
-                        <a class="btn btn-outline-primary"
-                            href="concert_detail.php?id=<?= $row['concert_id'] ?>">รายละเอียด</a>
-                        <a class="btn btn-outline-dark">ซื้อบัตร</a>
-                    </div>
-                    <br>
-                </div>
-                <?php
-            }
-            $db->close();
-            ?>
-        </div>
-    </div>
-    <!-- footer -->
-    <hr>
-    <footer class="py-3 my-4 ">
-        <p class="text-center text-muted">© 2023 TICKCON</p>
-    </footer>
 </body>
 
 </html>

@@ -37,7 +37,6 @@ require_once 'config/db.php';
 
         * {
             font-family: 'Dosis', sans-serif;
-            font-weight: 700;
         }
 
         .navbar-brand {
@@ -58,7 +57,7 @@ require_once 'config/db.php';
             border-color: #C2D9FF;
         }
 
-        .btn-outline-info {
+        .btn-outline-light {
             color: white;
             border-color: white;
         }
@@ -127,10 +126,10 @@ require_once 'config/db.php';
                         </li>
                     </ul>
                     <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
-                        <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                        <button class="btn btn-outline-light" type="submit">Sign Up</button>
                     </form>
                     <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
-                        <button class="btn btn-outline-info" type="submit">Log In</button>
+                        <button class="btn btn-outline-light" type="submit">Log In</button>
                     </form>
                 </div>
             </div>
