@@ -128,10 +128,9 @@
         </div>
     </nav>
     <!-- code -->
-    <a href="index_admin.php"><button class="btn btn-secondary">back</button></a>
     <div class='container py-3 rounded'>
         <div class='row'>
-            <h4 class='text-center text-light'>Approve Queue</h4><hr>
+            <h4 class='text-center text-light'>Pending List</h4><hr>
     <?php
     require_once 'config/db.php';
     $sql = <<<EOF
@@ -143,6 +142,10 @@
     while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
         $count++;
     }
+    $sql = <<<EOF
+    SELECT * from concert
+    WHERE status = 'checking';
+    EOF;
     if ($count > 0) {
         while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
             echo '<div class = "col-6 col-md-4 col-lg-3 mb-3" id = "main-concert">
@@ -161,7 +164,7 @@
         echo "</div></div>";
     } else {
         echo "</div></div>";
-        echo "<p>don't have concert to approve in queue.</p>";
+        echo '<div class="text-center mb-5"><h6>Don\'t have concert in pending list</h6></div>';
     }
     ?>
     <!-- footer -->

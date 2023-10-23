@@ -87,6 +87,9 @@
             justify-content: center;
             margin: 0 auto;
         }
+        hr {
+            color: white;
+        }
     </style>
 
 </head>
@@ -153,10 +156,11 @@
     </nav>
 
     <!-- code -->
-    <a href="index_user.php"><button class="btn btn-secondary">back</button></a>
     <div class="container py-3 rounded">
+        <h3 class="mt-4 text-center text-light">My Concert</h3>
+        <hr>
+        <br>
         <div class="row">
-            <h4 class="mt-4 text-center text-light">My Concert</h4>
     <?php
     //connect to database
     require_once 'config/db.php';

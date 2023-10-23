@@ -158,6 +158,7 @@
         echo '</ul><br>
     
         <form action="each_my_concert.php" method="post" enctype="multipart/form-data">
+        <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
             <div class="mb-3">
                 <label for="cname" class="form-label"><b>ชื่อคอนเสิร์ต</b></label>
                 <input type="text" class="form-control" name="cname" value = "' . $row['concert_name'] . '" disabled>
@@ -193,6 +194,8 @@
                 <input type="require" class="form-control" name="require" value = "' . $row['requirement'] . '" disabled>
                 <p style="color : red;">' . $row['requirement_comment'] . '</p><hr>
             </div>
+        </div>
+        <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
             <div class="mb-3" id="tic_type_add"><b>บัตรคอนเสิร์ต</b><br>';
         //ticket section start
         $sql3 = <<<EOF
@@ -217,6 +220,7 @@
         }
         //ticket section end
         echo '<p style="color : red;">' . $row['ticket_comment'] . '</p><hr></div>
+        </div>
             <div class="mb-3">
                 <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
                 <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
@@ -284,8 +288,22 @@
             EOF;
             $ret_edit = $db->exec($sql_edit);
             echo '<div class="container">
-            <h3 class="mt-4">my concert</h3>
-                <hr>
+        
+        <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">ข้อมูลคอนเสิร์ต</a>
+        </li>';
+        if ($row['status'] == 'approved') {
+            echo '<li class="nav-item">
+                <a class="nav-link" href="each_my_concert_stat.php">ดูข้อมูลการซื้อบัตร</a>
+                </li>';
+        }else{
+            echo '<li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true" href="each_my_concert_stat.php">ดูข้อมูลการซื้อบัตร</a>
+                </li>';
+        }
+
+        echo '</ul><br>
                 <form action="each_my_concert.php?tmp_status=' . $tmp_status . '" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="cname" class="form-label"><b>ชื่อคอนเสิร์ต</b></label>
@@ -612,7 +630,7 @@
                         // }
                     }
                 } else {
-                    echo "<script>alert('error1:Something went wrong, Please try again. ');</script>";
+                    echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">มีบางอย่างผิดพลาดโปรดลองใหม่อีกครั้ง EMSG:1<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
                 }
             }
             header("Refresh:0");
@@ -625,11 +643,25 @@
             EOF;
             $ret_sub = $db->exec($sql_sub);
             if ($ret_sub) {
-                echo "<script>alert('Submitted concert successfully.');</script>";
+                echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">ส่งข้อมูลคอนเสิร์ตเพื่อตรวจสอบเสร็จสิ้น กรุณารอผลการตรวจสอบ<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
             }
             echo '<div class="container">
-            <h3 class="mt-4">my concert</h3>
-            <hr>
+        
+        <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">ข้อมูลคอนเสิร์ต</a>
+        </li>';
+        if ($row['status'] == 'approved') {
+            echo '<li class="nav-item">
+                <a class="nav-link" href="each_my_concert_stat.php">ดูข้อมูลการซื้อบัตร</a>
+                </li>';
+        }else{
+            echo '<li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true" href="each_my_concert_stat.php">ดูข้อมูลการซื้อบัตร</a>
+                </li>';
+        }
+
+        echo '</ul><br>
             <form action="each_my_concert.php" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="cname" class="form-label"><b>ชื่อคอนเสิร์ต</b></label>

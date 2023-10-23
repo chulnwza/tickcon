@@ -96,14 +96,69 @@
             </div>
         </div>
     </nav>
-    <a href="con_waiting_list.php"><button class="btn btn-secondary">back</button></a>
+    <!-- code -->
+
     <?php
     session_start();
+
     if ((!isset($_SESSION['concert_id']) && isset($_GET['concert_id'])) || (isset($_SESSION['concert_id']) && isset($_GET['concert_id']))) {
         $_SESSION['concert_id'] = $_GET['concert_id'];
     }
+
     $concert_id = $_SESSION['concert_id'];
     require_once 'config/db.php';
+    //when click confirm button check
+    if (isset($_POST['confirm'])) {
+        $concert_name_comment = $_GET['concert_name_comment'];
+        $detail_comment = $_GET['detail_comment'];
+        $concert_img_comment = $_GET['concert_img_comment'];
+        $show_date_comment = $_GET['show_date_comment'];
+        $show_time_comment = $_GET['show_time_comment'];
+        $copy_id_card_comment = $_GET['copy_id_card_comment'];
+        $con_permission_comment = $_GET['con_permission_comment'];
+        $stage_img_comment = $_GET['stage_img_comment'];
+        $bank_name_comment = $_GET['bank_name_comment'];
+        $bank_code_comment = $_GET['bank_code_comment'];
+        $address_comment = $_GET['address_comment'];
+        $ticket_comment = $_GET['ticket_comment'];
+        $open_booking_date_comment = $_GET['open_booking_date_comment'];
+        $requirement_comment = $_GET['requirement_comment'];
+        if ($_POST['confirm'] == 'approve') {
+            $sql4 = <<<EOF
+            UPDATE concert
+            SET status = "approved"
+            WHERE concert_id = $concert_id;
+            EOF;
+            $ret4 = $db->exec($sql4);
+            header("Location: con_waiting_list.php");
+        } else if ($_POST['confirm'] == 'reject') {
+            $sql5 = <<<EOF
+            UPDATE concert
+            SET status = "rejected",
+            concert_name_comment = '$concert_name_comment',
+            detail_comment = '$detail_comment',
+            concert_img_comment = '$concert_img_comment',
+            show_date_comment = '$show_date_comment',
+            show_time_comment = '$show_time_comment',
+            copy_id_card_comment = '$copy_id_card_comment',
+            con_permission_comment = '$con_permission_comment',
+            stage_img_comment = '$stage_img_comment',
+            bank_name_comment = '$bank_name_comment',
+            bank_code_comment = '$bank_code_comment',
+            address_comment = '$address_comment',
+            ticket_comment = '$ticket_comment',
+            open_booking_date_comment = '$open_booking_date_comment',
+            requirement_comment = '$requirement_comment'
+            WHERE concert_id = $concert_id; 
+            EOF;
+            $ret5 = $db->exec($sql5);
+            header("Location:con_waiting_list.php");
+        }
+    }
+
+
+
+
     //concert data
     $sql = <<<EOF
     SELECT * from concert
@@ -221,62 +276,80 @@
                 <label for="bank_acc_number" class="form-label"><b>เลขที่บัญชีธนาคารรับเงิน</b></label>
                 <input type="text" class="form-control" name="bank_acc_number"  value = "' . $row['bank_code'] . '" disabled> 
                 <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="bank_code_comment" style="width: 50%; height: 50px;"></textarea><hr>
+            </div>';
+            //approve with modal
+            echo '<button type="button" class="btn btn-success border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm1">Approve</button>';
+            //reject with modal
+            echo '<button type="button" class="btn btn-danger border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm2">Reject</button>';
+                                                
+            // echo '<button type = "submit" name="button" value = "approve" class="btn btn-primary">Approve</button>
+            // <button type = "submit" name="button" value = "reject" class="btn btn-danger">Reject</button>
+            // </form></div>';
+    //modal when approve
+    echo '<div class="modal fade" id="confirm1" tabindex="-1" role="dialog"
+            aria-labelledby="Title" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!--ส่วนหัว-->
+                    <div class="modal-header">
+                        <p class="modal-title fw-bold fs-6" id="Title">Approved this concert?</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        </button>
+                    </div>
+                    <!--ส่วนฟอร์ม-->
+                    <div class="modal-body">
+                        <form action="each_con_check.php" method="POST">
+                            <div class="modal-footer">
+                                <input type="hidden" name="detail_id" id="ticket-detail-id" value = "">
+                                <button type="submit" class="btn btn-success" name="confirm" value ="approve">Confirm</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <button type = "submit" name="button" value = "approve" class="btn btn-primary">Approve</button>
-            <button type = "submit" name="button" value = "reject" class="btn btn-danger">Reject</button>
-            </form></div>';
-    if (isset($_GET['button'])) {
-        $concert_name_comment = $_GET['concert_name_comment'];
-        $detail_comment = $_GET['detail_comment'];
-        $concert_img_comment = $_GET['concert_img_comment'];
-        $show_date_comment = $_GET['show_date_comment'];
-        $show_time_comment = $_GET['show_time_comment'];
-        $copy_id_card_comment = $_GET['copy_id_card_comment'];
-        $con_permission_comment = $_GET['con_permission_comment'];
-        $stage_img_comment = $_GET['stage_img_comment'];
-        $bank_name_comment = $_GET['bank_name_comment'];
-        $bank_code_comment = $_GET['bank_code_comment'];
-        $address_comment = $_GET['address_comment'];
-        $ticket_comment = $_GET['ticket_comment'];
-        $open_booking_date_comment = $_GET['open_booking_date_comment'];
-        $requirement_comment = $_GET['requirement_comment'];
-        if ($_GET['button'] == 'approve') {
-            $sql4 = <<<EOF
-            UPDATE concert
-            SET status = "approved"
-            WHERE concert_id = $concert_id;
-            EOF;
-            $ret4 = $db->exec($sql4);
-            header("Location: con_waiting_list.php");
-        } else if ($_GET['button'] == 'reject') {
-            $sql5 = <<<EOF
-            UPDATE concert
-            SET status = "rejected",
-            concert_name_comment = '$concert_name_comment',
-            detail_comment = '$detail_comment',
-            concert_img_comment = '$concert_img_comment',
-            show_date_comment = '$show_date_comment',
-            show_time_comment = '$show_time_comment',
-            copy_id_card_comment = '$copy_id_card_comment',
-            con_permission_comment = '$con_permission_comment',
-            stage_img_comment = '$stage_img_comment',
-            bank_name_comment = '$bank_name_comment',
-            bank_code_comment = '$bank_code_comment',
-            address_comment = '$address_comment',
-            ticket_comment = '$ticket_comment',
-            open_booking_date_comment = '$open_booking_date_comment',
-            requirement_comment = '$requirement_comment'
-            WHERE concert_id = $concert_id; 
-            EOF;
-            $ret5 = $db->exec($sql5);
-            header("Location:con_waiting_list.php");
-        }
-    }
+        </div>';
+    //modal when reject
+    echo '<div class="modal fade" id="confirm2" tabindex="-1" role="dialog"
+        aria-labelledby="Title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--ส่วนหัว-->
+                <div class="modal-header">
+                    <p class="modal-title fw-bold fs-6" id="Title">Rejected this concert?</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                </div>
+                <!--ส่วนฟอร์ม-->
+                <div class="modal-body">
+                    <form action="each_con_check.php" method="POST">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" name="confirm" value ="reject">Confirm</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';
+    
     ?>
     <footer class="py-3 my-4 ">
         <hr>
         <p class="text-center text-muted">© 2023 TICKCON</p>
     </footer>
 </body>
-
+<script>
+    $('#confirm1').on('show.bs.modal', function (event) {
+        var button1 = $(event.relatedTarget);
+        var modal1 = $(this);
+    });
+    $('#confirm2').on('show.bs.modal', function (event) {
+        var button2 = $(event.relatedTarget);
+        var modal2 = $(this);
+    });
+    
+</script>
 </html>
