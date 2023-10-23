@@ -72,8 +72,26 @@
 
         .container {
             background-color: #56B2CD;
+            width:55%;
         }
 
+        @media only screen and (max-width: 767px) {
+            .container {
+                background-color: #56B2CD;
+                width:100%;
+            }
+        }
+
+        @media only screen and (max-width: 99px) {
+            .container {
+                background-color: #56B2CD;
+                width:80%;
+            }
+        }
+
+        #main-picture {
+            width: 80%;
+        }
     </style>
 
 </head>
@@ -122,13 +140,13 @@
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
 
             ?>
-                <div class="col-6 col-sm-4 col-md-3 mb-3" id="main-concert">
+                <div class="col-6 col-md-4 col-lg-3 mb-3" id="main-concert">
                     <div class="card h-100">
                     <div class="card-body px-2 pb-0 pt-1">
                     <div class="text-center">
                         <a class="text-decoration-none text-dark" id="main-text" href="concert_detail_notlogin.php?id=<?= $row['concert_id'] ?>">
                         <img src="<?= $row['concert_img_path'] ?>" id="main-picture"
-                            class="mt-3 p-1 my-1 border rounded w-100 img-fluid bg-dark"> <br>
+                            class="mt-3 p-1 my-1 border rounded bg-dark"> <br>
                         <b>
                             
                             <?= $row['concert_name'] ?>
