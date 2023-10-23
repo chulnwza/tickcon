@@ -55,6 +55,12 @@
         .card {
             margin: auto;
         }
+        .footer{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 
 </head>
@@ -120,8 +126,8 @@
     }
     ?>
     <!-- footer -->
-    <hr>
-    <footer class="py-3 my-4 ">
+    <footer class="py-3 my-4 " style="position: fixed;left: 0;bottom: 0;width: 100%;">
+        <hr>
         <p class="text-center text-muted">© 2023 TICKCON</p>
     </footer>
 

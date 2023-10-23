@@ -59,6 +59,12 @@ session_start();
         .card {
             margin: auto;
         }
+        .footer{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -147,9 +153,9 @@ session_start();
                 $count++;
             }
             echo '<div class="container" style="width : 70%">
-            <div class="text-center"></div><h4>My Tickets</h4><hr></div>';
+            <div class="text-start"><h4>My Tickets</h4><hr></div>';
             if ($count <= 0) {
-                echo "you don't have any ticket.";
+                echo '<div class="text-center mb-5"><h6>you don\'t have any ticket.</h6></div>';
             } else {
                 $sql = <<<EOF
                 SELECT concert_id, concert_name, show_date, show_time, td.name, concert_img_path, p.member_id
@@ -189,8 +195,9 @@ session_start();
 
     </main>
     <!-- footer -->
-    <hr>
-    <footer class="py-3 my-4 ">
+    
+    <footer class="py-3 my-4 footer">
+        <hr>
         <p class="text-center text-muted">© 2023 TICKCON</p>
     </footer>
 </body>

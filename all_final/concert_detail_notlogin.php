@@ -483,9 +483,9 @@ require_once 'config/db.php';
     </div>
 
     <!-- footer -->
-    <hr style="color :white;">
     <footer class="py-3 my-4">
-        <p class="text-center " style="color :white;">© 2023 TICKCON</p>
+        <hr  style="color:white">
+        <p class="text-center "  style="color:white">© 2023 TICKCON</p>
     </footer>
 </body>
 <script>

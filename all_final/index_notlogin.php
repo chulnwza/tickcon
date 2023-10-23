@@ -88,36 +88,34 @@ if (isset($_SESSION['member_id'])) {
 <body>
 
     <!-- navbar -->
-
-    <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index_notlogin.php">
-                <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="index_notlogin.php">Home</a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link " href="index_notlogin.php" style="color:white;">Concerts</a>
-                    </li>
-                </ul>
-                <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
-                    <button class="btn btn-outline-light" type="submit">Sign Up</button>
-                </form>
-                <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
-                    <button class="btn btn-outline-light" type="submit">Log In</button>
-                </form>
+        <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index_notlogin.php">
+                    <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
+                        <!-- <li class="nav-item">
+                                <a class="nav-link" href="index_notlogin.php">Home</a>
+                            </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link " href="index_notlogin.php" style="color:white;">Concerts</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex mb-2 mb-lg-0 me-1" action="signup_db.php">
+                        <button class="btn btn-outline-light" type="submit">Sign Up</button>
+                    </form>
+                    <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
+                        <button class="btn btn-outline-light" type="submit">Log In</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
-
+        </nav>
     <!-- code -->
     <div class="container py-2 rounded">
     <h3 class="mt-4 text-center text-light">คอนเสิร์ตที่เปิดขาย</h3>
@@ -136,7 +134,7 @@ if (isset($_SESSION['member_id'])) {
                     <div class="card h-100">
                     <div class="card-body px-2 pb-0 pt-1">
                     <div class="text-center">
-                        <a class="text-decoration-none text-dark" id="main-text" href="concert_detail.php?id=<?= $row['concert_id'] ?>">
+                        <a class="text-decoration-none text-dark" id="main-text" href="concert_detail_notlogin.php?id=<?= $row['concert_id'] ?>">
                         <img src="<?= $row['concert_img_path'] ?>" id="main-picture"
                             class="mt-3 p-1 my-1 border rounded w-100 img-fluid bg-dark"> <br>
                         <b>

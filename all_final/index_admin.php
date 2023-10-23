@@ -126,7 +126,7 @@
                     <div class="card h-100">
                     <div class="card-body px-2 pb-0 pt-1">
                     <div class="text-center">
-                        <a class="text-decoration-none text-dark" id="main-text" href="concert_detail.php?id=<?= $row['concert_id'] ?>">
+                        <a class="text-decoration-none text-dark" id="main-text" href="concert_detail_notlogin.php?id=<?= $row['concert_id'] ?>">
                         <img src="<?= $row['concert_img_path'] ?>" id="main-picture"
                             class="mt-3 p-1 my-1 border rounded w-100 img-fluid bg-dark"> <br>
                         <b>
