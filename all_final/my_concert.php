@@ -123,8 +123,8 @@
     </nav>
 
     <!-- code -->
-    <a href="index_user.php"><button class="btn btn-secondary">back</button></a>
-    <h4 style="text-align:center">My Concert</h4>
+    <div class="container" style="width : 70%">
+    <div class="text-center"></div><h4>My Concert</h4><hr></div>
     <?php
     //connect to database
     require_once 'config/db.php';
@@ -142,10 +142,10 @@
     if ($count > 0) {
         echo "<div class = 'show'>";
         while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-            echo '<div class="card" style="width: 18rem;">
+            echo '<div class="card" style="width: 16rem;">
             <img src="' . $row['concert_img_path'] . '" class="card-img-top">
                 <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center"><h5 class="card-title">' . $row['concert_name'] . '</h5>';
+                <p class="d-flex justify-content-between align-items-center"><h5 class="card-title">' . $row['concert_name'] . '</h5>';
                 if($row['status'] == 'checking'){
                     echo'<span class="badge bg-secondary rounded-pill">' . $row['status'] . '</span>';
                 }elseif ($row['status'] == 'approved'){
@@ -153,16 +153,16 @@
                 }elseif ($row['status'] == 'rejected'){
                     echo'<span class="badge bg-danger rounded-pill">' . $row['status'] . '</span>';
                 }
-                
-                echo '</div>
+                echo '</p>
                 <p class="card-text"></p>
-                <a href="each_my_concert.php?concert_id=' . $row['concert_id'] . '" class="btn btn-primary">see more</a>
+                <a href="each_my_concert.php?concert_id=' . $row['concert_id'] . '" class="btn btn-info" style="color:white">see more</a>
                 </div>
             </div>';
         }
         echo "</div>";
     }
     ?>
+    </div>
     <!-- footer -->
     <hr>
     <footer class="py-3 my-4 ">

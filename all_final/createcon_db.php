@@ -177,7 +177,7 @@ ob_start(); ?>
             //bank number
             $bank_acc_number = $_POST['bank_acc_number'];
             $status = "checking";
-            $member_id = $_SESSION['member_id']; #อย่าลืมแก้
+            $member_id = $_SESSION['member_id']; 
             $alert_msg = "";
 
             if (empty($cname)) {
@@ -238,6 +238,7 @@ ob_start(); ?>
                 EOF;
                     $ret2 = $db->exec($sql2);
                     if ($ret2) {
+                        //เอา concert_id ล่าสุด
                         $sql = <<<EOF
                             SELECT * from concert
                             ORDER BY concert_id DESC;
@@ -256,6 +257,7 @@ ob_start(); ?>
                             EOF;
                             $ret1 = $db->exec($sql1);
                         }
+                        
                         for ($i = 0; $i < count($tic_price); $i++) {
                             //store ticket detail in to ticket_detail
         
@@ -372,7 +374,7 @@ ob_start(); ?>
                 <label for="bank_acc_number" class="form-label">เลขที่บัญชีธนาคารรับเงิน</label>
                 <input type="text" class="form-control" name="bank_acc_number">
             </div>
-            <button type="submit" class="btn btn-primary" name="create_con">Submit</button>
+            <button type="submit" class="btn btn-info" name="create_con">Submit</button>
         </form>
         <hr>
     </div>

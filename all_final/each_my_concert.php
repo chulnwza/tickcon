@@ -125,7 +125,6 @@
         </div>
     </nav>
     <!-- code -->
-    <a href="my_concert.php"><button class="btn btn-secondary">back</button></a>
     <?php
     if ((!isset($_SESSION['concert_id']) && isset($_GET['concert_id'])) || (isset($_SESSION['concert_id']) && isset($_GET['concert_id']))) {
         $_SESSION['concert_id'] = $_GET['concert_id'];
@@ -221,20 +220,17 @@
             <div class="mb-3">
                 <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
                 <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
-                <input type="file" class="form-control" name="poster_img" accept="image/*" disabled>
                 <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
             </div>
 
             <div class="mb-3">
                 <label for="id_card_img" class="form-label"><b>สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</b></label><br>
                 <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><br>
-                <input type="file" class="form-control" name="id_card_img" accept="image/*" disabled>
                 <p style="color : red;">' . $row['copy_id_card_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
                 <label for="license_img" class="form-label"><b>ใบอนุญาตจัดคอนเสิร์ต</b></label><br>
                 <img src="' . $row['con_permission_img'] . '" style="max-width : 40vw"><br><br>
-                <input type="file" class="form-control" name="license_img" accept="image/*" disabled>
                 <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
@@ -245,8 +241,7 @@
         } else {
             echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
         }
-        echo '<input type="file" class="form-control" name="con_img" accept="image/*" disabled>
-                <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
+        echo '<p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
                 <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารับเงิน</b></label>
@@ -698,20 +693,17 @@
                 <div class="mb-3">
                     <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
                     <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
-                    <input type="file" class="form-control" name="poster_img" accept="image/*" disabled>
                     <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
                 </div>
 
                 <div class="mb-3">
                     <label for="id_card_img" class="form-label"><b>สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</b></label><br>
                     <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><br>
-                    <input type="file" class="form-control" name="id_card_img" accept="image/*" disabled>
                     <p style="color : red;">' . $row['copy_id_card_comment'] . '</p><hr>
                 </div>
                 <div class="mb-3">
                     <label for="license_img" class="form-label"><b>ใบอนุญาตจัดคอนเสิร์ต</b></label><br>
                     <img src="' . $row['con_permission_img'] . '" style="max-width : 40vw"><br><br>
-                    <input type="file" class="form-control" name="license_img" accept="image/*" disabled>
                     <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
                 </div>
                 <div class="mb-3">
@@ -722,8 +714,7 @@
             } else {
                 echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
             }
-            echo '<input type="file" class="form-control" name="con_img" accept="image/*" disabled>
-                <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
+            echo '<p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
                     <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารรับเงิน</b></label>

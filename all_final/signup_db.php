@@ -139,14 +139,14 @@
                 }
 
                 if (in_array($email, $data_email)) {
-                    echo '<div class="alert alert-danger text-center" role="alert">อีเมลนี้ถูกใช้ไปแล้ว กรุณาลองใหม่อีกครั้ง</div>';
+                    echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">อีเมลนี้ถูกใช้ไปแล้ว กรุณาลองใหม่อีกครั้ง <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
                 } else {
                     $sql = <<<EOF
                 INSERT INTO member(firstname,lastname,email,password,type)
                 VALUES ('$fname','$lname','$email','$pwd','$urole');
                 EOF;
                     $ret = $db->query($sql);
-                    echo '<div class="alert alert-success text-center" role="alert">สมัครสมาชิกสำเร็จ คลิกเพื่อเข้าสู่ระบบ <a href="login_db.php"> เข้าสู่ระบบ</a></div>';
+                    echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">สมัครสมาชิกสำเร็จ คลิกเพื่อเข้าสู่ระบบ <a href="login_db.php"> เข้าสู่ระบบ</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
                 }
                 $db->close();
             }

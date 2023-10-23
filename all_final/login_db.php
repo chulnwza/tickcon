@@ -102,7 +102,7 @@ if (isset($_SESSION['member_id'])) {
         </div>
     </nav>
 
-
+    <!-- code -->
     <div class="container" style="width : 60%">
         <h3 class="mt-4">เข้าสู่ระบบ</h3>
         <hr>
@@ -126,42 +126,33 @@ if (isset($_SESSION['member_id'])) {
                 require_once 'config/db.php';
 
                 $sql = <<<EOF
-            SELECT * from member;
-            EOF;
+                SELECT * from member;
+                EOF;
                 $ret = $db->query($sql);
                 $data_member = array();
                 $count = 0;
-                while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                    $count++;
-                }
                 $ret = $db->query($sql);
-                if ($count > 0) {
-                    while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                        if (($email == $row['email']) && ($pwd == $row['password'])) {
-                            $_SESSION['member_id'] = $row['member_id'];
-                            if ($row['type'] == 'user') {
-                                header('Location:index_user.php');
-                            } elseif ($row['type'] == 'admin') {
-                                header('Location:index_admin.php');
-                            }
-                            break;
-                        } elseif (($email == $row['email']) && ($pwd != $row['password'])) {
-                            $check = false;
-                            echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
-                                Email หรือ Password ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
-                            break;
+                while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
+                    if (($email == $row['email']) && ($pwd == $row['password'])) {
+                        $_SESSION['member_id'] = $row['member_id'];
+                        if ($row['type'] == 'user') {
+                            header('Location:index_user.php');
+                        } elseif ($row['type'] == 'admin') {
+                            header('Location:index_admin.php');
                         }
-                    }
-                    if ($check) {
-                        echo '<div class="alert alert-warning text-center alert-dismissible fade show" role="alert">
-                            บัญชีนี้ยังไม่มีชื่อในระบบ คลิกที่นี่เพื่อสมัครสมาชิก <a class="linkk" href="signup_db.php">สมัครสมาชิก</a>
+                        break;
+                    } elseif (($email == $row['email']) && ($pwd != $row['password'])) {
+                        $check = false;
+                        echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                            Email หรือ Password ไม่ถูกต้อง โปรดลองใหม่อีกครั้ง
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+                        break;
                     }
-                } else {
+                }
+                if ($check) {
                     echo '<div class="alert alert-warning text-center alert-dismissible fade show" role="alert">
-                    บัญชีนี้ยังไม่มีในระบบ คลิกที่นี่เพื่อสมัครสมาชิก <a class="linkk" href="signup_db.php">สมัครสมาชิก</a>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+                        บัญชีนี้ยังไม่มีชื่อในระบบ คลิกที่นี่เพื่อสมัครสมาชิก <a class="linkk" href="signup_db.php">สมัครสมาชิก</a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
                 }
                 $db->close();
             }

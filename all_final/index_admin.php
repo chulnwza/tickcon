@@ -76,7 +76,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="index_admin.php" style="color:white;">Home</a>
+                        <a class="nav-link" href="index_admin.php" style="color:white;">Concerts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="con_waiting_list.php">Pending List</a>

@@ -20,6 +20,7 @@
         crossorigin="anonymous"></script>
     <!-- add style -->
     <style>
+
         * {
             font-family: 'Dosis', sans-serif;
         }
@@ -125,7 +126,6 @@
         </div>
     </nav>
     <!-- code -->
-    <a href="my_concert.php"><button class="btn btn-secondary">back</button></a>
     <?php
     if ((!isset($_SESSION['concert_id']) && isset($_GET['concert_id'])) || (isset($_SESSION['concert_id']) && isset($_GET['concert_id']))) {
         $_SESSION['concert_id'] = $_GET['concert_id'];
@@ -148,9 +148,122 @@
         <li class="nav-item">
             <a class="nav-link1 nav-link active" aria-current="page" href="each_my_concert_stat.php" >ดูข้อมูลการซื้อบัตร</a>
         </li>
-        </ul><br>
-    </div>';
-    
+        </ul><br><h5>ข้อมูลบัตรคอนเสิร์ต</h5><hr>';
+    $sql2 = <<<EOF
+        SELECT * 
+        FROM ticket_detail
+        WHERE concert_id = $concert_id;
+        ORDER BY detail_id
+        EOF;
+    $ret2 = $db->query($sql2);
+
+
+    $sql_amount_buy = <<<EOF
+        SELECT COUNT(CASE WHEN payment_id IS NOT NULL THEN detail_id END) AS amount_sell
+        FROM ticket t
+        JOIN ticket_detail td
+        USING (detail_id)
+        WHERE concert_id = $concert_id
+        GROUP BY detail_id
+        ORDER BY detail_id
+        EOF;
+    $ret_amount_buy = $db->query($sql_amount_buy);
+
+    //เก็บค่ารายได้รวม
+    $total_earn = 0;
+    //display table
+    echo '<table class="table  table-hover text-center">
+        <thead>
+            <tr >
+            <th scope="col">ชนิดบัตร</th>
+            <th scope="col">ราคา</th>
+            <th scope="col">จำนวนที่เปิดขาย</th>
+            <th scope="col">ขายได้</th>
+            <th scope="col">คงเหลือ</th>
+            <th scope="col">รายได้</th>
+            </tr>
+        </thead><tbody>';
+    while ($row2 = $ret2->fetchArray(SQLITE3_ASSOC)) {
+        $row_amount_buy = $ret_amount_buy->fetchArray(SQLITE3_ASSOC);
+        echo '<tr>
+            <td class="text-start"><b>' . $row2['name'] . '</b><p style = "color:#808080">' . $row2['description'] . '</p></td>
+            <td>' . $row2['price'] . '</td>
+            <td><span class="badge bg-warning rounded-pill px-3">' . $row2['amount'] . '</span></td>
+            <td><span class="badge bg-success rounded-pill px-3">' . $row_amount_buy['amount_sell'] . '</span></td>
+            <td><span class="badge bg-secondary rounded-pill px-3">' . $row2['amount'] - $row_amount_buy['amount_sell'] . '</span></td>
+            <td><p style= "color:#088F8F"><b>' . number_format((float) $row2['price'] * $row_amount_buy['amount_sell'], 2, '.', '') . '</b></p></td>
+          </tr>';
+        $total_earn = $total_earn + ($row2['price'] * $row_amount_buy['amount_sell']);
+    }
+    echo '<tr >
+        <td class=" align-items-center pt-3" style = "background-color: #F0F0F0;"><p style = "color:#00A36C"><b>รายได้รวม</b></p></td>
+        <td style = "background-color: #F0F0F0;"></td>
+        <td style = "background-color: #F0F0F0;"></td>
+        <td style = "background-color: #F0F0F0;"></td>
+        <td style = "background-color: #F0F0F0;"></td>
+        <td class=" align-items-center pt-3" style = "color:#00A36C; background-color: #F0F0F0;"><h4><b>' . number_format((float) $total_earn, 2, '.', '') . '</b></h4></td>
+      </tr></tbody></table>';
+    echo '</div>';
+
+    //ประวัติการขายบัตร
+    $sql_sell_history = <<<EOF
+        SELECT * , COUNT(*)
+        FROM ticket 
+        JOIN ticket_detail 
+        USING (detail_id)
+        JOIN payment
+        USING (payment_id)
+        JOIN member
+        USING (member_id)
+        WHERE concert_id = $concert_id AND payment_id is not null
+        GROUP BY member_id, detail_id;
+        EOF;
+    $ret_sell_history = $db->query($sql_sell_history);
+    $count_sell = 0;
+    while ($row_sell_history = $ret_sell_history->fetchArray(SQLITE3_ASSOC)) {
+        $count_sell++;
+    }
+    $sql_sell_history = <<<EOF
+        SELECT * , COUNT(*)
+        FROM ticket 
+        JOIN ticket_detail 
+        USING (detail_id)
+        JOIN payment
+        USING (payment_id)
+        JOIN member
+        USING (member_id)
+        WHERE concert_id = $concert_id AND payment_id is not null
+        GROUP BY member_id, detail_id;
+        EOF;
+    $ret_sell_history = $db->query($sql_sell_history);
+    echo '<br><div class="container"><h5>ประวัติการขายบัตร</h5><div class="overflow-auto">';
+    if ($count_sell > 0) {
+        echo '<table class="table table-success  table-striped text-center">
+        <thead>
+            <tr>
+            <th scope="col">ชนิดบัตร</th>
+            <th scope="col">ราคา</th>
+            <th scope="col">จำนวน</th>
+            <th scope="col">ผู้ซื้อ</th>
+            <th scope="col">ราคา</th>
+            </tr>
+        </thead><tbody>';
+        while ($row_sell_history = $ret_sell_history->fetchArray(SQLITE3_ASSOC)) {
+            echo '<tr>
+            <td class="text-start"><b>' . $row_sell_history['name'] . '</b><p style = "color:#808080">' . $row_sell_history['description'] . '</p></td>
+            <td>' . $row_sell_history['price'] . '</td>
+            <td><span class="badge bg-success rounded-pill px-3">' . $row_sell_history['COUNT(*)'] . '</span></td>
+            <td>' . $row_sell_history['email'] . '</td>
+            <td><p style= "color:#088F8F"><b>' . number_format((float) $row_sell_history['COUNT(*)'] * $row_sell_history['price'], 2, '.', '') . '</b></p></td>
+            </tr>';
+        }
+        echo '</tbody></table>';
+
+    } else {
+        echo 'ยังไม่มีการขายบัตร';
+    }
+
+    echo '</div></div>';
 
     ?>
 
