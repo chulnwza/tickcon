@@ -411,7 +411,6 @@ ob_start(); ?>
 
             <button type="submit" class="btn btn-info" name="create_con">Submit</button>
         </form>
-        <hr>
     </div>
 
     <script>

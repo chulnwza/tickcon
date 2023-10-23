@@ -168,15 +168,14 @@ session_start();
                     <div class="card-body">
                       <div class="row">
                       <div class="col-lg-4 col-sm-12">
-                      <img class="card-img rounded rounded-4 border border-3 border-dark w-100 mt-1 mb-3"
+                      <img class="card-img border border-3 border-dark w-80 mt-1 mb-3"
                             src="'. $row['concert_img_path'] .'" alt="poster">
                       </div>
                       <div class="col-lg-8 col-sm-12">
                       <h6 class="card-title">'.$row['concert_name'].'</h6>
                       <h6 class="card-subtitle mb-2 text-body-secondary">'.$row['show_date'].' / '.$row['show_time'].'</h6>
                       <p class="card-text">'.$row['name'].'</p>
-                      <a href="concert_detail.php?id='. $row['concert_id'] .'" class="card-link">see more</a>
-                      <a href="#" class="card-link">QR code</a>
+                      <a href="concert_detail.php?id='. $row['concert_id'] .'" class="card-link">More Details</a>
                       </div>
                       </div>
                     </div>

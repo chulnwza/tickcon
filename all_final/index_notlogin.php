@@ -7,7 +7,6 @@ if (isset($_SESSION['member_id'])) {
 ?>
 <?php
 date_default_timezone_set("Asia/Bangkok");
-echo date("Y-m-d");
 ?>
 <!DOCTYPE html>
 <html lang="en">
