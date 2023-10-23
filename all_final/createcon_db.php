@@ -44,7 +44,7 @@ ob_start(); ?>
             border-color: #C2D9FF;
         }
 
-        .btn-outline-danger {
+        .btn-outline-danger-1 {
             color: white;
             border-color: white;
         }
@@ -116,7 +116,7 @@ ob_start(); ?>
                     <button class="btn btn-light" type="submit" style="background-color: white;">Create Concert</button>
                 </form>
                 <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
-                    <button class="btn btn-outline-danger" type="submit">Log Out</button>
+                    <button class="btn btn-outline-danger-1 btn-outline-danger" type="submit">Log Out</button>
                 </form>
             </div>
         </div>
@@ -175,7 +175,7 @@ ob_start(); ?>
             //bank number
             $bank_acc_number = $_POST['bank_acc_number'];
             $status = "checking";
-            $member_id = $_SESSION['member_id']; 
+            $member_id = $_SESSION['member_id'];
             $alert_msg = "";
 
             if (empty($cname)) {
@@ -255,7 +255,7 @@ ob_start(); ?>
                             EOF;
                             $ret1 = $db->exec($sql1);
                         }
-                        
+
                         for ($i = 0; $i < count($tic_price); $i++) {
                             //store ticket detail in to ticket_detail
         
@@ -296,7 +296,7 @@ ob_start(); ?>
 
                     } else {
                         echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">ไม่สามารถสร้างคอนเสิร์ตได้ กรุณาลองใหม่อีกครั้ง EMSG:1<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
-                        
+
                     }
                 } else {
                     echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">ไม่สามารถสร้างคอนเสิร์ตได้ กรุณาลองใหม่อีกครั้ง EMSG:2<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
@@ -307,93 +307,143 @@ ob_start(); ?>
 
         ?>
         <form action="createcon_db.php" method="post" enctype="multipart/form-data">
+            <!-- concert information section -->
             <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
-            <div class="mb-3">
-                <label for="cname" class="form-label">ชื่อคอนเสิร์ต</label>
-                <input type="text" class="form-control" name="cname">
+                <label class="form-label"><b>ข้อมูลคอนเสิร์ต</b></label>
+                <div class="mb-3">
+                    <label for="cname" class="form-label">ชื่อคอนเสิร์ต</label>
+                    <input type="text" class="form-control" name="cname" placeholder="Concert name">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">สถานที่จัดคอนเสิร์ต</label><br>
+                    <textarea name="address" style="width: 100%; height: 50px;" class="form-control"
+                        placeholder="Location"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="bdate" class="form-label">วันที่เปิดให้จองบัตรคอนเสิร์ต</label>
+                    <input type="date" class="form-control" name="bdate" placeholder="Open booking date">
+                </div>
+                <div class="mb-3">
+                    <label for="cdate" class="form-label">วันที่จัดคอนเสิร์ต</label>
+                    <input type="date" class="form-control" name="cdate">
+                </div>
+                <div class="mb-3">
+                    <label for="ctime" class="form-label">เวลาเริ่มคอนเสิร์ต</label>
+                    <input type="time" class="form-control" name="ctime">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">รายละเอียดคอนเสิร์ต</label><br>
+                    <textarea name="detail" style="width: 100%; height: 100px;" class="form-control"
+                        placeholder="Concert Description"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="require" class="form-label">ข้อจำกัดของคอนเสิร์ต</label>
+                    <input type="text" class="form-control" name="require"
+                        placeholder="Concert requirements (Ex. Must be 18 + or anothers)">
+                </div>
+                <div class="mb-3">
+                    <label for="poster_img" class="form-label">โปสเตอร์คอนเสิร์ต</label>
+                    <input type="file" class="form-control" name="poster_img" accept="image/*">
+                </div>
+                <div class="mb-3">
+                    <label for="con_img" class="form-label">แผนผังคอนเสิร์ต</label>
+                    <input type="file" class="form-control" name="con_img" accept="image/*">
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="address" class="form-label">สถานที่จัดคอนเสิร์ต</label><br>
-                <textarea name="address" style="width: 100%; height: 50px;" class="form-control"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="bdate" class="form-label">วันที่เปิดให้จองบัตรคอนเสิร์ต</label>
-                <input type="date" class="form-control" name="bdate">
-            </div>
-            <div class="mb-3">
-                <label for="cdate" class="form-label">วันที่จัดคอนเสิร์ต</label>
-                <input type="date" class="form-control" name="cdate">
-            </div>
-            <div class="mb-3">
-                <label for="ctime" class="form-label">เวลาเริ่มคอนเสิร์ต</label>
-                <input type="time" class="form-control" name="ctime">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">รายละเอียดคอนเสิร์ต</label><br>
-                <textarea name="detail" style="width: 100%; height: 100px;" class="form-control"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="require" class="form-label">ข้อจำกัดของคอนเสิร์ต</label>
-                <input type="text" class="form-control" name="require">
-            </div>
-            </div>
+            <!-- ticket section -->
             <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
-                <div class="row mb-3" id="tic_type_add">
+                <div class="mb-3" id="tic_type_add">
                     <label class="form-label"><b>บัตรคอนเสิร์ต</b></label>
-                    <div class="col">
-                    <label class="form-label">ชื่อบัตร</label>
-                    <input type="text" class="form-control" name="tic_name[]">
-                    </div>
-                    <div class="col">
-                    <label class="form-label">ราคาบัตร</label>
-                    <input type="number" min="0" class="form-control" name="tic_price[]">
-                    </div>
-                    <div class="col">
-                    <label class="form-label">จำนวนบัตร</label>
-                    <input type="number" min="0" class="form-control" name="tic_amount[]">
-                    </div>
-                    <div class="col">
-                    <label class="form-label">คำอธิบาย</label>
-                    <textarea name="tic_detail[]" style="width: 100%; height: 40px;" class="form-control"></textarea> 
+                    <div class="row">
+                        <div class="col">
+                            <label class="form-label">ชื่อบัตร</label>
+                            <input type="text" class="form-control" name="tic_name[]" placeholder="Ticket name">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">ราคาบัตร</label>
+                            <input type="number" min="0" class="form-control" name="tic_price[]" placeholder="Price">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">จำนวนบัตร</label>
+                            <input type="number" min="0" class="form-control" name="tic_amount[]" placeholder="Amount">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">คำอธิบาย</label>
+                            <textarea name="tic_detail[]" style="width: 100%; height: 40px;" class="form-control"
+                                placeholder="Ticket description"></textarea>
+                        </div>
+                        <div class="col">
+                            <br>
+                            <input type="button" class="btn btn-outline-danger" value="x" style="border-radius: 45%;" disabled>
+                        </div>
                     </div>
                 </div>
-            <div class="mb-3">
-                <input type="button" class="btn btn-secondary" onclick="add_type()" value="เพิ่มชนิดบัตร">
-            </div>
-            </div>
-            <div class="mb-3">
-                <label for="poster_img" class="form-label">โปสเตอร์คอนเสิร์ต</label>
-                <input type="file" class="form-control" name="poster_img" accept="image/*">
+                <div class="mb-3">
+                    <input type="button" class="btn btn-secondary" onclick="add_type()" value="เพิ่มชนิดบัตร">
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label for="id_card_img" class="form-label">สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</label>
-                <input type="file" class="form-control" name="id_card_img" accept="image/*">
+            <!-- creator section -->
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+                <label class="form-label"><b>ข้อมูลผู้จัดคอนเสิร์ต</b></label>
+                <div class="mb-3">
+                    <label for="id_card_img" class="form-label">สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</label>
+                    <input type="file" class="form-control" name="id_card_img" accept="image/*">
+                </div>
+                <div class="mb-3">
+                    <label for="license_img" class="form-label">ใบอนุญาตจัดคอนเสิร์ต</label>
+                    <input type="file" class="form-control" name="license_img" accept="image/*">
+                </div>
+                <div class="mb-3">
+                    <label for="bank_acc_name" class="form-label">ชื่อธนาคารรับเงิน</label>
+                    <input type="text" class="form-control" name="bank_acc_name">
+                    <label for="bank_acc_number" class="form-label">เลขที่บัญชีธนาคารรับเงิน</label>
+                    <input type="text" class="form-control" name="bank_acc_number">
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="license_img" class="form-label">ใบอนุญาตจัดคอนเสิร์ต</label>
-                <input type="file" class="form-control" name="license_img" accept="image/*">
-            </div>
-            <div class="mb-3">
-                <label for="con_img" class="form-label">แผนผังคอนเสิร์ต</label>
-                <input type="file" class="form-control" name="con_img" accept="image/*">
-            </div>
-            <div class="mb-3">
-                <label for="bank_acc_name" class="form-label">ชื่อธนาคารรับเงิน</label>
-                <input type="text" class="form-control" name="bank_acc_name">
-                <label for="bank_acc_number" class="form-label">เลขที่บัญชีธนาคารรับเงิน</label>
-                <input type="text" class="form-control" name="bank_acc_number">
-            </div>
+
             <button type="submit" class="btn btn-info" name="create_con">Submit</button>
         </form>
         <hr>
     </div>
 
     <script>
+
         function add_type() {
+            // <div class="col">
+            // <label class="form-label">ชื่อบัตร</label>
+            //         <input type="text" class="form-control" name="tic_name[]" placeholder="Ticket name">
+            // </div>
+            //         <div class="col">
+            //         <label class="form-label">ราคาบัตร</label>
+            //         <input type="number" min="0" class="form-control" name="tic_price[]" placeholder="Price">
+            //         </div>
+            //         <div class="col">
+            //         <label class="form-label">จำนวนบัตร</label>
+            //         <input type="number" min="0" class="form-control" name="tic_amount[]" placeholder="Amount">
+            //         </div>
+            //         <div class="col">
+            //         <label class="form-label">คำอธิบาย</label>
+            //         <textarea name="tic_detail[]" style="width: 100%; height: 40px;" class="form-control" placeholder="Ticket description"></textarea> 
+            //         </div>
             //parent
             let parent = document.getElementById("tic_type_add");
+            //name
+            let div1 = document.createElement("div");
+            div1.setAttribute("class", "col");
+            let tname_label = document.createElement("label");
+            tname_label.setAttribute("class", "form-label");
+            tname_label.innerText = "ชื่อบัตร";
+            let tname = document.createElement("input");
+            tname.setAttribute("type", "text");
+            tname.setAttribute("class", "form-control");
+            tname.setAttribute("name", "tic_name[]");
+            tname.setAttribute("placeholder", "Ticket name");
+            div1.appendChild(tname_label);
+            div1.appendChild(tname);
             //price
+            let div2 = document.createElement("div");
+            div2.setAttribute("class", "col");
             let price_label = document.createElement("label");
             price_label.setAttribute("class", "form-label");
             price_label.innerText = "ราคาบัตร";
@@ -402,7 +452,12 @@ ob_start(); ?>
             price.setAttribute("class", "form-control");
             price.setAttribute("name", "tic_price[]");
             price.setAttribute("min", "0");
+            price.setAttribute("placeholder", "Price");
+            div2.appendChild(price_label);
+            div2.appendChild(price);
             //amount
+            let div3 = document.createElement("div");
+            div3.setAttribute("class", "col");
             let amount_label = document.createElement("label");
             amount_label.setAttribute("class", "form-label");
             amount_label.innerText = "จำนวนบัตร";
@@ -411,34 +466,55 @@ ob_start(); ?>
             amount.setAttribute("class", "form-control");
             amount.setAttribute("name", "tic_amount[]");
             amount.setAttribute("min", "0");
-            //name
-            let tname_label = document.createElement("label");
-            tname_label.setAttribute("class", "form-label");
-            tname_label.innerText = "ชื่อบัตร";
-            let tname = document.createElement("input");
-            tname.setAttribute("type", "text");
-            tname.setAttribute("class", "form-control");
-            tname.setAttribute("name", "tic_name[]");
+            amount.setAttribute("placeholder", "Amount");
+            div3.appendChild(amount_label);
+            div3.appendChild(amount);
             //detail
-            // <textarea name="tic_detail[]" style="width: 100%; height: 70px;"></textarea>
+            //<textarea name="tic_detail[]" style="width: 100%; height: 40px;" class="form-control" placeholder="Ticket description"></textarea> 
+            let div4 = document.createElement("div");
+            div4.setAttribute("class", "col");
             let detail_label = document.createElement("label");
             detail_label.setAttribute("class", "form-label");
             detail_label.innerText = "คำอธิบาย";
             let detail = document.createElement("textarea");
-            detail.setAttribute("style", "width: 100%; height: 70px;");
+            detail.setAttribute("style", "width: 100%; height: 40px;");
             detail.setAttribute("name", "tic_detail[]");
-            //hr
+            detail.setAttribute("class", "form-control");
+            detail.setAttribute("class", "form-control");
+            detail.setAttribute("placeholder", "Ticket description");
+            div4.appendChild(detail_label);
+            div4.appendChild(detail);
+            
+            //hr br
             let hr = document.createElement("hr");
+            let br = document.createElement("br");
+            let div_all = document.createElement("div");
+            div_all.setAttribute("class","row")
             //append child
-            parent.appendChild(hr);
-            parent.appendChild(tname_label);
-            parent.appendChild(tname);
-            parent.appendChild(price_label);
-            parent.appendChild(price);
-            parent.appendChild(amount_label);
-            parent.appendChild(amount);
-            parent.appendChild(detail_label);
-            parent.appendChild(detail);
+            div_all.appendChild(div1);
+            div_all.appendChild(div2);
+            div_all.appendChild(div3);
+            div_all.appendChild(div4);
+
+            //remove button
+            //<input type="button" class="btn btn-secondary" onclick="add_type()" value="เพิ่มชนิดบัตร">
+            let div5 = document.createElement("div");
+            div5.setAttribute("class", "col");
+            let removeButton = document.createElement('input');
+            removeButton.setAttribute("type","button");
+            removeButton.setAttribute("class","btn btn-outline-danger");
+            removeButton.setAttribute("value","x");
+            removeButton.setAttribute("style","border-radius: 45%;");
+            removeButton.onclick = function() {
+                parent.removeChild(div_all);
+            };
+            div5.appendChild(br);
+            div5.appendChild(br);
+            div5.appendChild(removeButton);
+
+
+            div_all.appendChild(div5);
+            parent.appendChild(div_all)
         }
     </script>
     <!-- footer -->
