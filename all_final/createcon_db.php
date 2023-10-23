@@ -177,6 +177,7 @@ ob_start(); ?>
             $status = "checking";
             $member_id = $_SESSION['member_id'];
             $alert_msg = "";
+            $lolink = $_POST['lo_link'];
 
             if (empty($cname)) {
                 $alert_msg .= 'กรุณาระบุชื่อคอนเสิร์ต<br>';
@@ -210,6 +211,8 @@ ob_start(); ?>
                 $alert_msg .= 'กรุณาระบุเลขที่บัญชีของธนาคารรับเงิน<br>';
             } elseif (strtotime($bdate) > strtotime($cdate)) {
                 $alert_msg .= 'กรุณากรอกวันที่เปิดจำหน่ายบัตรให้เป็นวันที่ก่อนวันจัดแสดง<br>';
+            } elseif (empty($lolink)) {
+                $alert_msg .= 'กรุณากรอกลิ้งค์ google map<br>';
             }
             if ($alert_msg != "") {
 
@@ -231,8 +234,8 @@ ob_start(); ?>
                     (move_uploaded_file($_FILES["license_img"]["tmp_name"], $license_img_path))
                 ) {
                     $sql2 = <<<EOF
-                INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id)
-                VALUES ("$cname","$detail","$require",'$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path',"$bank_acc_name",'$bank_acc_number',"$address",'$member_id');
+                INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id, lo_link)
+                VALUES ("$cname","$detail","$require",'$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path',"$bank_acc_name",'$bank_acc_number',"$address",'$member_id',"$lolink");
                 EOF;
                     $ret2 = $db->exec($sql2);
                     if ($ret2) {
@@ -317,7 +320,11 @@ ob_start(); ?>
                 <div class="mb-3">
                     <label for="address" class="form-label">สถานที่จัดคอนเสิร์ต</label><br>
                     <textarea name="address" style="width: 100%; height: 50px;" class="form-control"
-                        placeholder="Location"></textarea>
+                    placeholder="Location"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="lo_link" class="form-label">ลิ้งค์ google map สถานที่จัดคอนเสิร์ต</label>
+                    <input type="text" class="form-control" name="lo_link" placeholder="Google Map link">
                 </div>
                 <div class="mb-3">
                     <label for="bdate" class="form-label">วันที่เปิดให้จองบัตรคอนเสิร์ต</label>

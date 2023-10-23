@@ -230,13 +230,11 @@ require_once 'config/db.php';
                     <img style="width: 100%;" class="card-img shadow-lg rounded" src="<?= $row['concert_img_path'] ?>">
 
                 </div>
-
-                <h4 class="mt-2" style="color:black;"><b>Description</b></h4>
+                <h4 class="mt-2" style="color:White;"><b>Description</b></h4>
                 <hr>
-                <small style="white-space: pre-line; color:black;" class="text-break">
+                <small style="white-space: pre-line; color:White;" class="text-break">
                     <?= $row['detail'] ?>
                 </small>
-
                 <div class="card my-3 text-center"
                     style="width: 50%;margin: 0 auto;<?php if (is_null($row['stage_img']) == TRUE) {
                         echo 'display:none;';
@@ -245,7 +243,15 @@ require_once 'config/db.php';
                     <img style="width: 100%;" class="card-img" src="<?= $row['stage_img'] ?>">
 
                 </div>
-
+                <?php
+            $sqlj = 'SELECT firstname, lastname FROM member WHERE member_id = "' . $row['member_id'] . '";';
+            $resultj = $db->query($sqlj);
+            $rowj = $resultj->fetchArray(SQLITE3_ASSOC);
+            ?>
+                <h4 class="mt-2" style="color:White;"><b>Event Organizer</b></h4>
+                <hr>
+                <h4><?= $rowj['firstname'] ?> <?= $rowj['lastname'] ?><h4>
+                <!-- ชื่อผู้จัด -->
             </div>
             <!--ฝั่งสองยาว 5/12 ใช้แสดงรายละเอียดสำคัญและการจองตัว-->
             <div class="col-lg-5">
@@ -275,6 +281,9 @@ require_once 'config/db.php';
                                     </li>
                                     <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
                                         <?= $row['address'] ?>
+                                    </li>
+                                    <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
+                                    <a href="<?= $row['lo_link'] ?>" target="_blank">Google Map</a>
                                     </li>
                                     <li><b><i class="bi bi-exclamation-circle-fill"></i>&nbsp;</b>
                                         <?= $row['requirement'] ?>

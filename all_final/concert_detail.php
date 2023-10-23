@@ -229,10 +229,9 @@ require_once 'config/db.php';
                     <img style="width: 100%;" class="card-img shadow-lg rounded" src="<?= $row['concert_img_path'] ?>">
 
                 </div>
-
-                <h4 class="mt-2" style="color:black;"><b>Description</b></h4>
+                <h4 class="mt-2" style="color:White;"><b>Description</b></h4>
                 <hr>
-                <small style="white-space: pre-line; color:black;" class="text-break">
+                <small style="white-space: pre-line; color:White;" class="text-break">
                     <?= $row['detail'] ?>
                 </small>
 
@@ -274,6 +273,9 @@ require_once 'config/db.php';
                                     </li>
                                     <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
                                         <?= $row['address'] ?>
+                                    </li>
+                                    <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
+                                    <a href="<?= $row['lo_link'] ?>" target="_blank">Google Map</a>
                                     </li>
                                     <li><b><i class="bi bi-exclamation-circle-fill"></i>&nbsp;</b>
                                         <?= $row['requirement'] ?>
