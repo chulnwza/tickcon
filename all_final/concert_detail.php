@@ -237,7 +237,7 @@ require_once 'config/db.php';
                                     JOIN ticket
                                     USING (detail_id)
                                     WHERE concert_id= ' . $ids . ')
-                                    GROUP by detail_id, payment_id;';
+                                    GROUP by detail_id, payment_id IS NOT NULL;';
                                     $result1 = $db->query($sql1);
                                     while ($row1 = $result1->fetchArray(SQLITE3_ASSOC)) {
                                         if ((is_null($row1['payment_id']) == TRUE) || ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each']))) {
