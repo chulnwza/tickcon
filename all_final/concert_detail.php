@@ -27,12 +27,8 @@ require_once 'config/db.php';
     <!-- add style -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        hr {
-            color: brown;
-        }
-
         .div-1 {
-            background-color: #80B3FF;
+            background-color: rgba(0,151,178,0.8);
         }
 
         h4 {
@@ -78,14 +74,14 @@ require_once 'config/db.php';
         }
 
         body {
-            background-color: #5ECDEA;
+            background-color: #04364A;
         }
     </style>
 </head>
 
 <body>
     <!-- navbar -->
-    <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
+    <nav class="navbar navbar-expand-md sticky-top shadow-lg p-2 mb-5 " style="background-color : #0097B2">
         <div class="container-fluid">
             <a class="navbar-brand" href="index_user.php">
                 <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
@@ -144,6 +140,80 @@ require_once 'config/db.php';
 
     <!-- code -->
     <div class="container">
+    <?php
+    if (isset($_POST['confirm'])) {
+        $member_id = $_SESSION['member_id'];
+        $number = $_POST['credit_number'];
+        $name = $_POST['credit_name'];
+        $month = $_POST['credit_month'];
+        $year = $_POST['credit_year'];
+        $cvv = $_POST['credit_cvv'];
+        $detail_id = $_POST['detail_id'];
+        $alert_text = '';
+        if (empty($number)) {
+            $alert_text .= 'กรุณากรอกเลขบัตรเครดิต';
+        }
+        elseif (empty($name)) {
+            $alert_text .= 'กรุณากรอกเลขชื่อ-นามสกุลผู้ถือบัตร';
+        }
+        elseif (empty($month)) {
+            $alert_text .= 'กรุณากรอกเดือนที่บัตรหมดอายุ';
+        }
+        elseif (empty($year)) {
+            $alert_text .= 'กรุณากรอกปีที่บัตรหมดอายุ';
+        }
+        elseif (empty($cvv)) {
+            $alert_text .= 'กรุณากรอกรหัสรักษาความปลอดภัยของบัตร';
+        }
+        elseif ($month > 12) {
+            $alert_text .= 'กรุณากรอกเดือนที่หมดอายุตามความเป็นจริง';
+        }
+        elseif ($year < date("Y")) {
+            $alert_text .= 'กรุณากรอกปีที่หมดอายุให้ไม่น้อยกว่าปัจจุบัน';
+        }
+        if ($alert_text != "") {
+            echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                ' . $alert_text . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+        } else {
+            #หาว่าตั๋ว id ที่น้อยที่สุดคือ id ที่เท่าไหร่
+            $sql_find = <<<EOF
+            SELECT ticket_id
+            FROM ticket
+            WHERE detail_id = $detail_id
+            AND payment_id IS NULL
+            ORDER BY ticket_id ASC
+            LIMIT 1;
+            EOF;
+            $ret = $db->query($sql_find);
+            $row = $ret->fetchArray(SQLITE3_ASSOC);
+            $current_id = $row['ticket_id'];
+
+            $sql_insert_paymemt = <<<EOF
+            INSERT INTO payment(member_id, card_number, card_holder, month, year, CVV)
+            VALUES ($member_id, $number, '$name', $month, $year, $cvv);
+            EOF;
+            $ret_insert_payment = $db->exec($sql_insert_paymemt);
+
+            $sql_get_payment_id = <<<EOF
+            SELECT payment_id
+            FROM payment
+            ORDER BY payment_id DESC
+            LIMIT 1;
+            EOF;
+            $ret_payment_id = $db->query($sql_get_payment_id);
+            $row = $ret_payment_id->fetchArray(SQLITE3_ASSOC);
+            $payment_id = $row['payment_id'];
+
+            $sql_update_ticket = <<<EOF
+            UPDATE ticket
+            SET payment_id = $payment_id
+            WHERE ticket_id = $current_id;
+            EOF;
+                $ret_update_ticket = $db->exec($sql_update_ticket);
+            echo '<script>alert("การซื้อบัตรเสร็จสิ้น");</script>';
+        }
+    }
+    ?>
         <!--แยกฝั่งหน้าจอ-->
         <?php
         $ids = $_GET['id'];
@@ -153,33 +223,36 @@ require_once 'config/db.php';
         ?>
         <div class="row mt-0">
             <!--ฝั่งแรกยาว 7/12 ใช้แสดงรูป + description-->
-            <div class="col-lg-7 div-1">
+            <div class="col-lg-7 div-1 shadow-lg p-3 mb-3  rounded">
                 <div class="card my-3 text-center" style="width: 50%;margin: 0 auto;">
 
-                    <img style="width: 100%;" class="card-img" src="<?= $row['concert_img_path'] ?>">
+                    <img style="width: 100%;" class="card-img shadow-lg rounded" src="<?= $row['concert_img_path'] ?>">
 
                 </div>
 
-                <h4 class="mt-2">Description</h4>
+                <h4 class="mt-2" style="color:black;"><b>Description</b></h4>
                 <hr>
-                <small style="white-space: pre-line" class="text-break">
-                        <?= $row['detail'] ?>
-                    </small>
+                <small style="white-space: pre-line; color:black;" class="text-break">
+                    <?= $row['detail'] ?>
+                </small>
 
-                <div class="card my-3 text-center" style="width: 50%;margin: 0 auto;<?php if (is_null($row['stage_img']) == TRUE) {echo 'display:none;';}?>">
+                <div class="card my-3 text-center"
+                    style="width: 50%;margin: 0 auto;<?php if (is_null($row['stage_img']) == TRUE) {
+                        echo 'display:none;';
+                    } ?>">
 
-                    <img style="width: 100%;" class="card-img" src="<?=$row['stage_img']?>">
+                    <img style="width: 100%;" class="card-img" src="<?= $row['stage_img'] ?>">
 
                 </div>
 
             </div>
             <!--ฝั่งสองยาว 5/12 ใช้แสดงรายละเอียดสำคัญและการจองตัว-->
-            <div class="col-lg-5 bg-dark">
+            <div class="col-lg-5">
                 <!--แบ่งเป็นแถวๆเพื่อง่ายต่อการจัดระเบียบ-->
                 <div class="row">
                     <!--แถวแรกเต็มแสดงชื่อคอนเสิร์ต-->
-                    <div class="col-12 mt-3 my-2">
-                        <div class="card">
+                    <div class="col-12 mb-2">
+                        <div class="card  shadow-lg rounded">
                             <div class="card-body text-center">
                                 <h6 class="card-title mb-0 fw-bold fs-5">
                                     <?= $row['concert_name'] ?>
@@ -189,14 +262,15 @@ require_once 'config/db.php';
                     </div>
                 </div>
                 <!--แถวสองแบ่งเป็น 8/12 4/12-->
-                <div class="row">
+                <div class="row ">
                     <!--ใช้แสดงวัน เวลา สถานที่ ข้อกำหนด-->
                     <div class="col-12">
-                        <div class="card h-100">
+                        <div class="card h-100 shadow-lg rounded">
                             <div class="card-body">
                                 <ul class="list-unstyled mb-0">
                                     <li><b><i class="bi bi-clock"></i>&nbsp;</b>
-                                        <?php echo date('l d F Y', strtotime($row['show_date'])); ?>, <?=$row['show_time']?>
+                                        <?php echo date('l d F Y', strtotime($row['show_date'])); ?>,
+                                        <?= $row['show_time'] ?>
                                     </li>
                                     <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
                                         <?= $row['address'] ?>
@@ -209,16 +283,15 @@ require_once 'config/db.php';
                         </div>
                     </div>
                 </div>
-                <hr>
                 <!--แถวสามเต็มแถว ใช้แสดงประเภทตั๋ว-->
                 <div class="row mt-2">
                     <div class="col-12">
                         <!--ใช้รูปแบบ card เพราะเป็นกรอบมาให้ แบ่งหัวท้ายง่าย-->
-                        <div class="card border-danger border mb-4">
+                        <div class="card border-info border mb-4">
                             <!--ส่วนหัว-->
-                            <p class="card-header border-danger border-2">ประเภทตั๋วที่จำหน่าย</p>
+                            <p class="card-header border-info border-2 shadow-lg">ประเภทตั๋วที่จำหน่าย</p>
                             <!--ส่วนเนื้อหา-->
-                            <div class="card-body pb-0">
+                            <div class="card-body pb-0 shadow-lg rounded ">
                                 <!--ใช้ list เพราะจะได้แสดงเป็นประเภทๆ ได้สะดวก-->
                                 <ul class="list-unstyled list-group-light align-middle">
                                     <!--ในแต่ละข้อมูลจะแบ่งเป็นซ้ายขวาอีกทีนึง-->
@@ -268,17 +341,18 @@ require_once 'config/db.php';
                                                     </div>
                                                     <div class="col-3 d-flex align-items-center text-center my-1">
 
-                                                        <button type="button" class="btn btn-danger border-0" data-bs-toggle="modal"
-                                                            data-bs-target="#payment" data-ticket-name="<?= $row1['name'] ?>"
+                                                        <button type="button" class="btn btn-danger border-0"
+                                                            data-bs-toggle="modal" data-bs-target="#payment"
+                                                            data-ticket-name="<?= $row1['name'] ?>"
                                                             data-ticket-description="<?= $row1['description'] ?>"
                                                             data-ticket-price="<?= $row1['price'] ?>฿"
                                                             data-ticket-detail-id="<?= $row1['detail_id'] ?>" <?php
-                                                            if ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each'])) {
-                                                                echo 'style="background-color:black;" disabled> Sold Out </button>';
-                                                            } else {
-                                                                echo '>Buy Now</button>';
-                                                            }
-                                                            ?> </div>
+                                                              if ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each'])) {
+                                                                  echo 'style="background-color:black;" disabled> Sold Out </button>';
+                                                              } else {
+                                                                  echo '>Buy Now</button>';
+                                                              }
+                                                              ?> </div>
                                                     </div>
                                             </li>
                                             <?php
@@ -337,7 +411,10 @@ require_once 'config/db.php';
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $_GET['id'];?>" method="POST">
+                                                    
+                                                    <form
+                                                        action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $_GET['id']; ?>"
+                                                        method="POST">
                                                         <div class="form-floating mb-2">
                                                             <input type="text" class="form-control" id="credit_number"
                                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '');"
@@ -383,7 +460,7 @@ require_once 'config/db.php';
                                                         </div>
                                                         <!--ส่วนท้าย-->
                                                         <div class="modal-footer">
-                                                        <input type="hidden" name="detail_id" id="ticket-detail-id">
+                                                            <input type="hidden" name="detail_id" id="ticket-detail-id">
                                                             <button type="submit" class="btn btn-success"
                                                                 name="confirm">Confirm</button>
                                                         </div>
@@ -403,84 +480,11 @@ require_once 'config/db.php';
     </div>
     </div>
     </div>
-    <?php
-    if (isset($_POST['confirm'])) {
-        $member_id = $_SESSION['member_id'];
-        $number = $_POST['credit_number'];
-        $name = $_POST['credit_name'];
-        $month = $_POST['credit_month'];
-        $year = $_POST['credit_year'];
-        $cvv = $_POST['credit_cvv'];
-        $detail_id = $_POST['detail_id'];
-        $alert_text = '';
-        if (empty($number)) {
-            $alert_text .= 'กรุณากรอกเลขบัตรเครดิต\n';
-        }
-        if (empty($name)) {
-            $alert_text .= 'กรุณากรอกเลขชื่อ-นามสกุลผู้ถือบัตร\n';
-        }
-        if (empty($month)) {
-            $alert_text .= 'กรุณากรอกเดือนที่บัตรหมดอายุ\n';
-        }
-        if (empty($year)) {
-            $alert_text .= 'กรุณากรอกปีที่บัตรหมดอายุ\n';
-        }
-        if (empty($cvv)) {
-            $alert_text .= 'กรุณากรอกรหัสรักษาความปลอดภัยของบัตร\n';
-        }
-        if ($month > 12){
-            $alert_text .= 'กรุณากรอกเดือนที่หมดอายุตามความเป็นจริง\n';
-        }
-        if ($year < date("Y")){
-            $alert_text .= 'กรุณากรอกปีที่หมดอายุให้ไม่น้อยกว่าปัจจุบัน';
-        }
-        if ($alert_text != "") {
-            echo "<script>alert('" . $alert_text . "');</script>";
-        }else {
-            #หาว่าตั๋ว id ที่น้อยที่สุดคือ id ที่เท่าไหร่
-            $sql_find = <<<EOF
-            SELECT ticket_id
-            FROM ticket
-            WHERE detail_id = $detail_id
-            AND payment_id IS NULL
-            ORDER BY ticket_id ASC
-            LIMIT 1;
-            EOF;
-            $ret = $db -> query($sql_find);
-            $row = $ret -> fetchArray(SQLITE3_ASSOC);
-            $current_id = $row['ticket_id'];
 
-            $sql_insert_paymemt = <<<EOF
-            INSERT INTO payment(member_id, card_number, card_holder, month, year, CVV)
-            VALUES ($member_id, $number, '$name', $month, $year, $cvv);
-            EOF;
-            $ret_insert_payment = $db -> exec($sql_insert_paymemt);
-
-            $sql_get_payment_id = <<<EOF
-            SELECT payment_id
-            FROM payment
-            ORDER BY payment_id DESC
-            LIMIT 1;
-            EOF;
-            $ret_payment_id = $db -> query($sql_get_payment_id);
-            $row = $ret_payment_id -> fetchArray(SQLITE3_ASSOC);
-            $payment_id = $row['payment_id'];
-
-            $sql_update_ticket = <<<EOF
-            UPDATE ticket
-            SET payment_id = $payment_id
-            WHERE ticket_id = $current_id;
-            EOF;
-            $ret_update_ticket = $db -> exec($sql_update_ticket);
-            echo '<script>alert("การซื้อบัตรเสร็จสิ้น");</script>';
-            }
-        }
-    $db->close();
-    ?>
     <!-- footer -->
-    <hr>
-    <footer class="py-3 my-4 ">
-        <p class="text-center text-muted">© 2023 TICKCON</p>
+    <hr style="color :white;">
+    <footer class="py-3 my-4">
+        <p class="text-center " style="color :white;">© 2023 TICKCON</p>
     </footer>
 </body>
 <script>
