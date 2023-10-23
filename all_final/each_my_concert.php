@@ -751,6 +751,10 @@
         }
     }
     ?>
+    <footer class="py-3 my-4 ">
+        <hr>
+        <p class="text-center text-muted">© 2023 TICKCON</p>
+    </footer>
 </body>
 
 </html>

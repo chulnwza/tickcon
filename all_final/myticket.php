@@ -59,12 +59,6 @@ session_start();
         .card {
             margin: auto;
         }
-        .footer{
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-        }
     </style>
 </head>
 
@@ -196,7 +190,7 @@ session_start();
     </main>
     <!-- footer -->
     
-    <footer class="py-3 my-4 footer">
+    <footer class="py-3 my-4">
         <hr>
         <p class="text-center text-muted">© 2023 TICKCON</p>
     </footer>
