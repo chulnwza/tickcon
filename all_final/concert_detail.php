@@ -76,6 +76,10 @@ require_once 'config/db.php';
         .card {
             margin: auto;
         }
+
+        body {
+            background-color: #5ECDEA;
+        }
     </style>
 </head>
 
@@ -158,7 +162,7 @@ require_once 'config/db.php';
 
                 <h4 class="mt-2">Description</h4>
                 <hr>
-                <small style="white-space: pre;">
+                <small style="white-space: pre-line" class="text-break">
                         <?= $row['detail'] ?>
                     </small>
 
@@ -236,7 +240,7 @@ require_once 'config/db.php';
                                     JOIN ticket
                                     USING (detail_id)
                                     WHERE concert_id= ' . $ids . ')
-                                    GROUP by detail_id, payment_id IS NOT NULL;';
+                                    GROUP by detail_id, payment_id IS NULL;';
                                     $result1 = $db->query($sql1);
                                     while ($row1 = $result1->fetchArray(SQLITE3_ASSOC)) {
                                         if ((is_null($row1['payment_id']) == TRUE) || ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each']))) {
@@ -264,13 +268,13 @@ require_once 'config/db.php';
                                                     </div>
                                                     <div class="col-3 d-flex align-items-center text-center my-1">
 
-                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                        <button type="button" class="btn btn-danger border-0" data-bs-toggle="modal"
                                                             data-bs-target="#payment" data-ticket-name="<?= $row1['name'] ?>"
                                                             data-ticket-description="<?= $row1['description'] ?>"
                                                             data-ticket-price="<?= $row1['price'] ?>฿"
                                                             data-ticket-detail-id="<?= $row1['detail_id'] ?>" <?php
                                                             if ((is_null($row1['payment_id']) == FALSE) && ($row1['amount'] == $row1['amount_each'])) {
-                                                                echo 'disabled> Sold Out </button>';
+                                                                echo 'style="background-color:black;" disabled> Sold Out </button>';
                                                             } else {
                                                                 echo '>Buy Now</button>';
                                                             }
