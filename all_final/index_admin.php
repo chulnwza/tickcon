@@ -122,6 +122,7 @@ date_default_timezone_set("Asia/Bangkok");
 
                     </li>
                 </ul>
+                <p><?=$_SESSION['firstname']?></p>
                 <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
