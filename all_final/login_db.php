@@ -135,6 +135,7 @@ if (isset($_SESSION['member_id'])) {
                 while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
                     if (($email == $row['email']) && ($pwd == $row['password'])) {
                         $_SESSION['member_id'] = $row['member_id'];
+                        $_SESSION['firstname'] = $row['firstname'];
                         if ($row['type'] == 'user') {
                             header('Location:index_user.php');
                         } elseif ($row['type'] == 'admin') {
