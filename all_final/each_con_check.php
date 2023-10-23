@@ -91,7 +91,6 @@
                     <li class="nav-item">
                         <a class="nav-link " href="con_waiting_list.php" style="color:white;">Pending List</a>
                     </li>
-                    <p><?=$_SESSION['firstname']?></p>
                 </ul>
                 <p><?=$_SESSION['firstname']?></p>
                 <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
