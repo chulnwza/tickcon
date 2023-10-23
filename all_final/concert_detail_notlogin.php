@@ -283,7 +283,7 @@ require_once 'config/db.php';
                                         <?= $row['address'] ?>
                                     </li>
                                     <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
-                                    <a href="<?= $row['lo_link'] ?>" target="_blank">Google Map</a>
+                                    <a href ="<?= $row['lo_link']?>" target="_blank">Google Map</a>
                                     </li>
                                     <li><b><i class="bi bi-exclamation-circle-fill"></i>&nbsp;</b>
                                         <?= $row['requirement'] ?>

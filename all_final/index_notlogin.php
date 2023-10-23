@@ -153,7 +153,7 @@ date_default_timezone_set("Asia/Bangkok");
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
 
             ?>
-                <div class="col-6 col-md-4 col-lg-3 mb-3" id="main-concert">
+                <div class="col-6 col-md-4 col-xl-3 mb-3" id="main-concert">
                     <div class="card h-100">
                     <div class="card-body px-2 pb-0 pt-1">
                     <div class="text-center">
@@ -179,8 +179,9 @@ date_default_timezone_set("Asia/Bangkok");
     </div>
 
     <!-- footer -->
-    <hr>
+    
     <footer class="py-3 my-4 ">
+        <hr  style="color:black;">
         <p class="text-center text-light">© 2023 TICKCON</p>
     </footer>
 </body>

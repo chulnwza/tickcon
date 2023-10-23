@@ -121,6 +121,16 @@
                         <a class="nav-link " href="con_waiting_list.php" style="color:white;">Pending List</a>
                     </li>
                 </ul>
+                <div class="mb-lg-0 me-3 mt-1">
+                    <p style="color:black"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle"
+                        viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path fill-rule="evenodd"
+                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                        <?= $_SESSION['firstname'] ?>
+                    </p>
+                </div>
                 <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
@@ -149,15 +159,16 @@
     if ($count > 0) {
         while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
             echo '<div class = "col-6 col-md-4 col-lg-3 mb-3" id = "main-concert">
-            <div class="card h-100 px-0 py-1">
+            <div class="card h-100 px-0 ">
             <img src="' . $row['concert_img_path'] . '" 
             class="card-img mt-3 p-1 my-1 border rounded bg-dark"
             id="main-picture">
                 <div class="card-body pb-2 pt-1 text-center">
                     <h6 class="card-title fw-bold mb-0">' . $row['concert_name'] . '</h5>
                     <small>' . date('l', strtotime($row['show_date'])) . ', ' . date('d F Y', strtotime($row['show_date'])) .'<br><i class="bi bi-clock"></i> '. $row['show_time'] . '</small><br>
-                    <a href="each_con_check.php?concert_id=' . $row['concert_id'] . '" class="btn btn-primary">see more</a>
+                    
                 </div>
+                <a href="each_con_check.php?concert_id=' . $row['concert_id'] . '" class="btn btn-outline-info p-2" style="border-radius:0px; border-color:white;">see more</a>
             </div>
             </div>';
         }
