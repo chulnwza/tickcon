@@ -161,12 +161,12 @@ if (isset($_SESSION['member_id'])) {
         ?>
         <form action="login_db.php" method="post">
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="อีเมล">
+                <label for="email" class="form-label">อีเมล</label>
+                <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="Email">
             </div>
             <div class="mb-3">
-                <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control" name="pwd" placeholder="รหัสผ่าน">
+                <label for="pwd" class="form-label">รหัสผ่าน</label>
+                <input type="password" class="form-control" name="pwd" placeholder="Password">
             </div>
             <button type="submit" class="btn btn-info" name="signin">Log In</button>
         </form>

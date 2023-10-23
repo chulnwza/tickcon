@@ -123,9 +123,7 @@ ob_start(); ?>
     </nav>
 
     <!-- code -->
-
-    <a href="index_user.php"><button class="btn btn-secondary">back</button></a>
-    <div class="container">
+    <div class="container" style="width: 80%">
         <h3 class="mt-4">สร้างคอนเสิร์ต</h3>
         <hr>
         <?php
@@ -309,13 +307,14 @@ ob_start(); ?>
 
         ?>
         <form action="createcon_db.php" method="post" enctype="multipart/form-data">
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
             <div class="mb-3">
                 <label for="cname" class="form-label">ชื่อคอนเสิร์ต</label>
                 <input type="text" class="form-control" name="cname">
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">สถานที่จัดคอนเสิร์ต</label><br>
-                <textarea name="address" style="width: 100%; height: 50px;"></textarea>
+                <textarea name="address" style="width: 100%; height: 50px;" class="form-control"></textarea>
             </div>
             <div class="mb-3">
                 <label for="bdate" class="form-label">วันที่เปิดให้จองบัตรคอนเสิร์ต</label>
@@ -331,26 +330,37 @@ ob_start(); ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">รายละเอียดคอนเสิร์ต</label><br>
-                <textarea name="detail" style="width: 100%; height: 100px;"></textarea>
+                <textarea name="detail" style="width: 100%; height: 100px;" class="form-control"></textarea>
             </div>
             <div class="mb-3">
                 <label for="require" class="form-label">ข้อจำกัดของคอนเสิร์ต</label>
                 <input type="text" class="form-control" name="require">
             </div>
-            <div class="mb-3" id="tic_type_add">
-                <label class="form-label">ชื่อบัตร</label>
-                <input type="text" class="form-control" name="tic_name[]">
-                <label class="form-label">ราคาบัตร</label>
-                <input type="number" class="form-control" name="tic_price[]">
-                <label class="form-label">จำนวนบัตร</label>
-                <input type="number" min="0" class="form-control" name="tic_amount[]">
-                <label class="form-label">คำอธิบาย</label>
-                <textarea name="tic_detail[]" style="width: 100%; height: 70px;"></textarea>
             </div>
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+                <div class="row mb-3" id="tic_type_add">
+                    <label class="form-label"><b>บัตรคอนเสิร์ต</b></label>
+                    <div class="col">
+                    <label class="form-label">ชื่อบัตร</label>
+                    <input type="text" class="form-control" name="tic_name[]">
+                    </div>
+                    <div class="col">
+                    <label class="form-label">ราคาบัตร</label>
+                    <input type="number" min="0" class="form-control" name="tic_price[]">
+                    </div>
+                    <div class="col">
+                    <label class="form-label">จำนวนบัตร</label>
+                    <input type="number" min="0" class="form-control" name="tic_amount[]">
+                    </div>
+                    <div class="col">
+                    <label class="form-label">คำอธิบาย</label>
+                    <textarea name="tic_detail[]" style="width: 100%; height: 40px;" class="form-control"></textarea> 
+                    </div>
+                </div>
             <div class="mb-3">
-                <input type="button" onclick="add_type()" value="เพิ่มชนิดบัตร">
+                <input type="button" class="btn btn-secondary" onclick="add_type()" value="เพิ่มชนิดบัตร">
             </div>
-
+            </div>
             <div class="mb-3">
                 <label for="poster_img" class="form-label">โปสเตอร์คอนเสิร์ต</label>
                 <input type="file" class="form-control" name="poster_img" accept="image/*">
@@ -391,6 +401,7 @@ ob_start(); ?>
             price.setAttribute("type", "number");
             price.setAttribute("class", "form-control");
             price.setAttribute("name", "tic_price[]");
+            price.setAttribute("min", "0");
             //amount
             let amount_label = document.createElement("label");
             amount_label.setAttribute("class", "form-label");

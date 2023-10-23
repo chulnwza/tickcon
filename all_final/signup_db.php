@@ -154,24 +154,24 @@
         ?>
         <form action="signup_db.php" method="post">
             <div class="mb-3">
-                <label for="fname" class="form-label">First name</label>
-                <input type="text" class="form-control" name="fname" aria-describedby="fname" placeholder="ชื่อจริง">
+                <label for="fname" class="form-label">ชื่อจริง</label>
+                <input type="text" class="form-control" name="fname" aria-describedby="fname" placeholder="Firstname">
             </div>
             <div class="mb-3">
-                <label for="lname" class="form-label">Last name</label>
-                <input type="text" class="form-control" name="lname" aria-describedby="lname" placeholder="นามสกุล">
+                <label for="lname" class="form-label">นามสกุล</label>
+                <input type="text" class="form-control" name="lname" aria-describedby="lname" placeholder="Lastname">
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="อีเมล">
+                <label for="email" class="form-label">อีเมล</label>
+                <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="Email">
             </div>
             <div class="mb-3">
-                <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control" name="pwd" placeholder="ความยาวมากกว่า 5 ตัวอักษร">
+                <label for="pwd" class="form-label">รหัสผ่าน</label>
+                <input type="password" class="form-control" name="pwd" placeholder="Password (more than 5 characters)">
             </div>
             <div class="mb-3">
-                <label for="confirm pwd" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" name="c_pwd" placeholder="ยืนยัน password">
+                <label for="confirm pwd" class="form-label">ยืนยันรหัสผ่าน</label>
+                <input type="password" class="form-control" name="c_pwd" placeholder="Confirm password">
             </div>
             <button type="submit" class="btn btn-info" name="signup">Sign Up</button>
 
