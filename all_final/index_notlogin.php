@@ -118,7 +118,7 @@ if (isset($_SESSION['member_id'])) {
         </nav>
     <!-- code -->
     <div class="container py-2 rounded">
-    <h3 class="mt-4 text-center text-light">คอนเสิร์ตที่เปิดขาย</h3>
+    <h3 class="mt-4 text-center text-light">Concerts</h3>
         <hr>
         <br>
         <div class="row">
