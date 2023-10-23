@@ -20,6 +20,8 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- add style -->
     <style>
         .container {
@@ -134,7 +136,7 @@ session_start();
         $ticket_comment = $_GET['ticket_comment'];
         $open_booking_date_comment = $_GET['open_booking_date_comment'];
         $requirement_comment = $_GET['requirement_comment'];
-        if ($_POST['confirm'] == 'approve') {
+        if ($_POST['status'] == 'approve') {
             $sql4 = <<<EOF
             UPDATE concert
             SET status = "approved"
@@ -142,7 +144,7 @@ session_start();
             EOF;
             $ret4 = $db->exec($sql4);
             header("Location: con_waiting_list.php");
-        } else if ($_POST['confirm'] == 'reject') {
+        } else if ($_POST['status'] == 'reject') {
             $sql5 = <<<EOF
             UPDATE concert
             SET status = "rejected",
@@ -291,7 +293,7 @@ session_start();
             //approve with modal
             echo '<button type="button" class="btn btn-success border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm1">Approve</button>';
             //reject with modal
-            echo '<button type="button" class="btn btn-danger border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm2">Reject</button>';
+            echo '<button type="button" class="btn btn-danger border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm2">Reject</button></form>';
                                                 
             // echo '<button type = "submit" name="button" value = "approve" class="btn btn-primary">Approve</button>
             // <button type = "submit" name="button" value = "reject" class="btn btn-danger">Reject</button>
@@ -312,8 +314,8 @@ session_start();
                     <div class="modal-body">
                         <form action="each_con_check.php" method="POST">
                             <div class="modal-footer">
-                                <input type="hidden" name="detail_id" id="ticket-detail-id" value = "">
-                                <button type="submit" class="btn btn-success" name="confirm" value ="approve">Confirm</button>
+                                <input type="hidden" id="status" name="status">
+                                <button type="submit" class="btn btn-success" id="confirm" name="confirm">Confirm</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
                             </div>
                         </form>
@@ -337,7 +339,8 @@ session_start();
                 <div class="modal-body">
                     <form action="each_con_check.php" method="POST">
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-success" name="confirm" value ="reject">Confirm</button>
+                            <input type="hidden" id="status" name="status">
+                            <button type="submit" class="btn btn-success" id="confirm" name="confirm">Confirm</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
                         </div>
                     </form>
@@ -345,7 +348,6 @@ session_start();
             </div>
         </div>
     </div>';
-    
     ?>
     <footer class="py-3 my-4 ">
         <hr>
@@ -354,13 +356,14 @@ session_start();
 </body>
 <script>
     $('#confirm1').on('show.bs.modal', function (event) {
-        var button1 = $(event.relatedTarget);
-        var modal1 = $(this);
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        modal.find('#status').val('approve');
     });
     $('#confirm2').on('show.bs.modal', function (event) {
-        var button2 = $(event.relatedTarget);
-        var modal2 = $(this);
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        modal.find('#status').val('reject');
     });
-    
 </script>
 </html>
