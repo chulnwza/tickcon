@@ -9,7 +9,7 @@ if (isset($_SESSION['member_id'])) {
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>log-in</title>
     <!-- google font -->
@@ -103,19 +103,6 @@ if (isset($_SESSION['member_id'])) {
     <div class="container">
         <h3 class="mt-4">เข้าสู่ระบบ</h3>
         <hr>
-        <form action="login_db.php" method="post">
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="email">
-            </div>
-            <div class="mb-3">
-                <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control" name="pwd">
-            </div>
-            <button type="submit" class="btn btn-primary" name="signin">Log In</button>
-        </form>
-        <hr>
-        <p>คลิกที่นี่เพื่อสมัครสมาชิก <a href="signup_db.php">สมัครสมาชิก</a></p>
         <?php
         if (isset($_POST['signin'])) {
             //assign variable
@@ -166,6 +153,20 @@ if (isset($_SESSION['member_id'])) {
             $db->close();
         }
         ?>
+        <form action="login_db.php" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" aria-describedby="email">
+            </div>
+            <div class="mb-3">
+                <label for="pwd" class="form-label">Password</label>
+                <input type="password" class="form-control" name="pwd">
+            </div>
+            <button type="submit" class="btn btn-primary" name="signin">Log In</button>
+        </form>
+        <hr>
+        <p>คลิกที่นี่เพื่อสมัครสมาชิก <a href="signup_db.php">สมัครสมาชิก</a></p>
+
     </div>
     <!-- footer -->
     <hr>

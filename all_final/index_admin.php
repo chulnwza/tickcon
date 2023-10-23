@@ -92,16 +92,15 @@
     </nav>
 
     <!-- code -->
-    <div class="text-center">
-        <h1>คอนเสิร์ตที่เปิดขาย</h1>
-    </div>
     <div class="container">
+        <h3 class="mt-4 text-center">คอนเสิร์ตที่เปิดขาย</h3>
+        <hr>
         <br>
         <div class="row">
             <?php
             require_once 'config/db.php';
             $sql1 = 'SELECT * FROM concert
-            WHERE status="approved" AND open_booking_date < "' . date("Y-m-d") . '"' . ' AND show_date > "' . date("Y-m-d") . '"';
+            WHERE status="approved" AND open_booking_date <= "' . date("Y-m-d") . '"' . ' AND show_date > "' . date("Y-m-d") . '"';
             $result = $db->query($sql1);
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
 

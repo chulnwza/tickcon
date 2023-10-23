@@ -219,9 +219,14 @@
                 <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
-                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>
-                <img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>
-                <input type="file" class="form-control" name="con_img" accept="image/*" disabled>
+                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+
+        if (is_null($row['stage_img'])) {
+            echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+        } else {
+            echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+        }
+        echo '<input type="file" class="form-control" name="con_img" accept="image/*" disabled>
                 <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
@@ -347,12 +352,16 @@
                         <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
                     </div>
                     <div class="mb-3">
-                        <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>
-                        <img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><a href="' . $row['stage_img'] . '" >download</a><br><br>
-                        <input type="file" class="form-control" name="con_img" accept="image/*" >
-                        <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
-                    </div>
-                    <div class="mb-3">
+                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+            if (is_null($row['stage_img'])) {
+                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+            } else {
+                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+            }
+            echo '<input type="file" class="form-control" name="con_img" accept="image/*">
+                    <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
+                </div>
+                <div class="mb-3">
                         <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารรับเงิน</b></label>
                         <input type="text" class="form-control" name="bank_acc_name"  value = "' . $row['bank_name'] . '" >
                         <p style="color : red;">' . $row['bank_name_comment'] . '</p><hr>
@@ -386,21 +395,50 @@
             WHERE concert_id = $concert_id;
             EOF;
             $ret_save = $db->exec($sql_save);
+
+            //name
             $cname = $_POST['cname'];
+            $cname = str_replace('"', '”', $cname);
+            $cname = str_replace('‘', "'", $cname);
+            $cname = str_replace('’', "'", $cname);
+            //address
             $address = $_POST['address'];
+            $address = str_replace('"', '”', $address);
+            $address = str_replace('‘', "'", $address);
+            $address = str_replace('’', "'", $address);
+            //open booking date
             $bdate = $_POST['bdate'];
+            //start date
             $cdate = $_POST['cdate'];
+            //start time
             $ctime = $_POST['ctime'];
+            //ticket name
             $tic_name = $_POST['tic_name'];
+            //ticket price
             $tic_price = $_POST['tic_price'];
+            //ticket detail
             $tic_detail = $_POST['tic_detail'];
+            //detail
             $detail = $_POST['detail'];
+            $detail = str_replace('"', '”', $detail);
+            $detail = str_replace('‘', "'", $detail);
+            $detail = str_replace('’', "'", $detail);
+            //requirement
             $require = $_POST['require'];
+            $require = str_replace('"', '”', $require);
+            $require = str_replace('‘', "'", $require);
+            $require = str_replace('’', "'", $require);
+            //file
             $poster_img = basename($_FILES["poster_img"]["name"]);
             $id_card_img = basename($_FILES["id_card_img"]["name"]);
             $license_img = basename($_FILES["license_img"]["name"]);
             $con_img = basename($_FILES["con_img"]["name"]);
+            //bank name
             $bank_acc_name = $_POST['bank_acc_name'];
+            $bank_acc_name = str_replace('"', '”', $bank_acc_name);
+            $bank_acc_name = str_replace('‘', "'", $bank_acc_name);
+            $bank_acc_name = str_replace('’', "'", $bank_acc_name);
+            //bank number
             $bank_acc_number = $_POST['bank_acc_number'];
             $member_id = $_SESSION['member_id']; #อย่าลืมแก้
             $alert_msg = "";
@@ -491,16 +529,15 @@
                 }
                 $sql = <<<EOF
                         UPDATE concert
-                        SET concert_name = '$cname',
-                        detail = '$detail',
-                        concert_name = '$cname',
-                        requirement = '$require',
+                        SET concert_name = "$cname",
+                        detail = "$detail",
+                        requirement = "$require",
                         open_booking_date = '$bdate',
                         show_date = '$cdate',
                         show_time = '$ctime',
-                        bank_name = '$bank_acc_name',
+                        bank_name = "$bank_acc_name",
                         bank_code = '$bank_acc_number',
-                        address = '$address'
+                        address = "$address"
                         WHERE concert_id = $concert_id;
                         EOF;
                 $ret = $db->exec($sql);
@@ -524,14 +561,24 @@
                     //         EOF;
                     // $ret4 = $db->query($sql4);
                     while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
+
                         $detail_id = $row3['detail_id'];
+                        //clean data avoid error
                         $tic_name_tmp = $tic_name[$count];
-                        $tic_price_tmp = $tic_price[$count];
+                        $tic_name_tmp = str_replace('"', '”', $tic_name_tmp);
+                        $tic_name_tmp = str_replace('‘', "'", $tic_name_tmp);
+                        $tic_name_tmp = str_replace('’', "'", $tic_name_tmp);
+                        //clean data avoid error
                         $tic_detail_tmp = $tic_detail[$count];
+                        $tic_detail_tmp = str_replace('"', '”', $tic_detail_tmp);
+                        $tic_detail_tmp = str_replace('‘', "'", $tic_detail_tmp);
+                        $tic_detail_tmp = str_replace('’', "'", $tic_detail_tmp);
+                        $tic_price_tmp = $tic_price[$count];
+
                         $sql = <<<EOF
                         UPDATE ticket_detail
-                        SET name = '$tic_name_tmp',
-                        description = '$tic_detail_tmp',
+                        SET name = "$tic_name_tmp",
+                        description = "$tic_detail_tmp",
                         price = '$tic_price_tmp'
                         WHERE detail_id = $detail_id;
                         EOF;
@@ -649,12 +696,17 @@
                     <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
                 </div>
                 <div class="mb-3">
-                    <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>
-                    <img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>
-                    <input type="file" class="form-control" name="con_img" accept="image/*" disabled>
-                    <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
-                </div>
-                <div class="mb-3">
+                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+
+            if (is_null($row['stage_img'])) {
+                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+            } else {
+                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+            }
+            echo '<input type="file" class="form-control" name="con_img" accept="image/*" disabled>
+                <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
+            </div>
+            <div class="mb-3">
                     <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารรับเงิน</b></label>
                     <input type="text" class="form-control" name="bank_acc_name"  value = "' . $row['bank_name'] . '" disabled>
                     <p style="color : red;">' . $row['bank_name_comment'] . '</p><hr>

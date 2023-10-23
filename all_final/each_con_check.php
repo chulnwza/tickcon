@@ -28,6 +28,7 @@
         .comment {
             color: blue;
         }
+
         * {
             font-family: 'Dosis', sans-serif;
             font-weight: 700;
@@ -50,10 +51,12 @@
             background-color: #C2D9FF;
             border-color: #C2D9FF;
         }
-        .btn-outline-danger{
+
+        .btn-outline-danger {
             color: white;
             border-color: white;
         }
+
         .card-text {
             max-width: 50ch;
             overflow: hidden;
@@ -72,8 +75,7 @@
     <nav class="navbar navbar-expand-md sticky-top shadow p-2 mb-5 " style="background-color : #0097B2">
         <div class="container-fluid">
             <a class="navbar-brand" href="index_admin.php">
-                <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" 
-                    class="d-inline-block align-text-top">
+                <img src="upload/logo/TICKCON.png" alt="Logo" width="150px" class="d-inline-block align-text-top">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -189,26 +191,31 @@
     echo '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="ticket_comment" style="width: 50%; height: 50px;"></textarea><hr></div>
             <div class="mb-3">
                 <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
-                <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
+                <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><a href="' . $row['stage_img'] . '" >download</a><br><br>
                 <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="concert_img_comment" style="width: 50%; height: 50px;"></textarea><hr>
             </div>
 
             <div class="mb-3">
                 <label for="id_card_img" class="form-label"><b>สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</b></label><br>
-                <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><br>
+                <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><a href="' . $row['stage_img'] . '" >download</a><br><br>
                 <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="copy_id_card_comment" style="width: 50%; height: 50px;"></textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="license_img" class="form-label"><b>ใบอนุญาตจัดคอนเสิร์ต</b></label><br>
-                <img src="' . $row['con_permission_img'] . '" style="max-width : 40vw"><br><br>
+                <img src="' . $row['con_permission_img'] . '" style="max-width : 40vw"><br><a href="' . $row['stage_img'] . '" >download</a><br><br>
                 <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="con_permission_comment" style="width: 50%; height: 50px;"></textarea><hr>
             </div>
             <div class="mb-3">
-                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>
-                <img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="stage_img_comment" style="width: 50%; height: 50px;"></textarea><hr>
+            <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+
+            if (is_null($row['stage_img'])) {
+                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+            } else {
+                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+            }
+            echo '<textarea name="stage_img_comment" style="width: 50%; height: 50px;"></textarea><hr>
             </div>
-            <div class="mb-3">
+             <div class="mb-3">
                 <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารรับเงิน</b></label>
                 <input type="text" class="form-control" name="bank_acc_name"  value = "' . $row['bank_name'] . '" disabled>
                 <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="bank_name_comment" style="width: 50%; height: 50px;"></textarea><hr>

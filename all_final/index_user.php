@@ -124,10 +124,9 @@
     </nav>
 
     <!-- code -->
-    <div class="text-center">
-        <h1>คอนเสิร์ตที่เปิดขาย</h1>
-    </div>
     <div class="container">
+    <h3 class="mt-4 text-center">คอนเสิร์ตที่เปิดขาย</h3>
+        <hr>
         <br>
         <div class="row">
             <?php

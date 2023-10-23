@@ -200,24 +200,51 @@ ob_start(); ?>
     </div>
     <?php
     if (isset($_POST['create_con'])) {
+        //name
         $cname = $_POST['cname'];
+        $cname = str_replace('"','”',$cname);
+        $cname = str_replace('‘',"'",$cname);
+        $cname = str_replace('’',"'",$cname);
+        //address
         $address = $_POST['address'];
+        $address = str_replace('"','”',$address);
+        $address = str_replace('‘',"'",$address);
+        $address = str_replace('’',"'",$address);
+        //open booking date
         $bdate = $_POST['bdate'];
+        //start date
         $cdate = $_POST['cdate'];
+        //start time
         $ctime = $_POST['ctime'];
+        //ticket name
         $tic_name = $_POST['tic_name'];
+        //ticket price
         $tic_price = $_POST['tic_price'];
+        //ticket amount
         $tic_amount = $_POST['tic_amount'];
+        //ticket detail
         $tic_detail = $_POST['tic_detail'];
+        //detail
         $detail = $_POST['detail'];
-        $detail = str_replace("'","\'",$detail);
-        $detail = str_replace('"','\"',$detail);
+        $detail = str_replace('"','”',$detail);
+        $detail = str_replace('‘',"'",$detail);
+        $detail = str_replace('’',"'",$detail);
+        //requirement
         $require = $_POST['require'];
+        $require = str_replace('"','”',$require);
+        $require = str_replace('‘',"'",$require);
+        $require = str_replace('’',"'",$require);
+        //file
         $poster_img = basename($_FILES["poster_img"]["name"]);
         $id_card_img = basename($_FILES["id_card_img"]["name"]);
         $license_img = basename($_FILES["license_img"]["name"]);
         $con_img = basename($_FILES["con_img"]["name"]);
+        //bank name
         $bank_acc_name = $_POST['bank_acc_name'];
+        $bank_acc_name = str_replace('"','”',$bank_acc_name);
+        $bank_acc_name = str_replace('‘',"'",$bank_acc_name);
+        $bank_acc_name = str_replace('’',"'",$bank_acc_name);
+        //bank number
         $bank_acc_number = $_POST['bank_acc_number'];
         $status = "checking";
         $member_id = $_SESSION['member_id']; #อย่าลืมแก้
@@ -290,7 +317,7 @@ ob_start(); ?>
             ) {
                 $sql2 = <<<EOF
                 INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id)
-                VALUES ('$cname',"$detail",'$require','$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path','$bank_acc_name','$bank_acc_number','$address','$member_id');
+                VALUES ("$cname","$detail","$require",'$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path',"$bank_acc_name",'$bank_acc_number',"$address",'$member_id');
                 EOF;
                 $ret2 = $db->exec($sql2);
                 if ($ret2) {
@@ -314,9 +341,21 @@ ob_start(); ?>
                     }
                     for ($i = 0; $i < count($tic_price); $i++) {
                         //store ticket detail in to ticket_detail
+
+                        //ticket name replace string for avoid error
+                        $tic_name_clean = $tic_name[$i];
+                        $tic_name_clean = str_replace('"','”',$tic_name_clean);
+                        $tic_name_clean = str_replace('‘',"'",$tic_name_clean);
+                        $tic_name_clean = str_replace('’',"'",$tic_name_clean);
+                        //ticket detail replace string for avoid error
+                        $tic_detail_clean = $tic_detail[$i];
+                        $tic_detail_clean = str_replace('"','”',$tic_detail_clean);
+                        $tic_detail_clean = str_replace('‘',"'",$tic_detail_clean);
+                        $tic_detail_clean = str_replace('’',"'",$tic_detail_clean);
+
                         $sql = <<<EOF
                             INSERT INTO ticket_detail(name,price,description,concert_id,amount)
-                            VALUES('$tic_name[$i]',$tic_price[$i],'$tic_detail[$i]','$concert_id','$tic_amount[$i]');
+                            VALUES("$tic_name_clean",$tic_price[$i],"$tic_detail_clean",'$concert_id','$tic_amount[$i]');
                             EOF;
                         $ret = $db->exec($sql);
                         $sql = <<<EOF

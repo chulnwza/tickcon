@@ -97,35 +97,7 @@
     <div class="container">
         <h3 class="mt-4">สมัครสมาชิก</h3>
         <hr>
-        <form action="signup_db.php" method="post">
-            <div class="mb-3">
-                <label for="fname" class="form-label">First name</label>
-                <input type="text" class="form-control" name="fname" aria-describedby="fname">
-            </div>
-            <div class="mb-3">
-                <label for="lname" class="form-label">Last name</label>
-                <input type="text" class="form-control" name="lname" aria-describedby="lname">
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" aria-describedby="email">
-            </div>
-            <div class="mb-3">
-                <label for="pwd" class="form-label">Password</label>
-                <input type="password" class="form-control" name="pwd">
-            </div>
-            <div class="mb-3">
-                <label for="confirm pwd" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" name="c_pwd">
-            </div>
-            <button type="submit" class="btn btn-primary" name="signup">Sign Up</button>
-        </form>
-        <hr>
-        <p>คลิกที่นี่เพื่อเข้าสู่ระบบ <a href="login_db.php">เข้าสู่ระบบ</a></p>
-
-    </div>
-
-    <?php
+        <?php
     if (isset($_POST['signup'])) {
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
@@ -175,12 +147,40 @@
                 VALUES ('$fname','$lname','$email','$pwd','$urole');
                 EOF;
                 $ret = $db->query($sql);
-                echo '<div class="alert alert-success text-center" role="alert">สมัครสมาชิกสำเร็จ คลิกเพื่อเข้าสู่ระบบ</div>';
+                echo '<div class="alert alert-success text-center" role="alert">สมัครสมาชิกสำเร็จ คลิกเพื่อเข้าสู่ระบบ <a href="login_db.php"> เข้าสู่ระบบ</a></div>';
             }
             $db->close();
         }
     }
     ?>
+        <form action="signup_db.php" method="post">
+            <div class="mb-3">
+                <label for="fname" class="form-label">First name</label>
+                <input type="text" class="form-control" name="fname" aria-describedby="fname">
+            </div>
+            <div class="mb-3">
+                <label for="lname" class="form-label">Last name</label>
+                <input type="text" class="form-control" name="lname" aria-describedby="lname">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" aria-describedby="email">
+            </div>
+            <div class="mb-3">
+                <label for="pwd" class="form-label">Password</label>
+                <input type="password" class="form-control" name="pwd">
+            </div>
+            <div class="mb-3">
+                <label for="confirm pwd" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="c_pwd">
+            </div>
+            <button type="submit" class="btn btn-primary" name="signup">Sign Up</button>
+        </form>
+        
+
+    </div>
+
+    
     <!-- footer -->
     <hr>
     <footer class="py-3 my-4 ">
