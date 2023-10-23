@@ -170,8 +170,6 @@ if (isset($_SESSION['member_id'])) {
             </div>
             <button type="submit" class="btn btn-info" name="signin">Log In</button>
         </form>
-        <hr>
-
     </div>
     <!-- footer -->
     <hr>

@@ -146,7 +146,8 @@ session_start();
             while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
                 $count++;
             }
-            echo '<div class="container">';
+            echo '<div class="container" style="width : 70%">
+            <div class="text-center"></div><h4>My Tickets</h4><hr></div>';
             if ($count <= 0) {
                 echo "you don't have any ticket.";
             } else {
