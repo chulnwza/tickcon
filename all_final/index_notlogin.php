@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 if (isset($_SESSION['member_id'])) {
     session_destroy();
 }
@@ -62,6 +63,24 @@ if (isset($_SESSION['member_id'])) {
         .card {
             margin: auto;
         }
+
+        #main-concert :hover {
+            background-color: #91EAFF;
+            border-radius: 10px;
+        }
+
+        body {
+            background-color: #04364A;
+        }
+
+        hr {
+            color: white;
+        }
+
+        .container {
+            background-color: #56B2CD;
+        }
+
     </style>
 
 </head>
@@ -100,8 +119,8 @@ if (isset($_SESSION['member_id'])) {
     </nav>
 
     <!-- code -->
-    <div class="container">
-    <h3 class="mt-4 text-center">คอนเสิร์ตที่เปิดขาย</h3>
+    <div class="container py-2 rounded">
+    <h3 class="mt-4 text-center text-light">คอนเสิร์ตที่เปิดขาย</h3>
         <hr>
         <br>
         <div class="row">
@@ -112,23 +131,24 @@ if (isset($_SESSION['member_id'])) {
             $result = $db->query($sql1);
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
 
-
-                ?>
-                <div class="col-sm-3">
+            ?>
+                <div class="col-6 col-sm-4 col-md-3 mb-3" id="main-concert">
+                    <div class="card h-100">
+                    <div class="card-body px-2 pb-0 pt-1">
                     <div class="text-center">
-                        <img src="<?= $row['concert_img_path'] ?>" width="200px" height="250" class="mt-5 p-1 my-1 border">
-                        <br>
+                        <a class="text-decoration-none text-dark" id="main-text" href="concert_detail.php?id=<?= $row['concert_id'] ?>">
+                        <img src="<?= $row['concert_img_path'] ?>" id="main-picture"
+                            class="mt-3 p-1 my-1 border rounded w-100 img-fluid bg-dark"> <br>
                         <b>
+                            
                             <?= $row['concert_name'] ?>
                         </b><br>
-                        <b>Showtime:</b>
-                        <?= $row['show_time'] ?>,
-                        <?= $row['show_date'] ?><br>
-                        <a class="btn btn-outline-primary"
-                            href="concert_detail_notlogin.php?id=<?= $row['concert_id'] ?>">รายละเอียด</a>
-                        <a class="btn btn-outline-dark">ซื้อบัตร</a>
+                        <?php echo '<small>' . date('l', strtotime($row['show_date'])) . '<br>' . date('d F Y', strtotime($row['show_date'])) .'<br><i class="bi bi-clock"></i> '. $row['show_time'] . '</small>';?><br>
+                        </a>
+                    </div>
                     </div>
                     <br>
+                </div>
                 </div>
                 <?php
             }
