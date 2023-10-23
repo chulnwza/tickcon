@@ -210,7 +210,7 @@ require_once 'config/db.php';
             WHERE ticket_id = $current_id;
             EOF;
                 $ret_update_ticket = $db->exec($sql_update_ticket);
-            echo '<script>alert("การซื้อบัตรเสร็จสิ้น");</script>';
+                echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">ชำระเงินเสร็จสิ้น สามารถดูบัตรคอนเสิร์ตได้ในหน้า <a href="myticket.php" style="text-decoration:none;">My Tickets</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
         }
     }
     ?>
