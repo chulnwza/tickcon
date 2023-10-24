@@ -341,11 +341,9 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
                     <!--ส่วนฟอร์ม-->
                     <div class="modal-body">
                             <div class="modal-footer">
-<<<<<<< HEAD
                                 <input type="hidden" id="status-approve" name="status-reject">
-=======
                                 <input type="hidden" id="status-approve" name="status-approve">
->>>>>>> ef025607e3a3b04d8751a3d66584c3c9e5a4faf2
+
                                 <button type="submit" class="btn btn-success" id="confirm" id="form1"  name="confirm">Approve</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
                             </div>
@@ -386,11 +384,9 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
     $('#confirm1').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var modal = $(this);
-<<<<<<< HEAD
         modal.find('#status-confirm').val('approve');
-=======
         modal.find('#status-approve').val('approve');
->>>>>>> ef025607e3a3b04d8751a3d66584c3c9e5a4faf2
+
     });
     $('#confirm2').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
