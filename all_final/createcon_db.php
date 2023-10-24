@@ -92,7 +92,7 @@ ob_start(); ?>
                         <a class="nav-link" href="myticket.php">My Tickets</a>
                     </li>
                 </ul>
-                <div class="mb-lg-0 me-3 mt-1">
+                <div class="mb-lg-0 mb-1">
                     <p style="color:black"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle"
                         viewBox="0 0 16 16">
                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
