@@ -132,7 +132,7 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
     $concert_id = $_SESSION['concert_id'];
     require_once 'config/db.php';
     //when click confirm button check
-    if (isset($_POST['confirm'])) {
+    if (isset($_GET['confirm'])) {
         $concert_name_comment = $_GET['concert_name_comment'];
         $detail_comment = $_GET['detail_comment'];
         $concert_img_comment = $_GET['concert_img_comment'];
@@ -147,7 +147,7 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
         $ticket_comment = $_GET['ticket_comment'];
         $open_booking_date_comment = $_GET['open_booking_date_comment'];
         $requirement_comment = $_GET['requirement_comment'];
-        if ($_POST['status'] == 'approve') {
+        if ($_GET['status-approve'] == 'approve') {
             $sql4 = <<<EOF
             UPDATE concert
             SET status = "approved"
@@ -155,7 +155,7 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
             EOF;
             $ret4 = $db->exec($sql4);
             header("Location: con_waiting_list.php");
-        } else if ($_POST['status'] == 'reject') {
+        } else if ($_GET['status-reject'] == 'reject') {
             $sql5 = <<<EOF
             UPDATE concert
             SET status = "rejected",
@@ -180,9 +180,6 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
         }
     }
 
-
-
-
     //concert data
     $sql = <<<EOF
     SELECT * from concert
@@ -202,7 +199,7 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
 
     echo '<div class="container">
         <h4>'.$row['concert_name'].'</h4><hr><br>
-        <form method="get" >
+        <form method="get" action="each_con_check.php" id="form1">
         <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
             <div class="mb-3">
                 <label for="cname" class="form-label"><b>ผู้สร้างคอนเสิร์ต</b></label>
@@ -324,7 +321,7 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
             //approve with modal
             echo '<button type="button" class="btn btn-success border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm1">Approve</button>';
             //reject with modal
-            echo '<button type="button" class="btn btn-danger border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm2">Reject</button></form>';
+            echo '<button type="button" class="btn btn-danger border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm2">Reject</button>';
                                                 
             // echo '<button type = "submit" name="button" value = "approve" class="btn btn-primary">Approve</button>
             // <button type = "submit" name="button" value = "reject" class="btn btn-danger">Reject</button>
@@ -343,13 +340,11 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
                     </div>
                     <!--ส่วนฟอร์ม-->
                     <div class="modal-body">
-                        <form action="each_con_check.php" method="POST">
                             <div class="modal-footer">
-                                <input type="hidden" id="status" name="status">
-                                <button type="submit" class="btn btn-success" id="confirm" name="confirm">Approve</button>
+                                <input type="hidden" id="status-approve" name="status-approve">
+                                <button type="submit" class="btn btn-success" id="confirm" id="form1"  name="confirm">Approve</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -368,17 +363,15 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
                 </div>
                 <!--ส่วนฟอร์ม-->
                 <div class="modal-body">
-                    <form action="each_con_check.php" method="POST">
                         <div class="modal-footer">
-                            <input type="hidden" id="status" name="status">
-                            <button type="submit" class="btn btn-danger" id="confirm" name="confirm">Reject</button>
+                            <input type="hidden" id="status-reject" name="status-reject">
+                            <button type="submit" class="btn btn-danger" id="confirm" id="form1" name="confirm">Reject</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>';
+    </div></form>';
     ?>
     <footer class="py-3 my-4 ">
         <hr>
@@ -389,12 +382,12 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
     $('#confirm1').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var modal = $(this);
-        modal.find('#status').val('approve');
+        modal.find('#status-approve').val('approve');
     });
     $('#confirm2').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var modal = $(this);
-        modal.find('#status').val('reject');
+        modal.find('#status-reject').val('reject');
     });
 </script>
 </html>
