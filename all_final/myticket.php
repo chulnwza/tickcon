@@ -223,12 +223,13 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
             $ret = $db->query($sql);
             $count = 0;
             while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                echo '<div class="card mb-3 m-3" style="width: 28 rem">
-                    <div class="card-body d-flex">
+                echo '<div class="col-12 col-xl-6 mb-3">
+                    <div class="card mb-3 m-3">
+                    <div class="card-body">
                       <div class="row">
                       <div class="col-6 text-center">
-                      <img class=" border-end  border-4 mt-1 p-3 rounded-0"
-                            src="' . $row['concert_img_path'] . '" style="width: 100%"><br>
+                      <img class=" border-end  border-4 mt-1 p-3 rounded-0 w-100"
+                            src="' . $row['concert_img_path'] . '"><br>
                     </div>
                       <div class="col-6">
                       <div class= "text-start">
@@ -264,11 +265,11 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
                     </div>
                     <nav class="navbar">
                         <div class="container-fluid row text-center">
-                        <div class="col-6 "><a class=" text-decoration-none"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">More</a></div>
-                        <div class="col-6 "><a class=" text-decoration-none"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContentQR'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">QR</a></div>
+                        <div class="col-6 "><a class=" text-decoration-none mb-0"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">More</a></div>
+                        <div class="col-6 "><a class=" text-decoration-none mb-0"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContentQR'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">QR</a></div>
                         </div>
                     </nav>
-                    </div></div></div></div></div>';
+                    </div></div></div></div></div></div>';
                     $count++;
             }
             echo '</div>';
