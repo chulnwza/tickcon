@@ -109,7 +109,6 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
         p {
             margin: 25px;
         }
->>>>>>> 6aff081b0ca2e8577d4c862887931d16b1672734
     </style>
 </head>
 
@@ -177,7 +176,6 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="createcon_db.php">
                     <button class="btn btn-light" type="submit" style="background-color: white;">Create Concert</button>
                 </form>
-                <p><?=$_SESSION['firstname']?></p>
                 <form class="d-flex mb-2 mb-lg-0" action="login_db.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
