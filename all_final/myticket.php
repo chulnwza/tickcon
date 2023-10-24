@@ -210,7 +210,7 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
             echo '<div class="text-center mb-5"><h6>you don\'t have any ticket.</h6></div>';
         } else {
             $sql = <<<EOF
-                SELECT concert_id, concert_name, show_date, show_time, td.name, concert_img_path, p.member_id
+                SELECT concert_id, concert_name, show_date, show_time, td.name, concert_img_path, p.member_id, payment_id
                 FROM ticket t
                 JOIN ticket_detail td
                 USING (detail_id) 
@@ -240,7 +240,7 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
                     }elseif ($row['show_date'] == date("Y-m-d")){
                         echo'<span class="badge bg-warning rounded-pill  ">using</span>';
                     }
-                    echo '<br><a href="concert_detail.php?id=' . $row['concert_id'] . '" class="card-link">More Details</a></div>
+                    echo '<br><a href="concert_detail.php?id=' . $row['concert_id'] . '" class="card-link">More Details</a><br><a href="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $row['payment_id'] . '" class="card-link">QR CODE</a></div>
                       </div></div>
                     </div>
                     </div>';
