@@ -62,6 +62,9 @@ ob_start(); ?>
         .card {
             margin: auto;
         }
+        p {
+  margin: 25px;
+}
     </style>
 </head>
 
