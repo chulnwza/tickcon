@@ -134,19 +134,65 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
     //when click confirm button check
     if (isset($_GET['confirm'])) {
         $concert_name_comment = $_GET['concert_name_comment'];
+        $concert_name_comment = str_replace('"', '”', $concert_name_comment);
+        $concert_name_comment = str_replace('‘', "'", $concert_name_comment);
+        $concert_name_comment = str_replace('’', "'", $concert_name_comment);
         $detail_comment = $_GET['detail_comment'];
+        $detail_comment = str_replace('"', '”', $detail_comment);
+        $detail_comment = str_replace('‘', "'", $detail_comment);
+        $detail_comment = str_replace('’', "'", $detail_comment);
         $concert_img_comment = $_GET['concert_img_comment'];
+        $concert_img_comment = str_replace('"', '”', $concert_img_comment);
+        $concert_img_comment = str_replace('‘', "'", $concert_img_comment);
+        $concert_img_comment = str_replace('’', "'", $concert_img_comment);
         $show_date_comment = $_GET['show_date_comment'];
+        $show_date_comment = str_replace('"', '”', $show_date_comment);
+        $show_date_comment = str_replace('‘', "'", $show_date_comment);
+        $show_date_comment = str_replace('’', "'", $show_date_comment);
         $show_time_comment = $_GET['show_time_comment'];
+        $show_time_comment = str_replace('"', '”', $show_time_comment);
+        $show_time_comment = str_replace('‘', "'", $show_time_comment);
+        $show_time_comment = str_replace('’', "'", $show_time_comment);
         $copy_id_card_comment = $_GET['copy_id_card_comment'];
+        $copy_id_card_comment = str_replace('"', '”', $copy_id_card_comment);
+        $copy_id_card_comment = str_replace('‘', "'", $copy_id_card_comment);
+        $copy_id_card_comment = str_replace('’', "'", $copy_id_card_comment);
         $con_permission_comment = $_GET['con_permission_comment'];
+        $con_permission_comment = str_replace('"', '”', $con_permission_comment);
+        $con_permission_comment = str_replace('‘', "'", $con_permission_comment);
+        $con_permission_comment = str_replace('’', "'", $con_permission_comment);
         $stage_img_comment = $_GET['stage_img_comment'];
+        $stage_img_comment = str_replace('"', '”', $stage_img_comment);
+        $stage_img_comment = str_replace('‘', "'", $stage_img_comment);
+        $stage_img_comment = str_replace('’', "'", $stage_img_comment);
         $bank_name_comment = $_GET['bank_name_comment'];
+        $bank_name_comment = str_replace('"', '”', $bank_name_comment);
+        $bank_name_comment = str_replace('‘', "'", $bank_name_comment);
+        $bank_name_comment = str_replace('’', "'", $bank_name_comment);
         $bank_code_comment = $_GET['bank_code_comment'];
+        $bank_code_comment = str_replace('"', '”', $bank_code_comment);
+        $bank_code_comment = str_replace('‘', "'", $bank_code_comment);
+        $bank_code_comment = str_replace('’', "'", $bank_code_comment);
         $address_comment = $_GET['address_comment'];
+        $address_comment = str_replace('"', '”', $address_comment);
+        $address_comment = str_replace('‘', "'", $address_comment);
+        $address_comment = str_replace('’', "'", $address_comment);
         $ticket_comment = $_GET['ticket_comment'];
+        $ticket_comment = str_replace('"', '”', $ticket_comment);
+        $ticket_comment = str_replace('‘', "'", $ticket_comment);
+        $ticket_comment = str_replace('’', "'", $ticket_comment);
         $open_booking_date_comment = $_GET['open_booking_date_comment'];
+        $open_booking_date_comment = str_replace('"', '”', $open_booking_date_comment);
+        $open_booking_date_comment = str_replace('‘', "'", $open_booking_date_comment);
+        $open_booking_date_comment = str_replace('’', "'", $open_booking_date_comment);
         $requirement_comment = $_GET['requirement_comment'];
+        $requirement_comment = str_replace('"', '”', $requirement_comment);
+        $requirement_comment = str_replace('‘', "'", $requirement_comment);
+        $requirement_comment = str_replace('’', "'", $requirement_comment);
+        $lo_link_comment = $_GET['lo_link_comment'];
+        $lo_link_comment = str_replace('"', '”', $lo_link_comment);
+        $lo_link_comment = str_replace('‘', "'", $lo_link_comment);
+        $lo_link_comment = str_replace('’', "'", $lo_link_comment);
         if ($_GET['status-approve'] == 'approve') {
             $sql4 = <<<EOF
             UPDATE concert
@@ -159,20 +205,21 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
             $sql5 = <<<EOF
             UPDATE concert
             SET status = "rejected",
-            concert_name_comment = '$concert_name_comment',
-            detail_comment = '$detail_comment',
-            concert_img_comment = '$concert_img_comment',
-            show_date_comment = '$show_date_comment',
-            show_time_comment = '$show_time_comment',
-            copy_id_card_comment = '$copy_id_card_comment',
-            con_permission_comment = '$con_permission_comment',
-            stage_img_comment = '$stage_img_comment',
-            bank_name_comment = '$bank_name_comment',
-            bank_code_comment = '$bank_code_comment',
-            address_comment = '$address_comment',
-            ticket_comment = '$ticket_comment',
-            open_booking_date_comment = '$open_booking_date_comment',
-            requirement_comment = '$requirement_comment'
+            concert_name_comment = "$concert_name_comment",
+            detail_comment = "$detail_comment",
+            concert_img_comment = "$concert_img_comment",
+            show_date_comment = "$show_date_comment",
+            show_time_comment = "$show_time_comment",
+            copy_id_card_comment = "$copy_id_card_comment",
+            con_permission_comment = "$con_permission_comment",
+            stage_img_comment = "$stage_img_comment",
+            bank_name_comment = "$bank_name_comment",
+            bank_code_comment = "$bank_code_comment",
+            address_comment = "$address_comment",
+            ticket_comment = "$ticket_comment",
+            open_booking_date_comment = "$open_booking_date_comment",
+            requirement_comment = "$requirement_comment",
+            lo_link_comment = "$lo_link_comment"
             WHERE concert_id = $concert_id; 
             EOF;
             $ret5 = $db->exec($sql5);
@@ -218,6 +265,11 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSIO
                 <label for="address" class="form-label"><b>สถานที่จัดคอนเสิร์ต</b></label><br>
                 <textarea name="address" style="width: 100%; height: 100px;" disabled>' . $row['address'] . '</textarea>
                 <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="address_comment" style="width: 50%; height: 50px;">'.$row['address_comment'].'</textarea><hr>
+            </div>
+            <div class="mb-3">
+                    <label for="lo_link" class="form-label"><b>ลิ้งค์ google map สถานที่จัดคอนเสิร์ต<b></label>
+                    <a type="text" class="form-control" name="lo_link"  href="'.$row['lo_link'].'" target="blank_">'.$row['lo_link'].'</a>
+                    <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="lo_link_comment" style="width: 50%; height: 50px;">'.$row['lo_link_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="bdate" class="form-label"><b>วันที่เปิดให้จองบัตรคอนเสิร์ต</b></label>

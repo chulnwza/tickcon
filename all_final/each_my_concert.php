@@ -197,6 +197,11 @@ ob_start(); ?>
                 <p style="color : red;">' . $row['address_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
+                    <label for="lo_link" class="form-label"><b>ลิ้งค์ google map สถานที่จัดคอนเสิร์ต</b></label>
+                    <input type="text" class="form-control" name="lo_link" value="'.$row['lo_link'].'" disabled>
+                    <p style="color : red;">' . $row['lo_link_comment'] . '</p><hr>
+            </div>
+            <div class="mb-3">
                 <label for="bdate" class="form-label"><b>วันที่เปิดให้จองบัตรคอนเสิร์ต</b></label>
                 <input type="date" class="form-control" name="bdate" value = "' . $row['open_booking_date'] . '" disabled>
                 <p style="color : red;">' . $row['open_booking_date_comment'] . '</p><hr>
@@ -383,6 +388,11 @@ ob_start(); ?>
                         <p style="color : red;">' . $row['address_comment'] . '</p><hr>
                     </div>
                     <div class="mb-3">
+                    <label for="lo_link" class="form-label"><b>ลิ้งค์ google map สถานที่จัดคอนเสิร์ต</b></label>
+                    <input type="text" class="form-control" name="lo_link" value="'.$row['lo_link'].'" >
+                    <p style="color : red;">' . $row['lo_link_comment'] . '</p><hr>
+                    </div>
+                    <div class="mb-3">
                         <label for="bdate" class="form-label"><b>วันที่เปิดให้จองบัตรคอนเสิร์ต</b></label>
                         <input type="date" class="form-control" name="bdate" value = "' . $row['open_booking_date'] . '" >
                         <p style="color : red;">' . $row['open_booking_date_comment'] . '</p><hr>
@@ -555,7 +565,12 @@ ob_start(); ?>
             $bank_acc_name = str_replace('’', "'", $bank_acc_name);
             //bank number
             $bank_acc_number = $_POST['bank_acc_number'];
-            $member_id = $_SESSION['member_id']; #อย่าลืมแก้
+            //lo_link
+            $lo_link = $_POST['lo_link'];
+            $lo_link = str_replace('"', '”', $lo_link);
+            $lo_link = str_replace('‘', "'", $lo_link);
+            $lo_link = str_replace('’', "'", $lo_link);
+            $member_id = $_SESSION['member_id'];
             $alert_msg = "";
 
             if (empty($cname)) {
@@ -593,6 +608,9 @@ ob_start(); ?>
             }
             elseif (strtotime($bdate) > strtotime($cdate)) {
                 $alert_msg .= 'กรุณากรอกวันที่เปิดจำหน่ายบัตรให้เป็นวันที่ก่อนวันจัดแสดง';
+            }
+            elseif (empty($lo_link)) {
+                $alert_msg .= 'กรุณากรอกลิ้งค์ google map';
             }
             if ($alert_msg != "") {
                 echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">'.
@@ -653,7 +671,8 @@ ob_start(); ?>
                         show_time = '$ctime',
                         bank_name = "$bank_acc_name",
                         bank_code = '$bank_acc_number',
-                        address = "$address"
+                        address = "$address",
+                        lo_link = "$lo_link"
                         WHERE concert_id = $concert_id;
                         EOF;
                 $ret = $db->exec($sql);
@@ -757,6 +776,11 @@ ob_start(); ?>
                     <label for="address" class="form-label"><b>สถานที่จัดคอนเสิร์ต</b></label><br>
                     <textarea name="address" style="width: 100%; height: 100px;" disabled>' . $row['address'] . '</textarea>
                     <p style="color : red;">' . $row['address_comment'] . '</p><hr>
+                </div>
+                <div class="mb-3">
+                    <label for="lo_link" class="form-label"><b>ลิ้งค์ google map สถานที่จัดคอนเสิร์ต</b></label>
+                    <input type="text" class="form-control" name="lo_link" value="'.$row['lo_link'].'" disabled>
+                    <p style="color : red;">' . $row['lo_link_comment'] . '</p><hr>
                 </div>
                 <div class="mb-3">
                     <label for="bdate" class="form-label"><b>วันที่เปิดให้จองบัตรคอนเสิร์ต</b></label>
