@@ -194,8 +194,9 @@ date_default_timezone_set("Asia/Bangkok");
             $sql1 = 'SELECT * FROM concert
     WHERE status="approved" AND open_booking_date <= "' . date("Y-m-d") . '"' . ' AND show_date > "' . date("Y-m-d") . '"';
             $result = $db->query($sql1);
+            $count = 0;
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                
+                    $count++;
                 ?>
                 <div class="col-6 col-md-4 col-lg-3 mb-3" id="main-concert">
                     <div class="card h-100">
@@ -216,6 +217,9 @@ date_default_timezone_set("Asia/Bangkok");
                 </div>
                 </div>
                 <?php
+            }
+            if($count == 0){
+                echo '<div class="text-center mb-5"><h6>Sorry, we don\'t have any concert </h6></div>';
             }
             $db->close();
             ?>
