@@ -407,7 +407,7 @@ require_once 'config/db.php';
                                                                 <div class="col-8 d-flex align-items-center">
                                                                     <ul class="list-unstyled">
                                                                         <li class="mb-2">
-                                                                            <p class="my-0 fw-bold">ประเภทที่นั่ง:&nbsp;
+                                                                            <p class="my-0 fw-bold">ประเภทบัตร:&nbsp;
                                                                             </p><span id="modal-ticket-name"></span>
                                                                         </li>
                                                                         <li class="mb-2">
