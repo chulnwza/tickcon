@@ -1,5 +1,8 @@
 <?php
 session_start();
+if(!isset($_SESSION['member_id']) || (isset($_SESSION['$member_id']) && $_SESSION['$member_id'] == 'user')){
+    header('location:index_notlogin.php');
+}
  ob_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,12 +10,11 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>check concert</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -35,6 +37,7 @@ session_start();
 
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -70,6 +73,14 @@ session_start();
         .card {
             margin: auto;
         }
+        .nav-link {
+            text-decoration: none;
+            color: #000000;
+        }
+        .nav-link-1:hover {
+            color: white;
+            font-weight: bolder;
+        }
     </style>
 </head>
 
@@ -88,7 +99,7 @@ session_start();
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="index_admin.php">Home</a>
+                        <a class="nav-link" href="index_admin.php">Cencerts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="con_waiting_list.php" style="color:white;">Pending List</a>
@@ -190,49 +201,71 @@ session_start();
 
 
     echo '<div class="container">
+        <h4>'.$row['concert_name'].'</h4><hr><br>
         <form method="get" >
+        <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
             <div class="mb-3">
                 <label for="cname" class="form-label"><b>ผู้สร้างคอนเสิร์ต</b></label>
                 <input type="text" class="form-control" name="cname" value = "' . $row2['firstname'] . ' ' . $row2['lastname'] . '" disabled>
                 <label for="cname" class="form-label"><b>email</b></label>
-                <input type="text" class="form-control" name="cname" value = "' . $row2['email'] . '" disabled><hr>
+                <input type="text" class="form-control" name="cname" value = "' . $row2['email'] . '" disabled>
             </div>
+            </div>
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
             <div class="mb-3">
                 <label for="cname" class="form-label"><b>ชื่อคอนเสิร์ต</b></label>
                 <input type="text" class="form-control" name="cname" value = "' . $row['concert_name'] . '" disabled>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="concert_name_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="concert_name_comment" style="width: 50%; height: 50px;">'.$row['concert_name_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label"><b>สถานที่จัดคอนเสิร์ต</b></label><br>
                 <textarea name="address" style="width: 100%; height: 100px;" disabled>' . $row['address'] . '</textarea>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="address_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="address_comment" style="width: 50%; height: 50px;">'.$row['address_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="bdate" class="form-label"><b>วันที่เปิดให้จองบัตรคอนเสิร์ต</b></label>
                 <input type="date" class="form-control" name="bdate" value = "' . $row['open_booking_date'] . '" disabled>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="open_booking_date_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="open_booking_date_comment" style="width: 50%; height: 50px;">'.$row['open_booking_date_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="cdate" class="form-label"><b>วันที่จัดคอนเสิร์ต</b></label>
                 <input type="date" class="form-control" name="cdate" value = "' . $row['show_date'] . '" disabled>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="show_date_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="show_date_comment" style="width: 50%; height: 50px;">'.$row['show_date_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="ctime" class="form-label"><b>เวลาเริ่มคอนเสิร์ต</b></label>
                 <input type="time" class="form-control" name="ctime" value = "' . $row['show_time'] . '" disabled>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="show_time_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="show_time_comment" style="width: 50%; height: 50px;">'.$row['show_time_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label class="form-label"><b>รายละเอียดคอนเสิร์ต</b></label><br>
                 <textarea name="detail" style="width: 100%; height: 100px;" disabled>' . $row['detail'] . '</textarea>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="detail_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="detail_comment" style="width: 50%; height: 50px;">'.$row['detail_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="require" class="form-label"><b>ข้อจำกัดของคอนเสิร์ต</b></label>
                 <input type="require" class="form-control" name="require" value = "' . $row['requirement'] . '" disabled>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="requirement_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="requirement_comment" style="width: 50%; height: 50px;">'.$row['requirement_comment'].'</textarea><hr>
             </div>
-            <div class="mb-3" id="tic_type_add"><b>บัตรคอนเสิร์ต</b><br>';
+            <div class="mb-3">
+                <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
+                <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
+                <p class="comment">ความคิดเห็น :</p>' . '<textarea name="concert_img_comment" style="width: 50%; height: 50px;">'.$row['concert_img_comment'].'</textarea><hr>
+            </div>
+            <div class="mb-3">
+            <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+
+            if (is_null($row['stage_img'])) {
+                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+            } else {
+                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+            }
+            echo '<p class="comment">ความคิดเห็น :</p><textarea name="stage_img_comment" style="width: 50%; height: 50px;">'.$row['stage_img_comment'].'</textarea>
+            </div>
+            </div>
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+            <div class="mb-3" id="tic_type_add">
+            <label class="form-label"><b>บัตรคอนเสิร์ต :</b></label>';
     //ticket section start
     $sql3 = <<<EOF
         SELECT name,description,price,COUNT(detail_id)
@@ -245,51 +278,49 @@ session_start();
     EOF;
     $ret3 = $db->query($sql3);
     while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
-        echo '<hr><label class="form-label">ชื่อบัตร</label>
+        echo '<div class="row">
+                <div class="col">
+                <label class="form-label">ชื่อบัตร</label>
                 <input type="text" class="form-control" name="tic_name[]"  value = "' . $row3['name'] . '" disabled>
+                </div>
+                <div class="col">
                 <label class="form-label">ราคาบัตร</label>
                 <input type="number" class="form-control" name="tic_price[]"  value = "' . $row3['price'] . '" disabled>
+                </div>
+                <div class="col">
                 <label class="form-label">จำนวนบัตร</label>
                 <input type="number" class="form-control" name="tic_amount[]"  value = "' . $row3['COUNT(detail_id)'] . '" disabled>
+                </div>
+                <div class="col">
                 <label class="form-label">คำอธิบาย</label>
-                <textarea name="tic_detail[]" style="width: 100%; height: 70px;" disabled>' . $row3['description'] . '</textarea>';
+                <textarea name="tic_detail[]" style="width: 100%; height: 40px;" disabled>' . $row3['description'] . '</textarea>
+                </div>
+                </div><hr>';
     }
     //ticket section end
-    echo '<p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="ticket_comment" style="width: 50%; height: 50px;"></textarea><hr></div>
-            <div class="mb-3">
-                <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
-                <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><a href="' . $row['stage_img'] . '" >download</a><br><br>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="concert_img_comment" style="width: 50%; height: 50px;"></textarea><hr>
+    echo '<p class="comment">ความคิดเห็น :</p>' . '<textarea name="ticket_comment" style="width: 50%; height: 50px;">'.$row['ticket_comment'].'</textarea></div>
             </div>
-
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+            <label class="form-label"><b>ข้อมูลผู้จัดคอนเสิร์ต :</b></label>
             <div class="mb-3">
                 <label for="id_card_img" class="form-label"><b>สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</b></label><br>
-                <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><a href="' . $row['stage_img'] . '" >download</a><br><br>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="copy_id_card_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><br>
+                <p class="comment">ความคิดเห็น :</p>' . '<textarea name="copy_id_card_comment" style="width: 50%; height: 50px;">'.$row['copy_id_card_comment'].'</textarea><hr>
             </div>
             <div class="mb-3">
                 <label for="license_img" class="form-label"><b>ใบอนุญาตจัดคอนเสิร์ต</b></label><br>
-                <img src="' . $row['con_permission_img'] . '" style="max-width : 40vw"><br><a href="' . $row['stage_img'] . '" >download</a><br><br>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="con_permission_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <img src="' . $row['con_permission_img'] . '" style="max-width : 40vw"><br><br>
+                <p class="comment">ความคิดเห็น :</p>' . '<textarea name="con_permission_comment" style="width: 50%; height: 50px;">'.$row['con_permission_comment'].'</textarea><hr>
             </div>
-            <div class="mb-3">
-            <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
-
-            if (is_null($row['stage_img'])) {
-                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
-            } else {
-                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
-            }
-            echo '<textarea name="stage_img_comment" style="width: 50%; height: 50px;"></textarea><hr>
-            </div>
+            
              <div class="mb-3">
                 <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารรับเงิน</b></label>
                 <input type="text" class="form-control" name="bank_acc_name"  value = "' . $row['bank_name'] . '" disabled>
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="bank_name_comment" style="width: 50%; height: 50px;"></textarea><hr>
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="bank_name_comment" style="width: 50%; height: 50px;">'.$row['bank_name_comment'].'</textarea><hr>
                 <label for="bank_acc_number" class="form-label"><b>เลขที่บัญชีธนาคารรับเงิน</b></label>
                 <input type="text" class="form-control" name="bank_acc_number"  value = "' . $row['bank_code'] . '" disabled> 
-                <p class="comment">ความคิดเห็น :</p></p>' . '<textarea name="bank_code_comment" style="width: 50%; height: 50px;"></textarea><hr>
-            </div>';
+                <br><p class="comment">ความคิดเห็น :</p>' . '<textarea name="bank_code_comment" style="width: 50%; height: 50px;">'.$row['bank_code_comment'].'</textarea><hr>
+            </div></div>';
             //approve with modal
             echo '<button type="button" class="btn btn-success border-0 me-1" data-bs-toggle="modal" data-bs-target="#confirm1">Approve</button>';
             //reject with modal
@@ -305,7 +336,7 @@ session_start();
                 <div class="modal-content">
                     <!--ส่วนหัว-->
                     <div class="modal-header">
-                        <p class="modal-title fw-bold fs-6" id="Title">Approved this concert?</p>
+                        <p class="modal-title fw-bold fs-6" id="Title">Approve this concert?</p>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close">
                         </button>
@@ -315,7 +346,7 @@ session_start();
                         <form action="each_con_check.php" method="POST">
                             <div class="modal-footer">
                                 <input type="hidden" id="status" name="status">
-                                <button type="submit" class="btn btn-success" id="confirm" name="confirm">Confirm</button>
+                                <button type="submit" class="btn btn-success" id="confirm" name="confirm">Approve</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
                             </div>
                         </form>
@@ -330,7 +361,7 @@ session_start();
             <div class="modal-content">
                 <!--ส่วนหัว-->
                 <div class="modal-header">
-                    <p class="modal-title fw-bold fs-6" id="Title">Rejected this concert?</p>
+                    <p class="modal-title fw-bold fs-6" id="Title">Reject this concert?</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                     </button>
@@ -340,7 +371,7 @@ session_start();
                     <form action="each_con_check.php" method="POST">
                         <div class="modal-footer">
                             <input type="hidden" id="status" name="status">
-                            <button type="submit" class="btn btn-success" id="confirm" name="confirm">Confirm</button>
+                            <button type="submit" class="btn btn-danger" id="confirm" name="confirm">Reject</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
                         </div>
                     </form>

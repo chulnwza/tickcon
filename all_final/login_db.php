@@ -11,12 +11,11 @@ if (isset($_SESSION['member_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>log-in</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -28,6 +27,7 @@ if (isset($_SESSION['member_id'])) {
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -136,6 +136,7 @@ if (isset($_SESSION['member_id'])) {
                     if (($email == $row['email']) && ($pwd == $row['password'])) {
                         $_SESSION['member_id'] = $row['member_id'];
                         $_SESSION['firstname'] = $row['firstname'];
+                        $_SESSION['type'] = $row['type'];
                         if ($row['type'] == 'user') {
                             header('Location:index_user.php');
                         } elseif ($row['type'] == 'admin') {

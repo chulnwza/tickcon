@@ -1,15 +1,20 @@
+<?php
+session_start();
+if(isset($_SESSION['member_id'])){
+    session_destroy();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>register</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -21,6 +26,7 @@
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -124,7 +130,6 @@
                 echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">รหัสผ่านไม่ตรงกัน<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
             } else {
                 // Connect to the database
-                session_start();
                 require_once 'config/db.php';
 
                 // Get data...

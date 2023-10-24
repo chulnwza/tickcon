@@ -1,6 +1,9 @@
 <?php
 date_default_timezone_set("Asia/Bangkok");
 session_start();
+if(!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['type'] == 'user')){
+    header('location:index_notlogin.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,12 +11,11 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -25,6 +27,7 @@ session_start();
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -116,7 +119,7 @@ session_start();
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="index_admin.php" style="color:white;">Home</a>
+                        <a class="nav-link" href="index_admin.php" style="color:white;">Concerts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="con_waiting_list.php">Pending List</a>
@@ -168,6 +171,7 @@ session_start();
                                     </b><br>
                                     <?php echo '<small>' . date('l', strtotime($row['show_date'])) . '<br>' . date('d F Y', strtotime($row['show_date'])) . '<br><i class="bi bi-clock"></i> ' . $row['show_time'] . '</small>'; ?><br>
                                 </a>
+                                
                             </div>
                         </div>
                         <br>

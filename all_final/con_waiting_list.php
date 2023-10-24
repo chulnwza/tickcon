@@ -1,17 +1,20 @@
-<?php session_start(); ?>
+<?php 
+session_start();
+if(!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['type'] == 'user')){
+    header('location:index_notlogin.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -22,6 +25,7 @@
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -115,7 +119,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="index_admin.php">Home</a>
+                        <a class="nav-link" href="index_admin.php">Concerts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="con_waiting_list.php" style="color:white;">Pending List</a>
@@ -139,8 +143,10 @@
     </nav>
     <!-- code -->
     <div class='container py-3 rounded'>
+    <h3 class="mt-4 text-center text-light">Pending List</h3>
+    <hr>
+        <br>
         <div class='row'>
-            <h4 class='text-center text-light'>Pending List</h4><hr>
     <?php
     require_once 'config/db.php';
     $sql = <<<EOF
@@ -174,14 +180,16 @@
         }
         echo "</div></div>";
     } else {
-        echo "</div></div>";
+        
         echo '<div class="text-center mb-5"><h6>Don\'t have concert in pending list</h6></div>';
+        echo "</div></div>";
     }
     ?>
     <!-- footer -->
-    <hr>
+    
     <footer class="py-3 my-4 ">
-        <p class="text-center text-light">© 2023 TICKCON</p>
+        <hr style="color: black">
+        <p class="text-center" style="color: white">© 2023 TICKCON</p>
     </footer>
 
 </body>
