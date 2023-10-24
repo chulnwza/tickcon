@@ -140,6 +140,7 @@ if (isset($_SESSION['member_id'])) {
                             header('Location:index_user.php');
                         } elseif ($row['type'] == 'admin') {
                             header('Location:index_admin.php');
+                            $_SESSION['firstname'] = $row['firstname'];
                         }
                         break;
                     } elseif (($email == $row['email']) && ($pwd != $row['password'])) {
