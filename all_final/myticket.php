@@ -224,7 +224,7 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
             $count = 0;
             while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
                 echo '<div class="col-12 col-xl-6 mb-3">
-                    <div class="card mb-3 m-3">
+                    <div class="card mb-3 m-3 shadow">
                     <div class="card-body">
                       <div class="row">
                       <div class="col-6 text-center">
@@ -260,13 +260,14 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
                     </div>
                     <div class="collapse" id="navbarToggleExternalContentQR'."$count".'" data-bs-theme="dark">
                         <div class="">
-                            <img class="card-img border border-2 border-dark mt-1 mb-3" src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' .$row['concert_id'].'-'.$row['ticket_id']. '-'.$row['payment_id'] . '">
+                            <img class="card-img border border-2 border-dark mt-1 mb-3" src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=CID' .$row['concert_id'].'-TID'.$row['ticket_id']. '-PID'.$row['payment_id'] .'-MID'.$row['member_id'].'">
                         </div>
                     </div>
                     <nav class="navbar">
                         <div class="container-fluid row text-center">
-                        <div class="col-6 "><a class=" text-decoration-none mb-0"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">More</a></div>
-                        <div class="col-6 "><a class=" text-decoration-none mb-0"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContentQR'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">QR</a></div>
+                        
+                        <div class="col-6"><a class=" text-decoration-none mb-0"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;"><small>More </small></a></div>
+                        <div class="col-6"><a class="btn btn-outline-secondary text-decoration-none mb-0"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContentQR'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;"><small>QR </small></a></div>
                         </div>
                     </nav>
                     </div></div></div></div></div></div>';
@@ -275,7 +276,7 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
             echo '</div>';
         }
             ?>
-
+    </div>
     </div>
     <!-- footer -->
 

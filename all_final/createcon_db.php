@@ -231,7 +231,6 @@ ob_start(); ?>
                 $alert_msg .= 'กรุณากรอกลิ้งค์ google map<br>';
             }
             if ($alert_msg != "") {
-
                 echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">' . $alert_msg
                     . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
             } else {
@@ -250,9 +249,9 @@ ob_start(); ?>
                     (move_uploaded_file($_FILES["license_img"]["tmp_name"], $license_img_path))
                 ) {
                     $sql2 = <<<EOF
-                INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id, lo_link)
-                VALUES ("$cname","$detail","$require",'$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path',"$bank_acc_name",'$bank_acc_number',"$address",'$member_id',"$lolink");
-                EOF;
+                    INSERT INTO concert(concert_name, detail, requirement, status, concert_img_path, open_booking_date, show_date, show_time, copy_id_card_img, con_permission_img, bank_name, bank_code, address, member_id, lo_link)
+                    VALUES ("$cname","$detail","$require",'$status','$poster_img_path','$bdate','$cdate','$ctime','$id_card_img_path','$license_img_path',"$bank_acc_name",'$bank_acc_number',"$address",'$member_id',"$lolink");
+                    EOF;
                     $ret2 = $db->exec($sql2);
                     if ($ret2) {
                         //เอา concert_id ล่าสุด
@@ -311,7 +310,7 @@ ob_start(); ?>
                             }
 
                         }
-                        echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">สร้างคอนเสิร์ตเสร็จสิ้น กรุณารอการตรวจสอบข้อมูล สามารถตรวจสอบตอบกลับจากผู้ตรวจสอบในหน้า <a href="my_concert.php">My Concert</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
+                        echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">สร้างคอนเสิร์ตเสร็จสิ้น กรุณารอการตรวจสอบข้อมูล สามารถตรวจสอบการตอบกลับจากผู้ตรวจสอบในหน้า <a href="my_concert.php">My Concert</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
 
                     } else {
                         echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">ไม่สามารถสร้างคอนเสิร์ตได้ กรุณาลองใหม่อีกครั้ง EMSG:1<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';

@@ -159,7 +159,7 @@ if(!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['typ
                 $count++;
                 ?>
                 <div class="col-6 col-md-4 col-lg-3 mb-3" id="main-concert">
-                    <div class="card h-100">
+                    <div class="card h-100 shadow">
                         <div class="card-body px-2 pb-0 pt-1">
                             <div class="text-center">
                                 <a class="text-decoration-none text-dark" id="main-text"
