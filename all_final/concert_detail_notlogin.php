@@ -7,12 +7,11 @@ require_once 'config/db.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tickcon</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -37,10 +36,11 @@ require_once 'config/db.php';
 
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
-            font-family: 'Mohave', sans-serif;
+            
         }
 
         .container-fluid {
@@ -95,13 +95,23 @@ require_once 'config/db.php';
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 p-1 ms-0 ps-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="index_admin.php" style="color:white;">Home</a>
+                            <a class="nav-link" href="index_admin.php" style="color:white;">Concerts</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="con_waiting_list.php">Pending List</a>
 
                         </li>
                     </ul>
+                    <div class="mb-lg-0 me-3 mt-1">
+                    <p style="color:black"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle"
+                        viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path fill-rule="evenodd"
+                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                        <?= $_SESSION['firstname'] ?>
+                    </p>
+                </div>
                     <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                         <button class="btn btn-outline-danger" type="submit">Log Out</button>
                     </form>
@@ -248,7 +258,7 @@ require_once 'config/db.php';
             $resultj = $db->query($sqlj);
             $rowj = $resultj->fetchArray(SQLITE3_ASSOC);
             ?>
-                <h4 class="mt-2" style="color:White;"><b>Event Organizer</b></h4>
+                <h4 class="mt-2" style="color:White;"><b>Concert Organizer</b></h4>
                 <hr>
                 <h4><?= $rowj['firstname'] ?> <?= $rowj['lastname'] ?><h4>
                 <!-- ชื่อผู้จัด -->
@@ -283,7 +293,7 @@ require_once 'config/db.php';
                                         <?= $row['address'] ?>
                                     </li>
                                     <li><b><i class="bi bi-geo-alt"></i>&nbsp;</b>
-                                    <a href="<?= $row['lo_link'] ?>" target="_blank">Google Map</a>
+                                    <a href ="<?= $row['lo_link']?>" target="_blank">Google Map</a>
                                     </li>
                                     <li><b><i class="bi bi-exclamation-circle-fill"></i>&nbsp;</b>
                                         <?= $row['requirement'] ?>

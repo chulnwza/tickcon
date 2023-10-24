@@ -1,16 +1,19 @@
-<?php session_start(); ?>
+<?php session_start();
+if(!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['type'] == 'admin')){
+    header('location:index_notlogin.php');
+}
+ob_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>create concert</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -22,6 +25,7 @@
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -89,6 +93,17 @@
                         <a class="nav-link-1 nav-link" href="myticket.php">My Tickets</a>
                     </li>
                 </ul>
+
+                <div class="mb-lg-0 me-3 mt-1">
+                    <p style="color:black"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle"
+                        viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path fill-rule="evenodd"
+                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                        <?= $_SESSION['firstname'] ?>
+                    </p>
+                </div>
                 <?php
                 require_once 'config/db.php';
                 $member_id = $_SESSION['member_id'];
@@ -118,19 +133,30 @@
                 <form class="d-flex mb-2 mb-lg-0 me-1" action="createcon_db.php">
                     <button class="btn btn-light" type="submit">Create Concert</button>
                 </form>
-                <p><?=$_SESSION['firstname']?></p>
                 <form class="d-flex mb-2 mb-lg-0" action="index_notlogin.php">
                     <button class="btn btn-outline-danger" type="submit">Log Out</button>
                 </form>
             </div>
         </div>
     </nav>
+
     <!-- code -->
     <?php
+    
     if ((!isset($_SESSION['concert_id']) && isset($_GET['concert_id'])) || (isset($_SESSION['concert_id']) && isset($_GET['concert_id']))) {
         $_SESSION['concert_id'] = $_GET['concert_id'];
     }
     $concert_id = $_SESSION['concert_id'];
+    if(isset($_POST['Delete'])){
+        $sql_del = <<<EOF
+            DELETE FROM concert
+            WHERE concert_id = $concert_id;
+        EOF;
+        $ret_del = $db->exec($sql_del);
+        header("location:my_concert.php");
+       
+    }
+
     require_once 'config/db.php';
     //concert data
     $sql = <<<EOF
@@ -195,9 +221,25 @@
                 <input type="require" class="form-control" name="require" value = "' . $row['requirement'] . '" disabled>
                 <p style="color : red;">' . $row['requirement_comment'] . '</p><hr>
             </div>
+            <div class="mb-3">
+                <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
+                <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
+                <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
+            </div>
+            <div class="mb-3">
+                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+
+        if (is_null($row['stage_img'])) {
+            echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+        } else {
+            echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+        }
+        echo '<p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
+            </div>
         </div>
         <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
-            <div class="mb-3" id="tic_type_add"><b>บัตรคอนเสิร์ต</b><br>';
+            <div class="mb-3" id="tic_type_add">
+            <label class="form-label"><b>บัตรคอนเสิร์ต :</b></label>';
         //ticket section start
         $sql3 = <<<EOF
         SELECT name,description,price,COUNT(detail_id)
@@ -210,23 +252,31 @@
     EOF;
         $ret3 = $db->query($sql3);
         while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
-            echo '<hr><label class="form-label">ชื่อบัตร</label>
+            echo '<div class="row">
+                <div class="col">
+                <label class="form-label">ชื่อบัตร</label>
                 <input type="text" class="form-control" name="tic_name[]"  value = "' . $row3['name'] . '" disabled>
+                </div>
+                <div class="col"> 
                 <label class="form-label">ราคาบัตร</label>
                 <input type="number" class="form-control" name="tic_price[]"  value = "' . $row3['price'] . '" disabled>
+                </div>
+                <div class="col">  
                 <label class="form-label">จำนวนบัตร</label>
                 <input type="number" class="form-control" name="tic_amount[]"  value = "' . $row3['COUNT(detail_id)'] . '" disabled>
+                </div>
+                <div class="col">    
                 <label class="form-label">คำอธิบาย</label>
-                <textarea name="tic_detail[]" style="width: 100%; height: 70px;" disabled>' . $row3['description'] . '</textarea>';
+                <textarea name="tic_detail[]" style="width: 100%; height: 40px;" disabled>' . $row3['description'] . '</textarea>
+                </div>
+                </div>';
         }
         //ticket section end
         echo '<p style="color : red;">' . $row['ticket_comment'] . '</p><hr></div>
         </div>
-            <div class="mb-3">
-                <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
-                <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
-                <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
-            </div>
+        
+        <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+        <label class="form-label"><b>ข้อมูลผู้จัดคอนเสิร์ต :</b></label>
 
             <div class="mb-3">
                 <label for="id_card_img" class="form-label"><b>สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</b></label><br>
@@ -239,23 +289,13 @@
                 <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
             </div>
             <div class="mb-3">
-                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
-
-        if (is_null($row['stage_img'])) {
-            echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
-        } else {
-            echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
-        }
-        echo '<p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
-            </div>
-            <div class="mb-3">
                 <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารับเงิน</b></label>
                 <input type="text" class="form-control" name="bank_acc_name"  value = "' . $row['bank_name'] . '" disabled>
                 <p style="color : red;">' . $row['bank_name_comment'] . '</p><hr>
                 <label for="bank_acc_number" class="form-label"><b>เลขที่บัญชีธนาคารรับเงิน</b></label>
                 <input type="text" class="form-control" name="bank_acc_number"  value = "' . $row['bank_code'] . '" disabled> 
                 <p style="color : red;">' . $row['bank_code_comment'] . '</p><hr>
-            </div>';
+            </div></div>';
         if ($row['status'] != 'approved') {
             echo '<div class="">
             <button type="submit" class="btn btn-secondary" name="button" value="edit">Edit</button>
@@ -270,10 +310,35 @@
             }
             echo '>Submit</button>';
             if ($row['status'] != 'approved') {
-                echo '<button type="submit" class="btn btn-danger float-end" name="button" value="delete" >Delete Concert</button>';
+                echo '<button type="button" class=" btn btn-danger border-0 me-1 float-end" data-bs-toggle="modal" data-bs-target="#confirm1">Delete Concert</button>';
             }
             echo '</div></form><br></div>';
         }
+        //modal when approve
+        echo '<div class="modal fade" id="confirm1" tabindex="-1" role="dialog"
+        aria-labelledby="Title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--ส่วนหัว-->
+                <div class="modal-header">
+                    <p class="modal-title fw-bold fs-6" id="Title">Delete this concert?</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    </button>
+                </div>
+                <!--ส่วนฟอร์ม-->
+                <div class="modal-body">
+                    <form action="each_my_concert.php" method="POST">
+                        <div class="modal-footer">
+                            <input type="hidden" id="status" name="status">
+                            <button type="submit" class="btn btn-danger" id="confirm" name="Delete">Delete</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>';
 
 
     } else {
@@ -306,6 +371,7 @@
 
         echo '</ul><br>
                 <form action="each_my_concert.php?tmp_status=' . $tmp_status . '" method="post" enctype="multipart/form-data">
+                <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
                     <div class="mb-3">
                         <label for="cname" class="form-label"><b>ชื่อคอนเสิร์ต</b></label>
                         <input type="text" class="form-control" name="cname" value = "' . $row['concert_name'] . '" >
@@ -341,7 +407,26 @@
                         <input type="require" class="form-control" name="require" value = "' . $row['requirement'] . '" >
                         <p style="color : red;">' . $row['requirement_comment'] . '</p><hr>
                     </div>
-                    <div class="mb-3" id="tic_type_add"><b>บัตรคอนเสิร์ต</b><br>';
+                    <div class="mb-3">
+                        <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
+                        <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><a href="' . $row['concert_img_path'] . '" >download</a><br><br>
+                        <input type="file" class="form-control" name="poster_img" accept="image/*" >
+                        <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
+                    </div>
+                    <div class="mb-3">
+                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+            if (is_null($row['stage_img'])) {
+                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+            } else {
+                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+            }
+            echo '<input type="file" class="form-control" name="con_img" accept="image/*">
+                    <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
+                </div>
+
+                    </div>
+                    <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+                    <label class="form-label"><b>บัตรคอนเสิร์ต :</b></label>';
             //ticket section start
             $sql3 = <<<EOF
                 SELECT name,description,price,COUNT(detail_id)
@@ -354,24 +439,30 @@
                 EOF;
             $ret3 = $db->query($sql3);
             while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
-                echo '<hr><label class="form-label">ชื่อบัตร</label>
+
+                echo '<div class="row">
+                <div class="col">
+                <label class="form-label">ชื่อบัตร</label>
                         <input type="text" class="form-control" name="tic_name[]"  value = "' . $row3['name'] . '" >
+                        </div>
+                        <div class="col">
                         <label class="form-label">ราคาบัตร</label>
                         <input type="number" class="form-control" name="tic_price[]"  value = "' . $row3['price'] . '" >
+                        </div>
+                        <div class="col">
                         <label class="form-label">จำนวนบัตร</label>
                         <input type="number" class="form-control" name="tic_amount[]"  value = "' . $row3['COUNT(detail_id)'] . '" disabled>
+                        </div>
+                        <div class="col">
                         <label class="form-label">คำอธิบาย</label>
-                        <textarea name="tic_detail[]" style="width: 100%; height: 70px;" >' . $row3['description'] . '</textarea>';
+                        <textarea name="tic_detail[]" style="width: 100%; height: 70px;" >' . $row3['description'] . '</textarea>
+                        </div>
+                        </div>';
             }
             //ticket section end
             echo '<p style="color : red;">' . $row['ticket_comment'] . '</p><hr></div>
-                    <div class="mb-3">
-                        <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
-                        <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><a href="' . $row['concert_img_path'] . '" >download</a><br><br>
-                        <input type="file" class="form-control" name="poster_img" accept="image/*" >
-                        <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
-                    </div>
-
+                    <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+                    <label class="form-label"><b>ข้อมูลผู้จัดคอนเสิร์ต :</b></label>
                     <div class="mb-3">
                         <label for="id_card_img" class="form-label"><b>สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</b></label><br>
                         <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><a href="' . $row['copy_id_card_img'] . '" >download</a><br><br>
@@ -384,16 +475,7 @@
                         <input type="file" class="form-control" name="license_img" accept="image/*" >
                         <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
                     </div>
-                    <div class="mb-3">
-                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
-            if (is_null($row['stage_img'])) {
-                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
-            } else {
-                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
-            }
-            echo '<input type="file" class="form-control" name="con_img" accept="image/*">
-                    <p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
-                </div>
+                    
                 <div class="mb-3">
                         <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารรับเงิน</b></label>
                         <input type="text" class="form-control" name="bank_acc_name"  value = "' . $row['bank_name'] . '" >
@@ -401,7 +483,7 @@
                         <label for="bank_acc_number" class="form-label"><b>เลขที่บัญชีธนาคารรับเงิน</b></label>
                         <input type="text" class="form-control" name="bank_acc_number"  value = "' . $row['bank_code'] . '" > 
                         <p style="color : red;">' . $row['bank_code_comment'] . '</p><hr>
-                    </div>
+                    </div></div>
                     <div class="">
             <button type="submit" class="btn btn-outline-secondary" name="button" value="edit" disabled>Edit</button>
             <button type="submit" class="btn btn-success" name="button" value="save" >Save</button>
@@ -415,7 +497,7 @@
             }
             echo '>Submit</button>';
             if ($row['status'] != 'approved') {
-                echo '<button type="submit" class="btn btn-danger float-end" name="button" value="delete" >Delete Concert</button>';
+                echo '<button type="submit" class="btn btn-outline-danger float-end" name="button" value="delete" disabled>Delete Concert</button>';
             }
             echo '</div></form><br>
             </div>';
@@ -477,43 +559,44 @@
             $alert_msg = "";
 
             if (empty($cname)) {
-                $alert_msg .= 'กรุณาระบุชื่อคอนเสิร์ต\n';
+                $alert_msg .= 'กรุณาระบุชื่อคอนเสิร์ต';
             }
-            if (empty($address)) {
-                $alert_msg .= 'กรุณาระบุสถานที่จัดคอนเสิร์ต\n';
+            elseif (empty($address)) {
+                $alert_msg .= 'กรุณาระบุสถานที่จัดคอนเสิร์ต';
             }
-            if (empty($bdate)) {
-                $alert_msg .= 'กรุณาระบุวันที่เปิดให้จองบัตรคอนเสิร์ต\n';
+            elseif (empty($bdate)) {
+                $alert_msg .= 'กรุณาระบุวันที่เปิดให้จองบัตรคอนเสิร์ต';
             }
-            if (empty($cdate)) {
-                $alert_msg .= 'กรุณาระบุวันที่จัดคอนเสิร์ต\n';
+            elseif (empty($cdate)) {
+                $alert_msg .= 'กรุณาระบุวันที่จัดคอนเสิร์ต';
             }
-            if (empty($ctime)) {
-                $alert_msg .= 'กรุณาระบุเวลาเริ่มคอนเสิร์ต\n';
+            elseif (empty($ctime)) {
+                $alert_msg .= 'กรุณาระบุเวลาเริ่มคอนเสิร์ต';
             }
-            if (empty($tic_name)) {
-                $alert_msg .= 'กรุณาระบุชื่อบัตร\n';
+            elseif (empty($tic_name)) {
+                $alert_msg .= 'กรุณาระบุชื่อบัตร';
             }
-            if (empty($tic_price)) {
-                $alert_msg .= 'กรุณาระบุราคาบัตร\n';
+            elseif (empty($tic_price)) {
+                $alert_msg .= 'กรุณาระบุราคาบัตร';
             }
-            if (empty($detail)) {
-                $alert_msg .= 'กรุณาระบุรายละเอียดคอนเสิร์ต\n';
+            elseif (empty($detail)) {
+                $alert_msg .= 'กรุณาระบุรายละเอียดคอนเสิร์ต';
             }
-            if (empty($require)) {
-                $alert_msg .= 'กรุณาระบุข้อจำกัดของคอนเสิร์ต หากไม่มีให้ใส่ (-)\n';
+            elseif (empty($require)) {
+                $alert_msg .= 'กรุณาระบุข้อจำกัดของคอนเสิร์ต หากไม่มีให้ใส่ (-)';
             }
-            if (empty($bank_acc_name)) {
-                $alert_msg .= 'กรุณาระบุชื่อบัญชีรับเงิน\n';
+            elseif (empty($bank_acc_name)) {
+                $alert_msg .= 'กรุณาระบุชื่อบัญชีรับเงิน';
             }
-            if (empty($bank_acc_number)) {
-                $alert_msg .= 'กรุณาระบุเลขที่บัญชีรับเงิน\n';
+            elseif (empty($bank_acc_number)) {
+                $alert_msg .= 'กรุณาระบุเลขที่บัญชีรับเงิน';
             }
-            if (strtotime($bdate) > strtotime($cdate)) {
-                $alert_msg .= 'กรุณากรอกวันที่เปิดจำหน่ายบัตรให้เป็นวันที่ก่อนวันจัดแสดง\n';
+            elseif (strtotime($bdate) > strtotime($cdate)) {
+                $alert_msg .= 'กรุณากรอกวันที่เปิดจำหน่ายบัตรให้เป็นวันที่ก่อนวันจัดแสดง';
             }
             if ($alert_msg != "") {
-                echo "<script>alert('" . $alert_msg . "');</script>";
+                echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">'.
+                $alert_msg.'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
             } else {
 
                 //cennect to database
@@ -646,7 +729,7 @@
             if ($ret_sub) {
                 echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">ส่งข้อมูลคอนเสิร์ตเพื่อตรวจสอบเสร็จสิ้น กรุณารอผลการตรวจสอบ<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></div>';
             }
-            echo '<div class="container">
+        echo '<div class="container">
         
         <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -664,6 +747,7 @@
 
         echo '</ul><br>
             <form action="each_my_concert.php" method="post" enctype="multipart/form-data">
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
                 <div class="mb-3">
                     <label for="cname" class="form-label"><b>ชื่อคอนเสิร์ต</b></label>
                     <input type="text" class="form-control" name="cname" value = "' . $row['concert_name'] . '" disabled>
@@ -699,7 +783,25 @@
                     <input type="require" class="form-control" name="require" value = "' . $row['requirement'] . '" disabled>
                     <p style="color : red;">' . $row['requirement_comment'] . '</p><hr>
                 </div>
-                <div class="mb-3" id="tic_type_add"><b>บัตรคอนเสิร์ต</b><br>';
+                <div class="mb-3">
+                    <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
+                    <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
+                    <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
+                </div>
+                <div class="mb-3">
+                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
+
+            if (is_null($row['stage_img'])) {
+                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
+            } else {
+                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
+            }
+            echo '<p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
+            </div>
+
+                </div>
+                <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+                <label class="form-label"><b>บัตรคอนเสิร์ต :</b></label>';
             //ticket section start
             $sql3 = <<<EOF
             SELECT name,description,price,COUNT(detail_id)
@@ -712,23 +814,30 @@
         EOF;
             $ret3 = $db->query($sql3);
             while ($row3 = $ret3->fetchArray(SQLITE3_ASSOC)) {
-                echo '<hr><label class="form-label">ชื่อบัตร</label>
+                echo '<div class="row">
+                <div class="col">
+                <label class="form-label">ชื่อบัตร</label>
                     <input type="text" class="form-control" name="tic_name[]"  value = "' . $row3['name'] . '" disabled>
+                    </div>
+                    <div class="col">
                     <label class="form-label">ราคาบัตร</label>
                     <input type="number" class="form-control" name="tic_price[]"  value = "' . $row3['price'] . '" disabled>
+                    </div>
+                    <div class="col">
                     <label class="form-label">จำนวนบัตร</label>
                     <input type="number" class="form-control" name="tic_amount[]"  value = "' . $row3['COUNT(detail_id)'] . '" disabled>
+                    </div>
+                    <div class="col">
                     <label class="form-label">คำอธิบาย</label>
-                    <textarea name="tic_detail[]" style="width: 100%; height: 70px;" disabled>' . $row3['description'] . '</textarea>';
+                    <textarea name="tic_detail[]" style="width: 100%; height: 70px;" disabled>' . $row3['description'] . '</textarea>
+                    </div>
+                    </div>';
             }
             //ticket section end
             echo '<p style="color : red;">' . $row['ticket_comment'] . '</p><hr></div>
-                <div class="mb-3">
-                    <label for="poster_img" class="form-label"><b>โปสเตอร์คอนเสิร์ต</b></label><br>
-                    <img src="' . $row['concert_img_path'] . '" style="max-width : 40vw"><br><br>
-                    <p style="color : red;">' . $row['concert_img_comment'] . '</p><hr>
-                </div>
-
+                
+            <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+            <label class="form-label"><b>ข้อมูลผู้จัดคอนเสิร์ต :</b></label>
                 <div class="mb-3">
                     <label for="id_card_img" class="form-label"><b>สำเนาบัตรประชาชนผู้จัดคอนเสิร์ต</b></label><br>
                     <img src="' . $row['copy_id_card_img'] . '" style="max-width : 40vw"><br><br>
@@ -739,16 +848,7 @@
                     <img src="' . $row['con_permission_img'] . '" style="max-width : 40vw"><br><br>
                     <p style="color : red;">' . $row['con_permission_comment'] . '</p><hr>
                 </div>
-                <div class="mb-3">
-                <label for="con_img" class="form-label"><b>แผนผังคอนเสิร์ต</b></label><br>';
-
-            if (is_null($row['stage_img'])) {
-                echo '<p style="color : #808080;">ไม่ได้อัพโหลดแผนผังคอนเสิร์ต</p>';
-            } else {
-                echo '<img src="' . $row['stage_img'] . '" style="max-width : 40vw"><br><br>';
-            }
-            echo '<p style="color : red;">' . $row['stage_img_comment'] . '</p><hr>
-            </div>
+                
             <div class="mb-3">
                     <label for="bank_acc_name" class="form-label"><b>ชื่อธนาคารรับเงิน</b></label>
                     <input type="text" class="form-control" name="bank_acc_name"  value = "' . $row['bank_name'] . '" disabled>
@@ -756,7 +856,7 @@
                     <label for="bank_acc_number" class="form-label"><b>เลขที่บัญชีธนาคารรับเงิน</b></label>
                     <input type="text" class="form-control" name="bank_acc_number"  value = "' . $row['bank_code'] . '" disabled> 
                     <p style="color : red;">' . $row['bank_code_comment'] . '</p><hr>
-                </div>
+                </div></div>
                 <div class="">
             <button type="submit" class="btn btn-secondary" name="button" value="edit">Edit</button>
             <button type="submit" class="btn btn-outline-success" name="button" value="save" disabled>Save</button>
@@ -770,18 +870,36 @@
             }
             echo '>Submit</button>';
             if ($row['status'] != 'approved') {
-                echo '<button type="submit" class="btn btn-danger float-end" name="button" value="delete" >Delete Concert</button>';
+                echo '<button type="button" class=" btn btn-danger border-0 me-1 float-end" data-bs-toggle="modal" data-bs-target="#confirm1">Delete Concert</button>';
             }
             echo '</div></form><br>
             </div>';
-        } else if ($_POST['button'] == 'delete') {
-            $sql_del = <<<EOF
-                DELETE FROM concert
-                WHERE concert_id = $concert_id;
-            EOF;
-            $ret_del = $db->exec($sql_del);
-            header("location:my_concert.php");
-        }
+            //modal when approve
+            echo '<div class="modal fade" id="confirm1" tabindex="-1" role="dialog"
+            aria-labelledby="Title" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!--ส่วนหัว-->
+                    <div class="modal-header">
+                        <p class="modal-title fw-bold fs-6" id="Title">Delete this concert?</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        </button>
+                    </div>
+                    <!--ส่วนฟอร์ม-->
+                    <div class="modal-body">
+                        <form action="each_my_concert.php" method="POST">
+                            <div class="modal-footer">
+                                <input type="hidden" id="status" name="status">
+                                <button type="submit" class="btn btn-danger" id="confirm" name="Delete">Delete</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>   
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>';
+        } 
     }
     ?>
     <footer class="py-3 my-4 ">
@@ -789,5 +907,11 @@
         <p class="text-center text-muted">© 2023 TICKCON</p>
     </footer>
 </body>
-
+<script>
+    $('#confirm1').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        modal.find('#status').val('approve');
+    });
+</script>
 </html>

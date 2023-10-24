@@ -1,16 +1,19 @@
-<?php session_start(); ?>
+<?php session_start(); 
+if(!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['type'] == 'admin')){
+    header('location:index_notlogin.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -22,6 +25,7 @@
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -122,6 +126,17 @@
                         <a class="nav-link" href="myticket.php">My Tickets</a>
                     </li>
                 </ul>
+
+                <div class="mb-lg-0 me-3 mt-1">
+                    <p style="color:black"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle"
+                        viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path fill-rule="evenodd"
+                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                        <?= $_SESSION['firstname'] ?>
+                    </p>
+                </div>
                 <?php
                 require_once 'config/db.php';
                 $member_id = $_SESSION['member_id'];
@@ -160,7 +175,7 @@
     </nav>
 
     <!-- code -->
-    <div class="container py-3 rounded">
+    <div class="container py-2 rounded">
         <h3 class="mt-4 text-center text-light">My Concert</h3>
         <hr>
         <br>
@@ -182,33 +197,36 @@
     if ($count > 0) {
         while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
             echo '<div class = "col-6 col-md-4 col-lg-3 mb-3" id = "main-concert">
-            <div class="card h-100 px-0 py-1">
+            <div class="card h-100 px-0 ">
             <img src="' . $row['concert_img_path'] . '" 
             class="card-img mt-3 p-1 my-1 border rounded bg-dark"
             id="main-picture">
-                <div class="card-body pb-2 pt-1 text-center">';
-                if($row['status'] == 'checking'){
-                    echo'<span class="badge bg-secondary rounded-pill mb-1">' . $row['status'] . '</span>';
-                }elseif ($row['status'] == 'approved'){
-                    echo'<span class="badge bg-success rounded-pill mb-1">' . $row['status'] . '</span>';
-                }elseif ($row['status'] == 'rejected'){
-                    echo'<span class="badge bg-danger rounded-pill mb-1">' . $row['status'] . '</span>';
-                }
-                
-                echo '<h6 class="card-title fw-bold mb-0">' . $row['concert_name'] . '</h5>
-                <p class="card-text"></p>
-                <a href="each_my_concert.php?concert_id=' . $row['concert_id'] . '" class="btn btn-primary">see more</a>
-                </div>
-            </div></div>';
+                <div class="card-body pb-2 pt-1 text-center">
+                    <h6 class="card-title fw-bold mb-0">' . $row['concert_name'] . '</h5>
+                    <small>' . date('l', strtotime($row['show_date'])) . ', ' . date('d F Y', strtotime($row['show_date'])) .'<br><i class="bi bi-clock"></i> '. $row['show_time'] . '</small><br>';
+                    if($row['status'] == 'checking'){
+                        echo'<span class="badge bg-secondary rounded-pill mb-1">' . $row['status'] . '</span>';
+                    }elseif ($row['status'] == 'approved'){
+                        echo'<span class="badge bg-success rounded-pill mb-1">' . $row['status'] . '</span>';
+                    }elseif ($row['status'] == 'rejected'){
+                        echo'<span class="badge bg-danger rounded-pill mb-1">' . $row['status'] . '</span>';
+                    }
+                echo '</div>
+                <a href="each_my_concert.php?concert_id=' . $row['concert_id'] . '" class="btn btn-outline-info p-2" style="border-radius:0px; border-color:white;">see more</a>
+            </div>
+            </div>';
         }
-        echo "</div></div></div>";
+        echo "</div></div>";
     } else {
-        echo "</div></div></div>";
+        
+        echo '<div class="text-center mb-5"><h6>Don\'t have concert in pending list</h6></div>';
+        echo "</div></div>";
     }
     ?>
     <!-- footer -->
-    <hr style="color:white;">
+    
     <footer class="py-3 my-4 ">
+        <hr style="color:black;">
         <p class="text-center text-light">© 2023 TICKCON</p>
     </footer>
 </body>

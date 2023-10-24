@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['type'] == 'admin')) {
+    header('location:index_notlogin.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,11 +10,12 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Ticket</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap"
         rel="stylesheet">
 
     <!-- bootstrap link and script -->
@@ -24,6 +28,7 @@ session_start();
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -59,9 +64,52 @@ session_start();
         .card {
             margin: auto;
         }
+<<<<<<< HEAD
         p {
   margin: 25px;
 }
+=======
+
+        #main-concert :hover {
+            background-color: #91EAFF;
+            border-radius: 10px;
+        }
+
+        body {
+            background-color: #04364A;
+        }
+
+        hr {
+            color: white;
+        }
+
+        .container {
+            background-color: #56B2CD;
+            width: 55%;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .container {
+                background-color: #56B2CD;
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 99px) {
+            .container {
+                background-color: #56B2CD;
+                width: 80%;
+            }
+        }
+
+        #main-picture {
+            width: 80%;
+        }
+
+        p {
+            margin: 25px;
+        }
+>>>>>>> 6aff081b0ca2e8577d4c862887931d16b1672734
     </style>
 </head>
 
@@ -89,6 +137,17 @@ session_start();
                         <a class="nav-link" href="myticket.php" style="color :white">My Tickets</a>
                     </li>
                 </ul>
+
+                <div class="mb-lg-0  mb-2">
+                    <p style="color:black"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                            <path fill-rule="evenodd"
+                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                        </svg>
+                        <?= $_SESSION['firstname'] ?>
+                    </p>
+                </div>
                 <?php
                 require_once 'config/db.php';
                 $member_id = $_SESSION['member_id'];
@@ -126,15 +185,14 @@ session_start();
         </div>
     </nav>
     <!-- code -->
-    <main>
+    <div class="container py-2 rounded">
+        <h3 class="mt-4 text-center text-light">My Tickets</h3>
+        <hr>
+        <br>
+        <div class="row"></div>
         <?php
-        if (!isset($_SESSION['member_id'])) {
-            $_SESSION['error'] = 'กรุณาล็อคอินก่อน';
-            header("location: /tickcon/login.php", TRUE);
-            exit;
-        } elseif (isset($_SESSION['member_id'])) {
-            $member_id = $_SESSION['member_id'];
-            $sql = <<<EOF
+        $member_id = $_SESSION['member_id'];
+        $sql = <<<EOF
             SELECT concert_name, show_date, show_time, td.name, c.address, requirement, concert_img_path, t.ticket_id,p.member_id
             FROM ticket t
             JOIN ticket_detail td
@@ -145,17 +203,15 @@ session_start();
             USING (concert_id)
             WHERE p.member_id = $member_id;"
             EOF;
-            $ret = $db->query($sql);
-            $count = 0;
-            while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                $count++;
-            }
-            echo '<div class="container" style="width : 70%">
-            <div class="text-start"><h4>My Tickets</h4><hr></div>';
-            if ($count <= 0) {
-                echo '<div class="text-center mb-5"><h6>you don\'t have any ticket.</h6></div>';
-            } else {
-                $sql = <<<EOF
+        $ret = $db->query($sql);
+        $count = 0;
+        while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
+            $count++;
+        }
+        if ($count <= 0) {
+            echo '<div class="text-center mb-5"><h6>you don\'t have any ticket.</h6></div>';
+        } else {
+            $sql = <<<EOF
                 SELECT concert_id, concert_name, show_date, show_time, td.name, concert_img_path, p.member_id
                 FROM ticket t
                 JOIN ticket_detail td
@@ -166,37 +222,42 @@ session_start();
                 USING (concert_id)
                 WHERE p.member_id = $member_id;"
                 EOF;
-                $ret = $db->query($sql);
-                while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                    echo '<div class="card mb-3" style="width: 24rem;">
-                    <div class="card-body">
+            $ret = $db->query($sql);
+            while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
+                echo '<div class="card mb-3" style="width: 24rem;">
+                    <div class="card-body d-flex">
                       <div class="row">
-                      <div class="col-lg-4 col-sm-12">
-                      <img class="card-img rounded rounded-4 border border-3 border-dark w-100 mt-1 mb-3"
-                            src="'. $row['concert_img_path'] .'" alt="poster">
+                      <div class="col-6 ">
+                      <img class=" card-img border border-3 border-dark mt-1 mb-3"
+                            src="' . $row['concert_img_path'] . '" style="width:80%">
                       </div>
-                      <div class="col-lg-8 col-sm-12">
-                      <h6 class="card-title">'.$row['concert_name'].'</h6>
-                      <h6 class="card-subtitle mb-2 text-body-secondary">'.$row['show_date'].' / '.$row['show_time'].'</h6>
-                      <p class="card-text">'.$row['name'].'</p>
-                      <a href="concert_detail.php?id='. $row['concert_id'] .'" class="card-link">see more</a>
-                      <a href="#" class="card-link">QR code</a>
-                      </div>
-                      </div>
+                      <div class="col-6 ">
+                      <h6 class="card-title">' . $row['concert_name'] . '</h6>
+                      <h6 class="card-subtitle mb-2 text-body-secondary">' . $row['show_date'] . ' / ' . $row['show_time'] . '</h6>
+                      <p class="card-text text-start">' . $row['name'].'</p><div class="text-center">';
+                      if($row['show_date'] < date("Y-m-d")){
+                        echo'<span class="badge bg-secondary rounded-pill ">expired</span>';
+                    }elseif ($row['show_date'] > date("Y-m-d")){
+                        echo'<span class="badge bg-success rounded-pill  ">available</span>';
+                    }elseif ($row['show_date'] == date("Y-m-d")){
+                        echo'<span class="badge bg-warning rounded-pill  ">using</span>';
+                    }
+                    echo '<br><a href="concert_detail.php?id=' . $row['concert_id'] . '" class="card-link">More Details</a></div>
+                      </div></div>
                     </div>
                     </div>';
-                }
             }
         }
         echo '</div>';
         ?>
 
-    </main>
+    </div>
+    </div>
     <!-- footer -->
-    
+
     <footer class="py-3 my-4">
-        <hr>
-        <p class="text-center text-muted">© 2023 TICKCON</p>
+        <hr style="color:black">
+        <p class="text-center text-light">© 2023 TICKCON</p>
     </footer>
 </body>
 

@@ -7,7 +7,6 @@ if (isset($_SESSION['member_id'])) {
 ?>
 <?php
 date_default_timezone_set("Asia/Bangkok");
-echo date("Y-m-d");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,12 +14,11 @@ echo date("Y-m-d");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>TICKCON</title>
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=Mohave:wght@700&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500;700&family=IBM+Plex+Sans+Thai:wght@500&family=Mohave:wght@700&display=swap" rel="stylesheet">
 
     <!-- bootstrap link and script -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -32,6 +30,7 @@ echo date("Y-m-d");
     <style>
         * {
             font-family: 'Dosis', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
         }
 
         .navbar-brand {
@@ -154,7 +153,7 @@ echo date("Y-m-d");
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
 
             ?>
-                <div class="col-6 col-md-4 col-lg-3 mb-3" id="main-concert">
+                <div class="col-6 col-md-4 col-xl-3 mb-3" id="main-concert">
                     <div class="card h-100">
                     <div class="card-body px-2 pb-0 pt-1">
                     <div class="text-center">
@@ -180,8 +179,9 @@ echo date("Y-m-d");
     </div>
 
     <!-- footer -->
-    <hr>
+    
     <footer class="py-3 my-4 ">
+        <hr  style="color:black;">
         <p class="text-center text-light">© 2023 TICKCON</p>
     </footer>
 </body>
