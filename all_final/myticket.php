@@ -183,11 +183,11 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
         </div>
     </nav>
     <!-- code -->
-    <div class="container py-2 rounded">
+    <div class="container py-3 rounded">
         <h3 class="mt-4 text-center text-light">My Tickets</h3>
         <hr>
         <br>
-        <div class="row"></div>
+        <div class="row">
         <?php
         $member_id = $_SESSION['member_id'];
         $sql = <<<EOF
@@ -210,7 +210,7 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
             echo '<div class="text-center mb-5"><h6>you don\'t have any ticket.</h6></div>';
         } else {
             $sql = <<<EOF
-                SELECT concert_id, concert_name, show_date, show_time, td.name, concert_img_path, p.member_id, payment_id
+                SELECT *
                 FROM ticket t
                 JOIN ticket_detail td
                 USING (detail_id) 
@@ -221,35 +221,60 @@ if (!isset($_SESSION['member_id']) || (isset($_SESSION['type']) && $_SESSION['ty
                 WHERE p.member_id = $member_id;"
                 EOF;
             $ret = $db->query($sql);
+            $count = 0;
             while ($row = $ret->fetchArray(SQLITE3_ASSOC)) {
-                echo '<div class="card mb-3" style="width: 24rem;">
+                echo '<div class="card mb-3 m-3" style="width: 28 rem">
                     <div class="card-body d-flex">
                       <div class="row">
-                      <div class="col-6 ">
-                      <img class=" card-img border border-3 border-dark mt-1 mb-3"
-                            src="' . $row['concert_img_path'] . '" style="width:80%">
-                      </div>
-                      <div class="col-6 ">
-                      <h6 class="card-title">' . $row['concert_name'] . '</h6>
-                      <h6 class="card-subtitle mb-2 text-body-secondary">' . $row['show_date'] . ' / ' . $row['show_time'] . '</h6>
-                      <p class="card-text text-start">' . $row['name'].'</p><div class="text-center">';
-                      if($row['show_date'] < date("Y-m-d")){
-                        echo'<span class="badge bg-secondary rounded-pill ">expired</span>';
-                    }elseif ($row['show_date'] > date("Y-m-d")){
-                        echo'<span class="badge bg-success rounded-pill  ">available</span>';
-                    }elseif ($row['show_date'] == date("Y-m-d")){
-                        echo'<span class="badge bg-warning rounded-pill  ">using</span>';
-                    }
-                    echo '<br><a href="concert_detail.php?id=' . $row['concert_id'] . '" class="card-link">More Details</a><br><a href="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $row['payment_id'] . '" class="card-link">QR CODE</a></div>
-                      </div></div>
+                      <div class="col-6 text-center">
+                      <img class=" border-end  border-4 mt-1 p-3 rounded-0"
+                            src="' . $row['concert_img_path'] . '" style="width: 100%"><br>
                     </div>
-                    </div>';
+                      <div class="col-6">
+                      <div class= "text-start">
+                      <b><a class="card-title text-decoration-none" href="concert_detail.php?id=' . $row['concert_id'] . '">' . $row['concert_name'] . '</a></b><br>
+                      <h6 class="card-subtitle mb-2 text-body-secondary">' . $row['show_date'] . ' / ' . $row['show_time'] . '</h6>
+                      <a class="card-text text-start text-decoration-none d-flex" style="color: #7752FE;"><b><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-ticket-detailed-fill" viewBox="0 0 16 16" >
+                      <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5Zm4 1a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5Zm0 5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5ZM4 8a1 1 0 0 0 1 1h6a1 1 0 1 0 0-2H5a1 1 0 0 0-1 1Z"/>
+                    </svg>  ' . $row['name'].'</b></a>';
+                    if($row['show_date'] < date("Y-m-d")){
+                        echo'<span class="badge bg-secondary rounded-pill float-end">expired</span>';
+                    }elseif ($row['show_date'] > date("Y-m-d")){
+                        echo'<span class="badge bg-success rounded-pill float-end ">available</span>';
+                    }elseif ($row['show_date'] == date("Y-m-d")){
+                        echo'<span class="badge bg-warning rounded-pill  float-end">using</span>';
+                    }
+                    echo '<br><hr style="color:black">
+                      <div class="collapse" id="navbarToggleExternalContent'."$count".'" data-bs-theme="dark">
+                        <div class="text-start">
+                            <small><p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                          </svg>  '.$row['description'].'</p>
+                            <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                          </svg> '.$row['address'].'</p>
+                            </small>
+                        </div>   
+                    </div>
+                    <div class="collapse" id="navbarToggleExternalContentQR'."$count".'" data-bs-theme="dark">
+                        <div class="">
+                            <img class="card-img border border-2 border-dark mt-1 mb-3" src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' .$row['concert_id'].'-'.$row['ticket_id']. '-'.$row['payment_id'] . '">
+                        </div>
+                    </div>
+                    <nav class="navbar">
+                        <div class="container-fluid row text-center">
+                        <div class="col-6 "><a class=" text-decoration-none"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">More</a></div>
+                        <div class="col-6 "><a class=" text-decoration-none"  data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContentQR'."$count".'" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" style="color: #000000;">QR</a></div>
+                        </div>
+                    </nav>
+                    </div></div></div></div></div>';
+                    $count++;
             }
+            echo '</div>';
         }
-        echo '</div>';
-        ?>
+            ?>
 
-    </div>
     </div>
     <!-- footer -->
 
