@@ -1,0 +1,4 @@
+# tickcon
+INFORMATION SYSTEM ANALYSIS AND DESIGN PROJECT 2023
+
+all_final folder
